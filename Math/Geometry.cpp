@@ -29,6 +29,13 @@ Line::Line(const LineSegment& LineSegment) {
 Line::Line(const Vector2& A, const Vector2& B) {
     // y = ax + m_c
     // ax + by + m_c = 0
+    if (A.x == B.x)
+    {
+        m_a = 1;
+        m_b = 0;
+        m_c = -A.x;
+        return;
+    }
     m_b = -1;
     m_a = (A.y - B.y) / (A.x - B.x);
     m_c = A.y - m_a * A.x;
@@ -81,7 +88,7 @@ bool isInsidePolygon(const Vector2& Point, const vector<LineSegment>& LineSegmen
         float MinY = min(LineSegment.A.y, LineSegment.B.y);
         if (Point.y > MaxY || Point.y < MinY) continue;
         // calculate the intersection's x-coordinate between the line y = Point.y and the LineSegment
-        float TargetX = LineSegment.A.x + (Point.y - LineSegment.A.y) / (LineSegment.B.y - LineSegment.A.y) * (LineSegment.B.x - LineSegment.B.y);
+        float TargetX = LineSegment.A.x + (Point.y - LineSegment.A.y) / (LineSegment.B.y - LineSegment.A.y) * (LineSegment.B.x - LineSegment.A.x);
         if (Point.x <= TargetX) ++CountIntersection;
     }
     return CountIntersection % 2;
@@ -96,4 +103,16 @@ bool isInsideTriangle(const Vector2& Point, const PlatformTriangle& Triangle)
     LineSegment CA(Triangle.m_C, Triangle.m_A);
     vector<LineSegment> LineSegmentList = {AB, BC, CA};
     return isInsidePolygon(Point, LineSegmentList);
+}
+Vector2 Line::projection(const Vector2 &Point) {
+    // ax + by + c = 0
+    // b(x - x0) - a(y - y0) = 0
+    LinearEquationsSolver Solver(m_a, m_b, + m_c, m_b, - m_a, + (m_a * Point.y - m_b * Point.x));
+    float x; float y;
+//    std::cout << m_a << ' ' << m_b << ' ' << m_c << std::endl;
+//    std::cout << m_b << ' ' << - m_a << ' ' << m_a * Point.y - m_b * Point.x << std::endl;
+    Solver.solve(x, y);
+//    std::cout << "Result: " << x << " " << y << std::endl;
+    Vector2 Res{x, y};
+    return Res;
 }

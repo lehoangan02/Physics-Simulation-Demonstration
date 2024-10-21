@@ -3,9 +3,14 @@
 //
 #include "RoundBall.hpp"
 #include <random>
-RoundBall::RoundBall(Vector2 Position) : m_CurrentPosition(Position), m_PreviousPosition(Position), m_Acceleration(Vector2{0, 0})
+RoundBall::RoundBall(Vector2 Position, Color Color) : m_CurrentPosition(Position), m_PreviousPosition(Position), m_Acceleration(Vector2{0, 0})
 {
-    m_Color = Color(static_cast<unsigned char>(rand() % 256), static_cast<unsigned char>(rand() % 256), static_cast<unsigned char>(rand() % 256), 255);
+    m_Color = Color;
+//    m_Color = Color(static_cast<unsigned char>(rand() % 256), static_cast<unsigned char>(rand() % 256), static_cast<unsigned char>(rand() % 256), 255);
+}
+void RoundBall::giveSpeed(Vector2 Speed) {
+    m_PreviousPosition = Vector2Subtract(m_CurrentPosition, Speed);
+    m_Velocity = Speed;
 }
 void RoundBall::draw() {
     DrawCircle(m_CurrentPosition.x, m_CurrentPosition.y, m_Radius, m_Color);

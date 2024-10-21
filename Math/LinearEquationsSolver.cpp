@@ -7,22 +7,23 @@ LinearEquationsSolver::LinearEquationsSolver(float a1, float b1, float c1, float
 }
 
 bool LinearEquationsSolver::solve(float &x, float &y) {
-    if (m_a1 == 0 ^ m_a2 == 0) {
+    if ((m_a1 == 0 && m_a2 != 0) || (m_a1 != 0 && m_a2 == 0)) {
         if (m_a1 == 0)
         {
-
             y  = - m_c1 / m_b1;
-            std::cout << m_c1 << ' ' << m_b1 << std::endl;
-            std::cout << "y: " << y << std::endl;
+//            std::cout << m_c1 << ' ' << m_b1 << std::endl;
+//            std::cout << "y: " << y << std::endl;
             x = (- m_c2 - m_b2 * y) / m_a2;
         }
-        else if (m_a2 == 0)
-        {
+        else if (m_a2 == 0) {
 
-            y = - m_c2 / m_b2;
-            x = (- m_c1 - m_b1 * y) / m_a1;
+            y = -m_c2 / m_b2;
+            x = (-m_c1 - m_b1 * y) / m_a1;
         }
-        else if (m_b1 == 0)
+    }
+    else if ((m_b1 == 0 && m_b2 != 0) || (m_b1 != 0 && m_b2 == 0))
+    {
+        if (m_b1 == 0)
         {
 
             x = - m_c1 / m_a1;
@@ -34,16 +35,18 @@ bool LinearEquationsSolver::solve(float &x, float &y) {
             x = - m_c2 / m_a2;
             y = (- m_c1 - m_a1 * x) / m_b1;
         }
-    } else
+    }
+    else
     {
-    float temp = m_a1 / m_a2;
-    m_b2 *= temp;
-    m_c2 *= temp;
-    if (m_b1 == m_b2) {
-        return false;
+        float temp = m_a1 / m_a2;
+        m_b2 *= temp;
+        m_c2 *= temp;
+        if (m_b1 == m_b2) {
+            return false;
+        }
+        y = - (m_c1 - m_c2) / (m_b1 - m_b2);
+        x = (- m_c1 - m_b1 * y) / m_a1;
+        return true;
     }
-    y = - (m_c1 - m_c2) / (m_b1 - m_b2);
-    x = (- m_c1 - m_b1 * y) / m_a1;
     return true;
-    }
 }

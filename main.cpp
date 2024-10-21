@@ -14,7 +14,7 @@ int main() {
     {
         ActiveState->update();
         BeginDrawing();
-        ClearBackground(RAYWHITE);
+        ClearBackground(BLACK);
         ActiveState->draw();
         DrawFPS(10, 10);
         EndDrawing();

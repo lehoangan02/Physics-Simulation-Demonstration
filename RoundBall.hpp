@@ -15,10 +15,13 @@ private:
     Vector2 m_Velocity;
     static float m_Radius;
     Color m_Color;
+    bool m_Fixed = false;
 public:
-    RoundBall(Vector2 Position);
+    RoundBall(Vector2 Position, Color Color);
+    void giveSpeed(Vector2 Speed);
     void update(float DeltaTime);
     void draw();
     friend class Engine;
+    friend class SimulationState;
 };
 #endif //PHYSICS_SIMULATION_DEMONSTRATION_ROUNDBALL_HPP

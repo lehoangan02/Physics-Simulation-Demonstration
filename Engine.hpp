@@ -14,7 +14,7 @@ using namespace std;
 class Engine
 {
 public:
-    const Vector2 m_Gravity = {0, 400.0f};
+    Vector2 m_Gravity = {0, 400.0f};
     int m_Width;
     int m_Height;
     int m_TotalEngery;
@@ -22,7 +22,9 @@ private:
     vector<RoundBall*> m_RoundBallList;
     vector<PlatformTriangle*> m_PlatformTriangleList;
     vector<PlatformTriangle> m_DilatedPlatformTriangleList;
+    vector<PlatformTriangle> m_SecondaryDilatedPlatformTriangleList;
     vector<vector<LineSegment>> m_TriangleLineSegmentList;
+    vector<vector<LineSegment>> m_SecondaryTriangleLineSegmentList;
 public:
     Engine(int Width, int Height);
     void attachRoundBall(RoundBall* roundBall);
@@ -33,5 +35,7 @@ private:
     void accelerate(Vector2 Acceleration);
     void applyConstraints();
     void collidePlatformTriangle();
+    void collideRoundBall();
+    void printMousePosition();
 };
 #endif //PHYSICS_SIMULATION_DEMONSTRATION_ENGINE_HPP
