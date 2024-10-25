@@ -8,6 +8,14 @@
 #define START_SPEED_Y -15
 #define MY_ORANGE Color(235, 131, 23, 255)
 #define MY_YELLOW Color(243, 198, 35, 255)
+void SimulationState::exitState() {
+    m_IsActive = false;
+}
+SimulationState* VerletDropState::getVerletDropState()
+{
+    static VerletDropState MyVerletDropState;
+    return &MyVerletDropState;
+}
 VerletDropState::VerletDropState() : m_Engine(1800, 1040) {
     RoundBall* RoundBall1 = new RoundBall(Vector2(START_X, START_Y), Color(16, 55, 92, 255));
     RoundBall1 -> giveSpeed(Vector2{START_SPEED_X, START_SPEED_Y});
@@ -37,17 +45,23 @@ VerletDropState::~VerletDropState() {
     for (auto& platform : m_PlatformTriangleList)
     {
         delete platform;
+        platform = nullptr;
     }
     for (auto& ball : m_RoundBall)
     {
         delete ball;
+        ball = nullptr;
     }
 }
-void VerletDropState::update() {
+SimulationState* VerletDropState::update() {
+    if (m_IsActive == false || IsKeyPressed(KEY_BACKSPACE))
+    {
+        return HomeState::getHomeState();
+    }
     m_TotalTime += GetFrameTime();
     if (m_TotalTime > m_DropInterval && m_RoundBall.size() < m_NumBall)
     {
-        printf("Create new ball\n");
+//        printf("Create new ball\n");
         RoundBall* RoundBall2 = new RoundBall(Vector2(START_X, START_Y), Color(16, 55, 92, 255));
         RoundBall2 -> giveSpeed(Vector2{START_SPEED_X, START_SPEED_Y});
         m_RoundBall.push_back(RoundBall2);
@@ -55,10 +69,39 @@ void VerletDropState::update() {
         m_TotalTime -= m_DropInterval;
     }
     m_Engine.update(0.05f);
+    return nullptr;
 }
 void VerletDropState::draw() {
     BeginDrawing();
     ClearBackground(Color(244, 246, 255, 255));
     m_Engine.draw();
+}
+void VerletDropState::onNotify() {
+    exitState();
+}
+SimulationState* HomeState::getHomeState()
+{
+    static HomeState HomeState;
+    return &HomeState;
+}
+HomeState::HomeState() {
+    m_Background = LoadTexture("Assets/Textures/HomeBackground.png");
+}
 
+SimulationState* HomeState::update() {
+    if (IsKeyPressed(KEY_A))
+    {
+        BackHomeButton::getBackHomeButton()->m_Active = true;
+        return VerletDropState::getVerletDropState();
+    }
+    BackHomeButton::getBackHomeButton()->m_Active = false;
+    return nullptr;
+}
+void HomeState::onNotify() {
+    return;
+}
+void HomeState::draw() {
+    DrawTexture(m_Background, 0, 0, WHITE);
+    DrawText("Press A to start the simulation", 10, 10, 20, BLACK);
+//    DrawText("VERLET_STATE", 10, 80, 20, BLACK);
 }

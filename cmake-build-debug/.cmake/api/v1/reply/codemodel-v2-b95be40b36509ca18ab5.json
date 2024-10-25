@@ -1,0 +1,60 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"jsonFile" : "directory-.-Debug-f5ebdc15457944623624.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.27"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "Physics_Simulation_Demonstration",
+					"targetIndexes" : 
+					[
+						0
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "Physics_Simulation_Demonstration::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-Physics_Simulation_Demonstration-Debug-faaa9c6fd0d8fbb1a05e.json",
+					"name" : "Physics_Simulation_Demonstration",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "/Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/cmake-build-debug",
+		"source" : "/Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 6
+	}
+}

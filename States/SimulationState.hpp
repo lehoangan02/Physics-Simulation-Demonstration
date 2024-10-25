@@ -4,19 +4,46 @@
 
 #ifndef PHYSICS_SIMULATION_DEMONSTRATION_SIMULATIONSTATE_HPP
 #define PHYSICS_SIMULATION_DEMONSTRATION_SIMULATIONSTATE_HPP
-#include "../Engine.hpp"
-#include "../RoundBall.hpp"
-#include "../PlatformTriangle.hpp"
+#include "../Physics/Engine.hpp"
+#include "../Physics/RoundBall.hpp"
+#include "../Physics/PlatformTriangle.hpp"
 #include <vector>
-class SimulationState {
+#include "Observer.hpp"
+#include "../Buttons/Buttons.hpp"
+enum StateNumber {
+    HOME_STATE,
+    VERLET_DROP_STATE
+};
+class SimulationState: public Observer{
+    friend class BackHome;
 public:
     SimulationState() = default;
-    virtual void update() = 0;
+    virtual SimulationState* update() = 0;
     virtual void draw() = 0;
     virtual ~SimulationState() = default;
+protected:
+    bool m_IsActive = true;
+    int m_ExitState = StateNumber::HOME_STATE;
+    void exitState();
+//    virtual void reset() = 0;
 };
-#endif //PHYSICS_SIMULATION_DEMONSTRATION_SIMULATIONSTATE_HPP
+class HomeState : public SimulationState {
+private:
+    Texture2D m_Background;
+public:
+    static SimulationState* getHomeState();
+private:
+    HomeState();
+    ~HomeState() = default;
+public:
+    SimulationState* update() override;
+    void draw() override;
+private:
+    void onNotify() override;
+};
 class VerletDropState : public SimulationState {
+public:
+    static SimulationState* getVerletDropState();
 private:
     Engine m_Engine;
     vector<RoundBall*> m_RoundBall;
@@ -24,9 +51,14 @@ private:
     float m_TotalTime = 0.0f;
     const int m_NumBall = 200;
     const float m_DropInterval = 0.1f;
-public:
+private:
     VerletDropState();
     ~VerletDropState();
-    void update() override;
+
+public:
+    SimulationState* update() override;
     void draw() override;
+private:
+    void onNotify() override;
 };
+#endif //PHYSICS_SIMULATION_DEMONSTRATION_SIMULATIONSTATE_HPP

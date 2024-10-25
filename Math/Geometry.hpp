@@ -6,7 +6,7 @@
 #define PHYSICS_SIMULATION_DEMONSTRATION_GEOMETRY_HPP
 #include "raylib.h"
 #include "LinearEquationsSolver.hpp"
-#include "../PlatformTriangle.hpp"
+#include "../Physics/PlatformTriangle.hpp"
 #include <vector>
 #include <iostream>
 using namespace std;

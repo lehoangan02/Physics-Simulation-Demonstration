@@ -1,21 +1,45 @@
 #include <iostream>
-#include "RoundBall.hpp"
+#include "Physics/RoundBall.hpp"
 #include "raylib.h"
-#include "Engine.hpp"
+#include "Physics/Engine.hpp"
 #include "States/SimulationState.hpp"
+#include "Utilites/Utilities.hpp"
+#include "Buttons/Buttons.hpp"
 using namespace std;
 int main() {
     InitWindow(1800, 1040, "Physics Simulation Demonstration");
     SetTargetFPS(60);
+    Utilities* MyUtilities = Utilities::getUtilities();
     SimulationState* ActiveState;
-    VerletDropState VerletDropState;
-    ActiveState = &VerletDropState;
+    ActiveState = HomeState::getHomeState();
+    Command *MyBackHome = BackHome::getBackHome();
+    MyBackHome -> addObserver(ActiveState);
     while(!WindowShouldClose())
     {
-        ActiveState->update();
+        if ((IsKeyPressed(KEY_LEFT_SHIFT) || IsKeyPressed(KEY_RIGHT_SHIFT)) && IsKeyPressed(KEY_COMMA))
+        {
+            SetTargetFPS(30);
+        }
+        if ((IsKeyPressed(KEY_LEFT_SHIFT) || IsKeyPressed(KEY_RIGHT_SHIFT)) && IsKeyPressed(KEY_PERIOD))
+        {
+            SetTargetFPS(60);
+        }
+        SimulationState* NextState = ActiveState->update();
+        if (NextState != nullptr)
+        {
+            MyBackHome -> removeObserver(ActiveState);
+//            ActiveState -> ~SimulationState();
+//            delete ActiveState;
+            ActiveState = NextState;
+            MyBackHome -> addObserver(ActiveState);
+        }
+        MyUtilities -> update();
+        BackHomeButton::getBackHomeButton() -> update();
         BeginDrawing();
         ClearBackground(BLACK);
         ActiveState->draw();
+        MyUtilities -> draw();
+        BackHomeButton::getBackHomeButton() -> draw();
         DrawFPS(10, 10);
         EndDrawing();
     }
