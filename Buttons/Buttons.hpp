@@ -34,7 +34,7 @@ class BackHomeButton : public Button {
     friend class HomeState;
 private:
     Texture2D m_Texture;
-    Vector2 m_Position = {200, 100};
+    Vector2 m_Position = {100, 100};
     bool m_Active = true;
 public:
     static BackHomeButton *getBackHomeButton();

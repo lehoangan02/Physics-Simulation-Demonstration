@@ -8,6 +8,7 @@
 using namespace std;
 int main() {
     InitWindow(1800, 1040, "Physics Simulation Demonstration");
+//    SetTargetFPS(10);
     SetTargetFPS(60);
     Utilities* MyUtilities = Utilities::getUtilities();
     SimulationState* ActiveState;
@@ -18,7 +19,7 @@ int main() {
     {
         if ((IsKeyPressed(KEY_LEFT_SHIFT) || IsKeyPressed(KEY_RIGHT_SHIFT)) && IsKeyPressed(KEY_COMMA))
         {
-            SetTargetFPS(30);
+            SetTargetFPS(15);
         }
         if ((IsKeyPressed(KEY_LEFT_SHIFT) || IsKeyPressed(KEY_RIGHT_SHIFT)) && IsKeyPressed(KEY_PERIOD))
         {
@@ -28,8 +29,7 @@ int main() {
         if (NextState != nullptr)
         {
             MyBackHome -> removeObserver(ActiveState);
-//            ActiveState -> ~SimulationState();
-//            delete ActiveState;
+            ActiveState -> reset();
             ActiveState = NextState;
             MyBackHome -> addObserver(ActiveState);
         }

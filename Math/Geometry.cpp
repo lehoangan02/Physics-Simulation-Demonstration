@@ -3,12 +3,41 @@
 //
 
 #include "Geometry.hpp"
-LineSegment::LineSegment(Vector2 A, Vector2 B) {
+LineSegment::LineSegment(const Vector2& A, const Vector2& B) {
     this->A = A;
     this->B = B;
 }
 void LineSegment::print() {
     std::cout << "LineSegment: A(" << A.x << ", " << A.y << ") B(" << B.x << ", " << B.y << ")" << std::endl;
+}
+float LineSegment::getLength() {
+    return Vector2Length(Vector2Subtract(B, A));
+}
+Vector2 LineSegment::getMidPoint() {
+    return Vector2Scale(Vector2Add(A, B), 0.5f);
+}
+Vector2 LineSegment::projection(const Vector2 &Point) {
+    Line AB(A, B);
+    return AB.projection(Point);
+}
+bool LineSegment::haveProjection(const Vector2 &Point) {
+    Line AB(A, B);
+    Vector2 Projection = AB.projection(Point);
+    if ((Projection.x - A.x) * (Projection.x - B.x) <= 0 && (Projection.y - A.y) * (Projection.y - B.y) <= 0) return true;
+    return false;
+}
+Vector2 LineSegment::getPointWithDistance(const float &Distance, std::string Side) {
+    Vector2 Direction = Vector2Normalize(Vector2Subtract(A, B));
+    Vector2 Normalized = Vector2Normalize(Direction);
+    Vector2 ScaledDirection = Vector2Scale(Normalized, Distance);
+    if (Side == "A")
+    {
+        return Vector2Add(A, ScaledDirection);
+    }
+    else
+    {
+        return Vector2Subtract(B, ScaledDirection);
+    }
 }
 Line::Line(float a, float b, float c) : m_a(a), m_b(b), m_c(c) {
 }
@@ -105,6 +134,10 @@ bool isInsideTriangle(const Vector2& Point, const PlatformTriangle& Triangle)
     return isInsidePolygon(Point, LineSegmentList);
 }
 Vector2 Line::projection(const Vector2 &Point) {
+    if (m_a * Point.x + m_b * Point.y + m_c == 0)
+    {
+        return Point;
+    }
     // ax + by + c = 0
     // b(x - x0) - a(y - y0) = 0
     LinearEquationsSolver Solver(m_a, m_b, + m_c, m_b, - m_a, + (m_a * Point.y - m_b * Point.x));
@@ -115,4 +148,16 @@ Vector2 Line::projection(const Vector2 &Point) {
 //    std::cout << "Result: " << x << " " << y << std::endl;
     Vector2 Res{x, y};
     return Res;
+}
+float Line::findX(float y) {
+    return (-m_b * y - m_c) / m_a;
+}
+float Line::findY(float x) {
+    return (-m_a * x - m_c) / m_b;
+}
+Line Line::flipHorizontally(Vector2 Point) {
+    float a = m_a;
+    float b = - m_b;
+    float c = -(a * Point.x + b * Point.y);
+    return Line(a, b, c);
 }
