@@ -54,6 +54,7 @@ void VerletDropState::onNotify() {
 }
 void VerletDropState::reset() {
     m_IsActive = true;
+    VerletRoundBall::m_Radius = 10.0f;
     for (auto& platform : m_PlatformTriangleList) {
         delete platform;
     }
@@ -126,6 +127,12 @@ SimulationState* HomeState::update() {
         BackHomeButton::getBackHomeButton()->m_Active = true;
         return EulerianDropState::getEulerianDropState();
     }
+    else if (IsKeyPressed(KEY_E))
+    {
+        BackHomeButton::getBackHomeButton()->m_Active = true;
+        return TunnellingComparisonState::getComparisonState();
+    }
+
     BackHomeButton::getBackHomeButton()->m_Active = false;
     return nullptr;
 }
@@ -147,6 +154,7 @@ SimulationState* VerletChainState::getVerletChainState()
 }
 void VerletChainState::reset() {
     m_IsActive = true;
+    VerletRoundBall::m_Radius = 10.0f;
     for (auto& ball : m_RoundBall)
     {
         delete ball;
@@ -272,6 +280,7 @@ VerletChainBasketState::~VerletChainBasketState() {
 }
 void VerletChainBasketState::reset() {
     m_IsActive = true;
+    VerletRoundBall::m_Radius = 10.0f;
     for (auto& ball : m_RoundBall)
     {
         delete ball;
@@ -448,4 +457,118 @@ EulerianDropState::~EulerianDropState() {
     }
     m_RoundBallList.clear();
     m_Engine.reset();
+}
+
+SimulationState *TunnellingComparisonState::getComparisonState() {
+    static TunnellingComparisonState MyComparisonState;
+    return &MyComparisonState;
+}
+TunnellingComparisonState::TunnellingComparisonState() : m_EulerianEngine(1800 / 2 - 10, 1040), m_VerletEngine(1800 / 2 - 10, 1040) {
+    reset();
+}
+TunnellingComparisonState::~TunnellingComparisonState() {
+    m_IsActive = true;
+    for (auto& ball : m_EulerianRoundBallList)
+    {
+        delete ball;
+        ball = nullptr;
+    }
+    m_EulerianRoundBallList.clear();
+    for (auto& ball : m_VerletRoundBallList)
+    {
+        delete ball;
+        ball = nullptr;
+    }
+    m_VerletRoundBallList.clear();
+    m_EulerianEngine.reset();
+    m_VerletEngine.reset();
+}
+
+void TunnellingComparisonState::reset() {
+    m_EulerianCamera.target = Vector2{0, 0};
+    m_EulerianCamera.offset = Vector2{0, 0};
+    m_EulerianCamera.rotation = 0.0f;
+    m_EulerianCamera.zoom = 1.0f;
+    m_VerletCamera.target = Vector2{1800 / 2, 0};
+    m_VerletCamera.offset = Vector2{1800 / 2 + 10, 0};
+    m_VerletCamera.rotation = 0.0f;
+    m_VerletCamera.zoom = 1.0f;
+    m_IsActive = true;
+    for (auto& ball : m_EulerianRoundBallList)
+    {
+        delete ball;
+    }
+    m_EulerianRoundBallList.clear();
+    for (auto& ball : m_VerletRoundBallList)
+    {
+        delete ball;
+    }
+    m_VerletRoundBallList.clear();
+    m_EulerianEngine.reset();
+    m_VerletEngine.reset();
+    EulerianRoundBall* EulerianRoundBall1 = new EulerianRoundBall(Vector2{100, 100}, MY_ORANGE, 1.0f);
+    EulerianRoundBall1 -> m_Velocity = Vector2{200, 0};
+//    EulerianRoundBall* EulerianRoundBall2 = new EulerianRoundBall(Vector2{200, 200}, GREEN, 1.0f);
+    m_EulerianRoundBallList.push_back(EulerianRoundBall1);
+//    m_EulerianRoundBallList.push_back(EulerianRoundBall2);
+    m_EulerianEngine.attachRoundBall(EulerianRoundBall1);
+//    m_EulerianEngine.attachRoundBall(EulerianRoundBall2);
+    VerletRoundBall::m_Radius = 100.0f;
+    VerletRoundBall* VerletRoundBall1 = new VerletRoundBall(Vector2{100, 100}, MY_ORANGE);
+    VerletRoundBall1 -> giveSpeed(Vector2{5, -5});
+    VerletRoundBall1 -> m_SpeedScale = 1.2f;
+//    VerletRoundBall* VerletRoundBall2 = new VerletRoundBall(Vector2{400, 400}, GREEN);
+//    VerletRoundBall2 -> giveSpeed(Vector2{5, 10});
+    m_VerletRoundBallList.push_back(VerletRoundBall1);
+//    m_VerletRoundBallList.push_back(VerletRoundBall2);
+    m_VerletEngine.attachRoundBall(VerletRoundBall1);
+//    m_VerletEngine.attachRoundBall(VerletRoundBall2);
+
+}
+
+void TunnellingComparisonState::onNotify() {
+    exitState();
+}
+SimulationState* TunnellingComparisonState::update() {
+    if (!m_IsActive)
+    {
+        return HomeState::getHomeState();
+    }
+    for (auto& ball : m_EulerianRoundBallList)
+    {
+        ball -> m_Velocity = Vector2Scale(ball -> m_Velocity, 1.01f);
+    }
+    for (auto& ball : m_VerletRoundBallList)
+    {
+        ball -> m_Velocity = Vector2Scale(ball -> m_Velocity, 1);
+    }
+    m_EulerianEngine.update(m_FrameTime);
+    m_VerletEngine.update(m_FrameTime);
+    return nullptr;
+}
+void TunnellingComparisonState::draw() {
+//    RenderTexture screenCamera1 = LoadRenderTexture(1800/2, 1040);
+//    RenderTexture screenCamera2 = LoadRenderTexture(1800/2, 1040);
+//    Rectangle splitScreenRect = { 0.0f, 0.0f, (float)screenCamera1.texture.width, (float)-screenCamera1.texture.height };
+
+    BeginTextureMode(screenCamera1);
+    ClearBackground(RAYWHITE);
+    BeginMode2D(m_EulerianCamera);
+    m_EulerianEngine.draw();
+    DrawText("Continuous Eulerian Integration Method does not have tunnelling", 10, 50, 20, RED);
+    EndMode2D();
+    EndTextureMode();
+
+    BeginTextureMode(screenCamera2);
+    ClearBackground(RAYWHITE);
+    BeginMode2D(m_VerletCamera);
+    m_VerletEngine.draw();
+    DrawText("Verlet Integration Method has tunnelling", 10, 50, 20, RED);
+
+    EndMode2D();
+    EndTextureMode();
+    DrawTextureRec(screenCamera1.texture, splitScreenRect, (Vector2){ 0, 0 }, WHITE);
+    DrawTextureRec(screenCamera2.texture, splitScreenRect, (Vector2){ 1800/2.0f, 0 }, WHITE);
+    Color MidBarColor = Color(68, 3, 129, 255);
+    DrawRectangle(1800 / 2 - 10, 0, 20, 1040, MidBarColor);
 }

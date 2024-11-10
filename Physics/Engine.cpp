@@ -17,20 +17,20 @@ void VerletEngine::applyConstraints() {
             ball -> m_PreviousPosition.x = ball -> m_CurrentPosition.x;
             ball -> m_CurrentPosition.x = m_Width - ball -> m_Radius;
         }
-        if (ball -> m_CurrentPosition.x - ball -> m_Radius < 0)
+        if (ball -> m_CurrentPosition.x - ball -> m_Radius < m_Left)
         {
             ball -> m_PreviousPosition.x = ball -> m_CurrentPosition.x;
-            ball -> m_CurrentPosition.x = ball -> m_Radius;
+            ball -> m_CurrentPosition.x = ball -> m_Radius + m_Left;
         }
         if (ball -> m_CurrentPosition.y + ball -> m_Radius > m_Height)
         {
             ball -> m_PreviousPosition.y = ball -> m_CurrentPosition.y;
             ball -> m_CurrentPosition.y = m_Height - ball -> m_Radius;
         }
-        if (ball -> m_CurrentPosition.y - ball -> m_Radius < 0)
+        if (ball -> m_CurrentPosition.y - ball -> m_Radius < m_Top)
         {
             ball -> m_PreviousPosition.y = ball -> m_CurrentPosition.y;
-            ball -> m_CurrentPosition.y = ball -> m_Radius;
+            ball -> m_CurrentPosition.y = ball -> m_Radius + m_Top;
         }
     }
 
@@ -109,6 +109,13 @@ void VerletEngine::draw() {
     for (auto& ball : m_RoundBallList) {
         ball->draw();
     }
+    m_TotalEngery = 0;
+    for (auto& ball : m_RoundBallList) {
+        float Mass = 10.0f;
+        m_TotalEngery += Mass * Vector2Length(ball -> m_Velocity) * Vector2Length(ball -> m_Velocity) / 2 + Mass * m_Gravity.y * (m_Height - ball -> m_CurrentPosition.y);
+    }
+    std::string Engery = "Total Energy Approximation: " + to_string(m_TotalEngery / 100000);
+    DrawText(Engery.c_str(), 10, 30, 20, RED);
 }
 void VerletEngine::attachPlatformTriangle(PlatformTriangle *NewPlatformTriangle) {
     m_PlatformTriangleList.push_back(NewPlatformTriangle);
@@ -173,32 +180,62 @@ void ContinuousEulerianEngine::attachRoundBall(EulerianRoundBall *NewRoundBall) 
     m_RoundBallList.push_back(NewRoundBall);
 }
 void ContinuousEulerianEngine::update(float DeltaTime) {
-    collideRoundBalls();
     applyGravity();
     for (auto& ball : m_RoundBallList) {
         ball->update(DeltaTime);
     }
     applyConstraints();
+    collideRoundBalls();
 }
 void ContinuousEulerianEngine::applyConstraints() {
     for (auto &ball : m_RoundBallList) {
 //        if (ball->m_Fixed) continue;
         if (ball-> m_CurrentPosition.x + ball->m_Radius > m_Width) {
             Line Delta = Line(ball->m_CurrentPosition, ball -> m_PreviousPosition);
-            Vector2 Intersection = Delta.intersection(m_RightLine);
-            float newX = m_Width - ball -> m_Radius;
-            float newY = Delta.findY(newX);
-            ball -> m_CurrentPosition = Vector2{newX, newY};
-//            ball -> m_PreviousPosition = Vector2{newX, newY};
+            Line RealRight = Line(1, 0, - m_Width + ball -> m_Radius);
+            Vector2 Intersection = Delta.intersection(RealRight);
+            float NewY = ball -> m_CurrentPosition.y;
+            Line FlippedDelta = Delta.flipVertically(Intersection);
+            float NewX;
+            if (FlippedDelta.isHorizontal())
+            {
+                float Excess = ball -> m_CurrentPosition.x - (m_Width - ball -> m_Radius);
+                NewX = (m_Width - ball -> m_Radius) - Excess;
+            }
+            else
+            {
+                NewX = FlippedDelta.findX(NewY);
+            }
+            if (NewX - ball -> m_Radius < 0)
+            {
+                NewX = Intersection.x;
+            }
+            ball -> m_CurrentPosition = Vector2{NewX, NewY};
+            ball -> m_PreviousPosition = Intersection;
             ball -> m_Velocity.x = -(ball -> m_Velocity.x);
         }
         if (ball-> m_CurrentPosition.x - ball->m_Radius < 0) {
             Line Delta = Line(ball->m_CurrentPosition, ball -> m_PreviousPosition);
-            Vector2 Intersection = Delta.intersection(m_LeftLine);
-            float newX = ball -> m_Radius;
-            float newY = Delta.findY(newX);
-            ball -> m_CurrentPosition = Vector2{newX, newY};
-//            ball -> m_PreviousPosition = Vector2{newX, newY};
+            Line RealLeft = Line(1, 0,   -ball -> m_Radius);
+            Vector2 Intersection = Delta.intersection(RealLeft);
+            float NewY = ball -> m_CurrentPosition.y;
+            Line FlippedDelta = Delta.flipVertically(Intersection);
+            float NewX;
+            if (FlippedDelta.isVertical())
+            {
+                float Excess = ball -> m_CurrentPosition.x - ball -> m_Radius;
+                NewX = ball -> m_Radius - Excess;
+            }
+            else
+            {
+                NewX = FlippedDelta.findX(NewY);
+            }
+            if (NewX + ball -> m_Radius > m_Width)
+            {
+                NewX = Intersection.x;
+            }
+            ball -> m_CurrentPosition = Vector2{NewX, NewY};
+            ball -> m_PreviousPosition = Intersection;
             ball -> m_Velocity.x = -(ball -> m_Velocity.x);
         }
         if (ball-> m_CurrentPosition.y + ball->m_Radius > m_Height) {
@@ -207,22 +244,47 @@ void ContinuousEulerianEngine::applyConstraints() {
             Vector2 Intersection = Delta.intersection(RealTop);
             float NewX = ball -> m_CurrentPosition.x;
             Line FlippedDelta = Delta.flipHorizontally(Intersection);
-            float NewY = FlippedDelta.findY(NewX);
-            ball -> m_CurrentPosition = Vector2{NewX, NewY};
-            if (ball-> m_CurrentPosition.y + ball->m_Radius > m_Height)
+            float NewY;
+            if (FlippedDelta.isVertical())
             {
-                std::cout << "Error" << std::endl;
+                float Excess = ball -> m_CurrentPosition.y - (m_Height - ball -> m_Radius);
+                NewY = (m_Height - ball -> m_Radius) - Excess;
             }
-//            ball -> m_PreviousPosition = Vector2{newX, newY};
+            else
+            {
+                NewY = FlippedDelta.findY(NewX);
+            }
+            if (NewY - ball -> m_Radius < 0)
+            {
+                NewY = Intersection.y;
+
+            }
+            ball -> m_CurrentPosition = Vector2{NewX, NewY};
+            ball -> m_PreviousPosition = Intersection;
             ball -> m_Velocity.y = -(ball -> m_Velocity.y);
         }
         if (ball-> m_CurrentPosition.y - ball->m_Radius < 0) {
             Line Delta = Line(ball->m_CurrentPosition, ball -> m_PreviousPosition);
-            Vector2 Intersection = Delta.intersection(m_GroundLine);
-            float newY = ball -> m_Radius;
-            float newX = Delta.findX(newY);
-            ball -> m_CurrentPosition = Vector2{newX, newY};
-//            ball -> m_PreviousPosition = Vector2{newX, newY};
+            Line RealBottom = Line(0, 1, -ball -> m_Radius);
+            Vector2 Intersection = Delta.intersection(RealBottom);
+            float NewX = ball -> m_CurrentPosition.x;
+            Line FlippedDelta = Delta.flipHorizontally(Intersection);
+            float NewY;
+            if (FlippedDelta.isVertical())
+            {
+                float Excess = fabs(ball -> m_CurrentPosition.y - ball -> m_Radius);
+                NewY = ball -> m_Radius + Excess;
+            }
+            else
+            {
+                NewY = FlippedDelta.findY(NewX);
+            }
+            if (NewY + ball -> m_Radius > m_Height)
+            {
+                NewY = Intersection.y;
+            }
+            ball -> m_CurrentPosition = Vector2{NewX, NewY};
+            ball -> m_PreviousPosition = Intersection;
             ball -> m_Velocity.y = -(ball -> m_Velocity.y);
         }
     }
@@ -232,17 +294,12 @@ void ContinuousEulerianEngine::draw() {
     for (auto& ball : m_RoundBallList) {
         ball->draw();
     }
-//    std::string Vel = to_string(Vector2Length(m_RoundBallList[0] -> m_Velocity));
-//    std::cout << m_RoundBallList[0] -> m_Velocity.x << std::endl;
-    std::string Vel = "Velocity: " + to_string((m_RoundBallList[0] -> m_Velocity).x);
-    DrawText(Vel.c_str(), 10, 50, 20, BLACK);
     m_TotalEngery = 0;
     for (auto& ball : m_RoundBallList) {
         m_TotalEngery += ball -> m_Mass * Vector2Length(ball -> m_Velocity) * Vector2Length(ball -> m_Velocity) / 2 + ball -> m_Mass * m_Gravity.y * (m_Height - ball -> m_CurrentPosition.y);
     }
-//    m_TotalEngery = m_RoundBallList[0] -> m_Mass * Vector2Length(m_RoundBallList[0] -> m_Velocity) * Vector2Length(m_RoundBallList[0] -> m_Velocity) / 2 + m_RoundBallList[0] -> m_Mass * m_Gravity.y * (m_Height- m_RoundBallList[0] -> m_CurrentPosition.y);
-    std::string Engery = to_string(m_TotalEngery);
-    DrawText(Engery.c_str(), 10, 100, 20, BLACK);
+    std::string Engery = "Total Energy Approximation: " + to_string(m_TotalEngery / 10000);
+    DrawText(Engery.c_str(), 10, 30, 20, RED);
 }
 void ContinuousEulerianEngine::reset() {
     m_RoundBallList.clear();
@@ -269,17 +326,21 @@ void ContinuousEulerianEngine::collideRoundBalls() {
                             Altitude.getLength() * Altitude.getLength());
                     float ProjectionLength = Vector2Distance(Projection, Ball1->m_PreviousPosition);
                     float Offset = ProjectionLength - RadicalProjectionLength;
-                    Ball1->m_CurrentPosition = DeltaPosition.getPointWithDistance(Offset, "A");
+                    Vector2 CollidingPosition = DeltaPosition.getPointWithDistance(Offset, "A");
+                    float DistanceToCollidingPosition = Vector2Distance(CollidingPosition, Ball1->m_CurrentPosition);
+                    float TimeSinceCollision = Vector2Distance(Ball1->m_CurrentPosition, CollidingPosition) /
+                            Vector2Length(Ball1 -> m_Velocity);
+                    Ball1->m_CurrentPosition = CollidingPosition;
+
                     float Velocity1 = Vector2Length(Ball1->m_Velocity);
                     float Velocity2 = Vector2Length(Ball2->m_Velocity);
                     calculateFinalVelocity(Ball1->m_Mass, Ball2->m_Mass, Velocity1, Velocity2);
                     Vector2 Direction = Vector2Normalize(Vector2Subtract(Ball2->m_CurrentPosition, Ball1->m_CurrentPosition));
                     Ball1 -> m_Velocity = Vector2Scale(Direction, -Velocity1);
-//                    std::cout << Velocity2 << std::endl;
                     Ball2 -> m_Velocity = Vector2Scale(Direction, Velocity2);
-//                    std::cout << Ball2 -> m_Velocity.x << std::endl;
-//                    std::cout << Ball2 -> m_Velocity.y << std::endl;
 
+                    Ball1->m_CurrentPosition = Vector2Add(Ball1->m_CurrentPosition, Vector2Scale(Ball1->m_Velocity, TimeSinceCollision));
+                    Ball2->m_CurrentPosition = Vector2Add(Ball2->m_CurrentPosition, Vector2Scale(Ball2->m_Velocity, TimeSinceCollision));
                 }
             }
         }

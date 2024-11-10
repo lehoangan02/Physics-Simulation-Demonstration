@@ -114,12 +114,51 @@ private:
     EulerianDropState();
     ~EulerianDropState();
     void reset() override;
-//    float m_TotalTime = 0.0f;
-//    const int m_NumBall = 200;
-//    const float m_DropInterval = 0.1f;
-//    const float StartSppedX = 20;
-//    const float StartSppedY = 15;
-//    const float StartX = 500;
-//    const float StartY = 300;
+};
+class TunnellingComparisonState : public SimulationState {
+public:
+    static SimulationState* getComparisonState();
+    SimulationState* update() override;
+    void draw() override;
+    void onNotify() override;
+private:
+    ContinuousEulerianEngine m_EulerianEngine;
+    VerletEngine m_VerletEngine;
+    vector<EulerianRoundBall*> m_EulerianRoundBallList;
+    vector<VerletRoundBall*> m_VerletRoundBallList;
+    Camera2D m_EulerianCamera = {0};
+    Camera2D m_VerletCamera = {0};
+private:
+    RenderTexture screenCamera1 = LoadRenderTexture(1800/2, 1040);
+    RenderTexture screenCamera2 = LoadRenderTexture(1800/2, 1040);
+    Rectangle splitScreenRect = { 0.0f, 0.0f, (float)screenCamera1.texture.width, (float)-screenCamera1.texture.height };
+private:
+    TunnellingComparisonState();
+    ~TunnellingComparisonState();
+    void reset() override;
+};
+class EnergyComparisonState : public SimulationState {
+public:
+    static SimulationState* getEnergyComparisonState();
+    SimulationState* update() override;
+    void draw() override;
+    void onNotify() override;
+private:
+private:
+    ContinuousEulerianEngine m_EulerianEngine;
+    VerletEngine m_VerletEngine;
+    vector<EulerianRoundBall*> m_EulerianRoundBallList;
+    vector<VerletRoundBall*> m_VerletRoundBallList;
+    Camera2D m_EulerianCamera = {0};
+    Camera2D m_VerletCamera = {0};
+private:
+    RenderTexture screenCamera1 = LoadRenderTexture(1800/2, 1040);
+    RenderTexture screenCamera2 = LoadRenderTexture(1800/2, 1040);
+    Rectangle splitScreenRect = { 0.0f, 0.0f, (float)screenCamera1.texture.width, (float)-screenCamera1.texture.height };
+private:
+    EnergyComparisonState();
+    ~EnergyComparisonState();
+    void reset() override;
+};
 };
 #endif //PHYSICS_SIMULATION_DEMONSTRATION_SIMULATIONSTATE_HPP

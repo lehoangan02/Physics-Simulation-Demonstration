@@ -18,6 +18,8 @@ public:
     Vector2 m_Gravity = {0, 400.0f};
     int m_Width;
     int m_Height;
+    int m_Top = 0;
+    int m_Left = 0;
     int m_TotalEngery;
 private:
     Texture2D m_Background;
@@ -46,7 +48,7 @@ private:
 class ContinuousEulerianEngine
 {
 private:
-    Vector2 m_Gravity = {0, 9000.0f};
+    Vector2 m_Gravity = {0, 400.0f};
     int m_Width;
     int m_Height;
     int m_TotalEngery;

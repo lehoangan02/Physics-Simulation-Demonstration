@@ -16,6 +16,7 @@ private:
     static float m_Radius;
     Color m_Color;
     bool m_Fixed = false;
+    float m_SpeedScale = 1.0f;
 private:
     VerletRoundBall(Vector2 Position, Color Color);
     void giveSpeed(Vector2 Speed);
@@ -26,6 +27,7 @@ private:
     friend class VerletChainState;
     friend class VerletChainBasketState;
     friend class VerletChain;
+    friend class TunnellingComparisonState;
 };
 class EulerianRoundBall {
 private:
@@ -47,5 +49,6 @@ public:
     friend class ContinuousEulerianEngine;
     friend class Spring;
     friend class EulerianDropState;
+    friend class TunnellingComparisonState;
 };
 #endif //PHYSICS_SIMULATION_DEMONSTRATION_ROUNDBALL_HPP

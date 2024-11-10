@@ -18,9 +18,9 @@ void VerletRoundBall::draw() {
 }
 void VerletRoundBall::update(float DeltaTime) {
     Vector2 DeltaPosition = Vector2Subtract(m_CurrentPosition, m_PreviousPosition);
-    m_Velocity = Vector2Scale(Vector2Subtract(m_CurrentPosition, m_PreviousPosition), 1 / DeltaTime);
+    m_Velocity = Vector2Scale(Vector2Subtract(m_CurrentPosition, m_PreviousPosition), m_SpeedScale / DeltaTime);
     m_PreviousPosition = m_CurrentPosition;
-    m_CurrentPosition = Vector2Add(m_CurrentPosition, Vector2Add(DeltaPosition, Vector2Scale(m_Acceleration, 0.5f * DeltaTime * DeltaTime)));
+    m_CurrentPosition = Vector2Add(m_CurrentPosition, Vector2Add(Vector2Scale(m_Velocity, DeltaTime), Vector2Scale(m_Acceleration, 0.5f * DeltaTime * DeltaTime)));
     m_Acceleration = Vector2{0, 0};
 }
 float VerletRoundBall::m_Radius = 10.0f;

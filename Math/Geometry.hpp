@@ -47,6 +47,9 @@ public:
     float findX(float y);
     float findY(float x);
     Line flipHorizontally(Vector2 Point);
+    Line flipVertically(Vector2 Point);
+    bool isVertical();
+    bool isHorizontal();
 };
 class Ray2D {
 private:

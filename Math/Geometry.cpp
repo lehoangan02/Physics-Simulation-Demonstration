@@ -150,9 +150,11 @@ Vector2 Line::projection(const Vector2 &Point) {
     return Res;
 }
 float Line::findX(float y) {
+    if (!m_a) return 0;
     return (-m_b * y - m_c) / m_a;
 }
 float Line::findY(float x) {
+    if (!m_b) return 0;
     return (-m_a * x - m_c) / m_b;
 }
 Line Line::flipHorizontally(Vector2 Point) {
@@ -160,4 +162,18 @@ Line Line::flipHorizontally(Vector2 Point) {
     float b = - m_b;
     float c = -(a * Point.x + b * Point.y);
     return Line(a, b, c);
+}
+Line Line::flipVertically(Vector2 Point) {
+    float a = - m_a;
+    float b = m_b;
+    float c = -(a * Point.x + b * Point.y);
+    return Line(a, b, c);
+}
+bool Line::isVertical() {
+    if (!m_b) return true;
+    return false;
+}
+bool Line::isHorizontal() {
+    if (!m_a) return true;
+    return false;
 }
