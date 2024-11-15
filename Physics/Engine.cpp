@@ -62,9 +62,6 @@ void VerletEngine::update(float DeltaTime) {
     {
         chain -> update();
     }
-//    printf("VerletChain Update Done\n");
-
-
     for (auto& ball : m_RoundBallList) {
         ball->update(DeltaTime);
     }
@@ -73,7 +70,6 @@ void VerletEngine::update(float DeltaTime) {
 void VerletEngine::collidePlatformTriangle() {
     for (auto& Ball : m_RoundBallList)
     {
-//        for (auto& TriangleLineSegment: m_TriangleLineSegmentList)
         for (long k = 0; k < m_TriangleLineSegmentList.size(); ++k)
         {
             vector<LineSegment> TriangleLineSegment = m_TriangleLineSegmentList[k];
@@ -184,12 +180,11 @@ void ContinuousEulerianEngine::update(float DeltaTime) {
     for (auto& ball : m_RoundBallList) {
         ball->update(DeltaTime);
     }
+    collideRoundBalls(DeltaTime);
     applyConstraints();
-    collideRoundBalls();
 }
 void ContinuousEulerianEngine::applyConstraints() {
     for (auto &ball : m_RoundBallList) {
-//        if (ball->m_Fixed) continue;
         if (ball-> m_CurrentPosition.x + ball->m_Radius > m_Width) {
             Line Delta = Line(ball->m_CurrentPosition, ball -> m_PreviousPosition);
             Line RealRight = Line(1, 0, - m_Width + ball -> m_Radius);
@@ -257,7 +252,6 @@ void ContinuousEulerianEngine::applyConstraints() {
             if (NewY - ball -> m_Radius < 0)
             {
                 NewY = Intersection.y;
-
             }
             ball -> m_CurrentPosition = Vector2{NewX, NewY};
             ball -> m_PreviousPosition = Intersection;
@@ -303,53 +297,184 @@ void ContinuousEulerianEngine::draw() {
 }
 void ContinuousEulerianEngine::reset() {
     m_RoundBallList.clear();
-    m_PlatformTriangleList.clear();
 }
 void ContinuousEulerianEngine::applyGravity() {
     for (auto& ball : m_RoundBallList) {
-//        if (!(ball -> m_Fixed)) ball->accelerate(m_Gravity);
         ball -> applyForce(m_Gravity);
     }
 }
-void ContinuousEulerianEngine::collideRoundBalls() {
+void ContinuousEulerianEngine::collideRoundBalls(float DeltaTime) {
     for (auto &Ball1: m_RoundBallList) {
         for (auto &Ball2: m_RoundBallList) {
             if (Ball1 != Ball2) {
                 if (Ball1->m_Radius + Ball2->m_Radius >
                     Vector2Distance(Ball1->m_CurrentPosition, Ball2->m_CurrentPosition)) {
-                    // use pythagorean theorem to calculate the distance between the two balls
-                    LineSegment DeltaPosition = LineSegment(Ball1->m_PreviousPosition, Ball1->m_CurrentPosition);
-                    Vector2 Projection = DeltaPosition.projection(Ball2->m_CurrentPosition);
-                    LineSegment Altitude(Projection, Ball2->m_CurrentPosition);
-                    float RadicalProjectionLength = sqrt(
-                            (Ball1->m_Radius + Ball2->m_Radius) * (Ball1->m_Radius + Ball2->m_Radius) -
-                            Altitude.getLength() * Altitude.getLength());
-                    float ProjectionLength = Vector2Distance(Projection, Ball1->m_PreviousPosition);
-                    float Offset = ProjectionLength - RadicalProjectionLength;
-                    Vector2 CollidingPosition = DeltaPosition.getPointWithDistance(Offset, "A");
-                    float DistanceToCollidingPosition = Vector2Distance(CollidingPosition, Ball1->m_CurrentPosition);
-                    float TimeSinceCollision = Vector2Distance(Ball1->m_CurrentPosition, CollidingPosition) /
-                            Vector2Length(Ball1 -> m_Velocity);
-                    Ball1->m_CurrentPosition = CollidingPosition;
-
-                    float Velocity1 = Vector2Length(Ball1->m_Velocity);
-                    float Velocity2 = Vector2Length(Ball2->m_Velocity);
-                    calculateFinalVelocity(Ball1->m_Mass, Ball2->m_Mass, Velocity1, Velocity2);
-                    Vector2 Direction = Vector2Normalize(Vector2Subtract(Ball2->m_CurrentPosition, Ball1->m_CurrentPosition));
-                    Ball1 -> m_Velocity = Vector2Scale(Direction, -Velocity1);
-                    Ball2 -> m_Velocity = Vector2Scale(Direction, Velocity2);
-
+                    Vector2 DeltaVelocity = Vector2Subtract(Ball1->m_Velocity, Ball2->m_Velocity);
+                    Vector2 DeltaPosition = Vector2Subtract(Ball1->m_PreviousPosition, Ball2->m_PreviousPosition);
+                    float A = DeltaVelocity.x * DeltaVelocity.x + DeltaVelocity.y * DeltaVelocity.y;
+                    float B = 2 * (DeltaVelocity.x * DeltaPosition.x + DeltaVelocity.y * DeltaPosition.y);
+                    float C = DeltaPosition.x * DeltaPosition.x + DeltaPosition.y * DeltaPosition.y - (Ball1->m_Radius + Ball2->m_Radius) * (Ball1->m_Radius + Ball2->m_Radius);
+                    QuadraticEquationsSolver Solver;
+                    float TimeToCollision = Solver(A, B, C);
+                    Ball1 -> m_CurrentPosition = Vector2Add(Ball1 -> m_PreviousPosition, Vector2Scale(Ball1 -> m_Velocity, TimeToCollision));
+                    Ball2 -> m_CurrentPosition = Vector2Add(Ball2 -> m_PreviousPosition, Vector2Scale(Ball2 -> m_Velocity, TimeToCollision));
+                    if (Ball1->m_Radius + Ball2->m_Radius >
+                        Vector2Distance(Ball1->m_CurrentPosition, Ball2->m_CurrentPosition)) {
+                        std::cout << "Error: Collision not resolved" << std::endl;
+                    }
+                    Ball1 -> m_PreviousPosition = Ball1 -> m_CurrentPosition;
+                    Ball2 -> m_PreviousPosition = Ball2 -> m_CurrentPosition;
+                    float TimeSinceCollision = DeltaTime - TimeToCollision;
+                    calculateFinalVelocity(Ball1->m_Mass, Ball2->m_Mass, Ball1->m_Velocity, Ball2->m_Velocity);
                     Ball1->m_CurrentPosition = Vector2Add(Ball1->m_CurrentPosition, Vector2Scale(Ball1->m_Velocity, TimeSinceCollision));
                     Ball2->m_CurrentPosition = Vector2Add(Ball2->m_CurrentPosition, Vector2Scale(Ball2->m_Velocity, TimeSinceCollision));
+            }
+            }
+        }
+    }
+}
+void calculateFinalVelocity(const float &Mass1, const float &Mass2, Vector2 &Velocity1,
+                                                      Vector2 &Velocity2) {
+    Vector2 v1 = Vector2Scale(Vector2Add(Vector2Scale(Velocity2, 2 * Mass2), Vector2Scale(Velocity1, Mass1 - Mass2)), 1 / (Mass1 + Mass2));
+    Vector2 v2 = Vector2Scale(Vector2Add(Vector2Scale(Velocity1, 2 * Mass1), Vector2Scale(Velocity2, Mass2 - Mass1)), 1 / (Mass1 + Mass2));
+    Velocity1 = v1;
+    Velocity2 = v2;
+}
+void calculateFinalVelocity(const float &Mass1, const float &Mass2, float &Velocity1,
+                                                      float &Velocity2)
+{
+        float v1 = fabs((2 * Mass2 * Velocity2 + (Mass1 - Mass2) * Velocity1) / (Mass1 + Mass2));
+    float v2 = fabs((2 * Mass1 * Velocity1 + (Mass2 - Mass1) * Velocity2) / (Mass1 + Mass2));
+
+    Velocity1 = v1;
+    Velocity2 = v2;
+}
+DisceteEulerianEngine::DisceteEulerianEngine(int Width, int Height) : m_Width(Width), m_Height(Height), m_TotalEngery(0) {
+    m_Background = LoadTexture("Assets/Textures/GridBackground.png");
+
+}
+void DisceteEulerianEngine::attachRoundBall(EulerianRoundBall *NewRoundBall) {
+    m_RoundBallList.push_back(NewRoundBall);
+}
+void DisceteEulerianEngine::update(float DeltaTime) {
+    for (auto& ball : m_RoundBallList) {
+        ball->update(DeltaTime);
+    }
+    accelerateMutually();
+    collideRoundBalls();
+    applyConstraints();
+}
+void DisceteEulerianEngine::applyConstraints() {
+    for (auto &Ball : m_RoundBallList) {
+        if (Ball-> m_CurrentPosition.x + Ball->m_Radius > m_Width) {
+            Ball -> m_CurrentPosition.x = m_Width - Ball -> m_Radius;
+            Ball -> m_Velocity.x = -(Ball -> m_Velocity.x);
+        }
+        if (Ball-> m_CurrentPosition.x - Ball->m_Radius < 0) {
+            Ball -> m_CurrentPosition.x = Ball -> m_Radius;
+            Ball -> m_Velocity.x = -(Ball -> m_Velocity.x);
+        }
+        if (Ball-> m_CurrentPosition.y + Ball->m_Radius > m_Height) {
+            Ball -> m_CurrentPosition.y = m_Height - Ball -> m_Radius;
+            Ball -> m_Velocity.y = -(Ball -> m_Velocity.y);
+        }
+        if (Ball-> m_CurrentPosition.y - Ball->m_Radius < 0) {
+            Ball -> m_CurrentPosition.y = Ball -> m_Radius;
+            Ball -> m_Velocity.y = -(Ball -> m_Velocity.y);
+        }
+    }
+}
+void DisceteEulerianEngine::collideRoundBalls() {
+    for (auto& Ball1 : m_RoundBallList)
+    {
+        for (auto& Ball2 : m_RoundBallList)
+        {
+            if (Ball1 != Ball2)
+            {
+                Vector2 DirectVector = Vector2Subtract(Ball2 -> m_CurrentPosition, Ball1 -> m_CurrentPosition);
+                float Distance = Vector2Length(DirectVector);
+                if (Distance < 2 * Ball1 -> m_Radius) {
+                    Vector2 NormalizedDirectVector = Vector2Normalize(DirectVector);
+                    if (!(Ball1->m_Fixed) && !(Ball2->m_Fixed)) {
+                        Ball2->m_CurrentPosition = Vector2Add(Ball2->m_CurrentPosition,
+                                                              Vector2Scale(NormalizedDirectVector,
+                                                                           0.5 * (2 * Ball1->m_Radius - Distance)));
+                        Ball1->m_CurrentPosition = Vector2Subtract(Ball1->m_CurrentPosition,
+                                                                   Vector2Scale(NormalizedDirectVector, 0.5 * (2 *
+                                                                                                               Ball1->m_Radius -
+                                                                                                               Distance)));
+                        calculateFinalVelocity(Ball1->m_Mass, Ball2->m_Mass, Ball1->m_Velocity, Ball2->m_Velocity);
+                    }
                 }
             }
         }
     }
 }
-void ContinuousEulerianEngine::calculateFinalVelocity(const float &Mass1, const float &Mass2, float &Velocity1,
-                                                      float &Velocity2) {
-    float v1 = fabs((2 * Mass2 * Velocity2 + (Mass1 - Mass2) * Velocity1) / (Mass1 + Mass2));
-    float v2 = fabs((2 * Mass1 * Velocity1 + (Mass2 - Mass1) * Velocity2) / (Mass1 + Mass2));
-    Velocity1 = v1;
-    Velocity2 = v2;
+void DisceteEulerianEngine::draw() {
+    DrawTexture(m_Background, 0, 0, WHITE);
+    for (auto& ball : m_RoundBallList) {
+        ball -> m_Color = calculateColor(ball);
+        ball->draw();
+    }
+}
+void DisceteEulerianEngine::reset() {
+    m_RoundBallList.clear();
+}
+Color DisceteEulerianEngine::ColorSquare::m_RED = Color(238, 66, 102, 255);
+Color DisceteEulerianEngine::ColorSquare::m_YELLOW = Color(255, 210, 63, 255);
+Color DisceteEulerianEngine::ColorSquare::m_GREEN = Color(51, 115, 87, 255);
+Color DisceteEulerianEngine::ColorSquare::chooseColor(vector<EulerianRoundBall*> m_RoundBallList, EulerianRoundBall* Ball) {
+    int Count = 0;
+    for (auto& ball : m_RoundBallList)
+    {
+        if (isInsideSquare(ball))
+        {
+            ++Count;
+        }
+    }
+    if (Count > 8)
+    {
+        return m_RED;
+    }
+    else if (Count > 5)
+    {
+        return m_YELLOW;
+    }
+    else
+    {
+        return m_GREEN;
+    }
+}
+void DisceteEulerianEngine::accelerateMutually() {
+    for (auto& Ball1 : m_RoundBallList)
+    {
+        for (auto& Ball2 : m_RoundBallList)
+        {
+            if (Ball1 != Ball2)
+            {
+
+                Vector2 DirectVector = Vector2Subtract(Ball2 -> m_CurrentPosition, Ball1 -> m_CurrentPosition);
+                float Distance = Vector2Length(DirectVector);
+                float Acceleration = 6.67f * 10 * 1 / (Distance * Distance);
+//                float Acceleration = ;
+                Vector2 AccelerationVector = Vector2Scale(Vector2Normalize(DirectVector), Acceleration);
+                Vector2 NormalizedDirectVector = Vector2Normalize(DirectVector);
+                if (!(Ball1->m_Fixed) && !(Ball2 -> m_Fixed)) {
+                    Ball1 ->accelerate(AccelerationVector);
+                    Ball2 ->accelerate(Vector2Scale(AccelerationVector, -1));
+                }
+            }
+        }
+    }
+}
+bool DisceteEulerianEngine::ColorSquare::isInsideSquare(EulerianRoundBall* Ball) {
+    return Ball -> m_CurrentPosition.x > m_TopLeft.x && Ball -> m_CurrentPosition.x < m_TopLeft.x + m_Width && Ball -> m_CurrentPosition.y > m_TopLeft.y && Ball -> m_CurrentPosition.y < m_TopLeft.y + m_Height;
+}
+Color DisceteEulerianEngine::calculateColor(EulerianRoundBall *Ball) {
+    ColorSquare Square;
+    Square.m_Center = Ball -> m_CurrentPosition;
+    Square.m_Width = 100.0f;
+    Square.m_Height = 100.0f;
+    Square.m_TopLeft = Vector2{Square.m_Center.x - Square.m_Width / 2, Square.m_Center.y - Square.m_Height / 2};
+    return Square.chooseColor(m_RoundBallList, Ball);
 }

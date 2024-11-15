@@ -128,7 +128,6 @@ private:
     vector<VerletRoundBall*> m_VerletRoundBallList;
     Camera2D m_EulerianCamera = {0};
     Camera2D m_VerletCamera = {0};
-private:
     RenderTexture screenCamera1 = LoadRenderTexture(1800/2, 1040);
     RenderTexture screenCamera2 = LoadRenderTexture(1800/2, 1040);
     Rectangle splitScreenRect = { 0.0f, 0.0f, (float)screenCamera1.texture.width, (float)-screenCamera1.texture.height };
@@ -144,14 +143,12 @@ public:
     void draw() override;
     void onNotify() override;
 private:
-private:
     ContinuousEulerianEngine m_EulerianEngine;
     VerletEngine m_VerletEngine;
     vector<EulerianRoundBall*> m_EulerianRoundBallList;
     vector<VerletRoundBall*> m_VerletRoundBallList;
     Camera2D m_EulerianCamera = {0};
     Camera2D m_VerletCamera = {0};
-private:
     RenderTexture screenCamera1 = LoadRenderTexture(1800/2, 1040);
     RenderTexture screenCamera2 = LoadRenderTexture(1800/2, 1040);
     Rectangle splitScreenRect = { 0.0f, 0.0f, (float)screenCamera1.texture.width, (float)-screenCamera1.texture.height };
@@ -160,5 +157,40 @@ private:
     ~EnergyComparisonState();
     void reset() override;
 };
+class FPSInvariantStateForContinuousIntegration : public SimulationState {
+public:
+    static SimulationState* getFPSInvariantStateForContinuousIntegration();
+    SimulationState* update() override;
+    void draw() override;
+    void onNotify() override;
+private:
+    ContinuousEulerianEngine m_Engine1;
+    ContinuousEulerianEngine m_Engine2;
+    vector<EulerianRoundBall*> m_RoundBallList1;
+    vector<EulerianRoundBall*> m_RoundBallList2;
+    Camera2D m_Camera1 = {0};
+    Camera2D m_Camera2 = {0};
+    RenderTexture screenCamera1 = LoadRenderTexture(1800/2, 1040);
+    RenderTexture screenCamera2 = LoadRenderTexture(1800/2, 1040);
+    Rectangle splitScreenRect = { 0.0f, 0.0f, (float)screenCamera1.texture.width, (float)-screenCamera1.texture.height };
+    int m_FrameCount = 0;
+private:
+    FPSInvariantStateForContinuousIntegration();
+    ~FPSInvariantStateForContinuousIntegration();
+    void reset() override;
+};
+class ParticleGravityState : public SimulationState {
+public:
+    static SimulationState* getParticleGravityState();
+    SimulationState* update() override;
+    void draw() override;
+    void onNotify() override;
+private:
+    DisceteEulerianEngine m_Engine;
+    vector<EulerianRoundBall*> m_RoundBallList;
+private:
+    ParticleGravityState();
+    ~ParticleGravityState();
+    void reset() override;
 };
 #endif //PHYSICS_SIMULATION_DEMONSTRATION_SIMULATIONSTATE_HPP

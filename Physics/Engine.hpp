@@ -11,7 +11,12 @@
 #include "../Math/Geometry.hpp"
 #include "Chains.hpp"
 #include <vector>
+#include <cmath>
 using namespace std;
+void calculateFinalVelocity(const float &Mass1, const float &Mass2, Vector2 &Velocity1,
+                            Vector2 &Velocity2);
+void calculateFinalVelocity(const float &Mass1, const float &Mass2, float &Velocity1,
+                            float &Velocity2);
 class VerletEngine
 {
 public:
@@ -54,22 +59,51 @@ private:
     int m_TotalEngery;
     Texture2D m_Background;
     vector<EulerianRoundBall*> m_RoundBallList;
-    vector<PlatformTriangle*> m_PlatformTriangleList;
-    Line m_GroundLine = Line(0, 1, 0);
-    Line m_TopLine = Line(0, 1, -m_Height);
-    Line m_LeftLine = Line (1, 0, 0);
-    Line m_RightLine = Line(1, 0, -m_Width);
 public:
     ContinuousEulerianEngine(int Width, int Height);
     void attachRoundBall(EulerianRoundBall* NewRoundBall);
-//    void attachPlatformTriangle(PlatformTriangle* NewPlatformTriangle);
     void update(float DeltaTime);
     void draw();
     void reset();
 private:
     void applyConstraints();
     void applyGravity();
+    void collideRoundBalls(float DeltaTime);
+    friend class FPSInvariantStateForContinuousIntegration;
+};
+
+class DisceteEulerianEngine
+{
+    class ColorSquare {
+    private:
+        static Color m_RED;
+        static Color m_YELLOW;
+        static Color m_GREEN;
+    public:
+        Vector2 m_TopLeft;
+        float m_Width;
+        float m_Height;
+        Vector2 m_Center;
+    public:
+        Color chooseColor(vector<EulerianRoundBall*> m_RoundBallList, EulerianRoundBall* Ball);
+        bool isInsideSquare(EulerianRoundBall* Ball);
+    };
+private:
+    int m_Width;
+    int m_Height;
+    int m_TotalEngery;
+    Texture2D m_Background;
+    vector<EulerianRoundBall*> m_RoundBallList;
+public:
+    DisceteEulerianEngine(int Width, int Height);
+    void attachRoundBall(EulerianRoundBall* NewRoundBall);
+    void update(float DeltaTime);
+    void draw();
+    void reset();
+private:
+    void applyConstraints();
     void collideRoundBalls();
-    void calculateFinalVelocity(const float &Mass1, const float &Mass2, float& Velocity1, float& Velocity2);
+    void accelerateMutually();
+    Color calculateColor(EulerianRoundBall* Ball);
 };
 #endif //PHYSICS_SIMULATION_DEMONSTRATION_ENGINE_HPP

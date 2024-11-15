@@ -228,12 +228,12 @@
 		{
 			"backtrace" : 1,
 			"compileGroupIndex" : 0,
-			"path" : "Math/LinearEquationsSolver.cpp",
+			"path" : "Math/EquationsSolver.cpp",
 			"sourceGroupIndex" : 0
 		},
 		{
 			"backtrace" : 1,
-			"path" : "Math/LinearEquationsSolver.hpp",
+			"path" : "Math/EquationsSolver.hpp",
 			"sourceGroupIndex" : 1
 		},
 		{

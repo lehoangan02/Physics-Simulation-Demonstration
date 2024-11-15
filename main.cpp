@@ -17,11 +17,11 @@ int main() {
     MyBackHome -> addObserver(ActiveState);
     while(!WindowShouldClose())
     {
-        if ((IsKeyPressed(KEY_LEFT_SHIFT) || IsKeyPressed(KEY_RIGHT_SHIFT)) && IsKeyPressed(KEY_COMMA))
+        if ((IsKeyDown(KEY_LEFT_SHIFT) || IsKeyDown(KEY_RIGHT_SHIFT)) && IsKeyPressed(KEY_COMMA))
         {
             SetTargetFPS(15);
         }
-        if ((IsKeyPressed(KEY_LEFT_SHIFT) || IsKeyPressed(KEY_RIGHT_SHIFT)) && IsKeyPressed(KEY_PERIOD))
+        if ((IsKeyDown(KEY_LEFT_SHIFT) || IsKeyDown(KEY_RIGHT_SHIFT)) && IsKeyPressed(KEY_PERIOD))
         {
             SetTargetFPS(60);
         }

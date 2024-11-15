@@ -28,6 +28,7 @@ private:
     friend class VerletChainBasketState;
     friend class VerletChain;
     friend class TunnellingComparisonState;
+    friend class EnergyComparisonState;
 };
 class EulerianRoundBall {
 private:
@@ -35,7 +36,7 @@ private:
     Vector2 m_CurrentPosition;
     Vector2 m_Acceleration;
     Vector2 m_Velocity;
-    const float m_Radius = 100.0f;
+    float m_Radius = 100.0f;
     Color m_Color;
     bool m_Fixed = false;
     float m_Mass = 1.0f;
@@ -47,8 +48,12 @@ public:
     void update(float DeltaTime);
     void draw();
     friend class ContinuousEulerianEngine;
+    friend class DisceteEulerianEngine;
     friend class Spring;
     friend class EulerianDropState;
     friend class TunnellingComparisonState;
+    friend class EnergyComparisonState;
+    friend class FPSInvariantStateForContinuousIntegration;
+    friend class ParticleGravityState;
 };
 #endif //PHYSICS_SIMULATION_DEMONSTRATION_ROUNDBALL_HPP

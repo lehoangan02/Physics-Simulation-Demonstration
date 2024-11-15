@@ -2,8 +2,8 @@
 // Created by Le Hoang An on 18/10/24.
 //
 
-#ifndef PHYSICS_SIMULATION_DEMONSTRATION_LINEAREQUATIONSSOLVER_HPP
-#define PHYSICS_SIMULATION_DEMONSTRATION_LINEAREQUATIONSSOLVER_HPP
+#ifndef PHYSICS_SIMULATION_DEMONSTRATION_EQUATIONSSOLVER_HPP
+#define PHYSICS_SIMULATION_DEMONSTRATION_EQUATIONSSOLVER_HPP
 #include <iostream>
 class LinearEquationsSolver
 {
@@ -18,4 +18,9 @@ public:
     LinearEquationsSolver(float a1, float b1, float c1, float a2, float b2, float c2);
     bool solve(float& x, float& y);
 };
-#endif //PHYSICS_SIMULATION_DEMONSTRATION_LINEAREQUATIONSSOLVER_HPP
+class QuadraticEquationsSolver
+{
+public:
+    float operator()(float a, float b, float c);
+};
+#endif //PHYSICS_SIMULATION_DEMONSTRATION_EQUATIONSSOLVER_HPP

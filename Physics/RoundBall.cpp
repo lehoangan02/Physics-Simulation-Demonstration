@@ -38,7 +38,7 @@ void EulerianRoundBall::applyForce(Vector2 Force) {
 }
 void EulerianRoundBall::update(float DeltaTime) {
     m_Velocity = Vector2Add(m_Velocity, Vector2Scale(m_Acceleration, DeltaTime));
-//    m_Velocity = Vector2Scale(m_Velocity, 1.00007f);
+//    m_Velocity = Vector2Scale(m_Velocity, 0.999994f);
 //    m_Velocity = Vector2Scale(m_Velocity, 1.01f); // for stress testing
     m_PreviousPosition = m_CurrentPosition;
     m_CurrentPosition = Vector2Add(m_CurrentPosition, Vector2Scale(m_Velocity, DeltaTime));

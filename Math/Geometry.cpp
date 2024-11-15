@@ -27,9 +27,14 @@ bool LineSegment::haveProjection(const Vector2 &Point) {
     return false;
 }
 Vector2 LineSegment::getPointWithDistance(const float &Distance, std::string Side) {
-    Vector2 Direction = Vector2Normalize(Vector2Subtract(A, B));
+    Vector2 Direction = Vector2Subtract(B, A);
+//    std::cout << "Direction: " << Direction.x << " " << Direction.y << std::endl;
+//    std::cout << "A: " << A.x << " " << A.y << std::endl;
+//    std::cout << "B: " << B.x << " " << B.y << std::endl;
     Vector2 Normalized = Vector2Normalize(Direction);
+//    std::cout << "Normalized: " << Normalized.x << " " << Normalized.y << std::endl;
     Vector2 ScaledDirection = Vector2Scale(Normalized, Distance);
+//    std::cout << "ScaledDirection: " << ScaledDirection.x << " " << ScaledDirection.y << std::endl;
     if (Side == "A")
     {
         return Vector2Add(A, ScaledDirection);
@@ -68,6 +73,42 @@ Line::Line(const Vector2& A, const Vector2& B) {
     m_b = -1;
     m_a = (A.y - B.y) / (A.x - B.x);
     m_c = A.y - m_a * A.x;
+}
+Line::Line(std::pair<Vector2, Vector2> DirectionVectorAndPoint) {
+    m_a = DirectionVectorAndPoint.first.y;
+    m_b = - DirectionVectorAndPoint.first.x;
+    m_c = - (m_a * DirectionVectorAndPoint.second.x + m_b * DirectionVectorAndPoint.second.y);
+    Normalized();
+}
+void Line::Normalized() {
+    if (m_a < 0)
+    {
+        m_a = -m_a;
+        m_b = -m_b;
+        m_c = -m_c;
+    }
+    if (m_a == 0)
+    {
+        m_b = 1;
+        m_c = -m_c;
+    }
+    else if (m_b == 0)
+    {
+        m_a = 1;
+        m_c = -m_c;
+    }
+    if (fabs(m_a) < fabs(m_b))
+    {
+        m_b = m_b / m_a;
+        m_c = m_c / m_a;
+        m_a = 1;
+    }
+    else
+    {
+        m_a = m_a / m_b;
+        m_c = m_c / m_b;
+        m_b = 1;
+    }
 }
 float Line::distanceToPoint(const Vector2& Point) {
     return static_cast<float>(fabs(m_a * Point.x + m_b * Point.y + m_c) / sqrt(m_a * m_a + m_b * m_b));
@@ -176,4 +217,33 @@ bool Line::isVertical() {
 bool Line::isHorizontal() {
     if (!m_a) return true;
     return false;
+}
+bool Line::isParallel(Line Other) {
+    if (m_a == 0 && Other.m_b == 0) return false;
+    if (m_b == 0 && Other.m_a == 0) return false;
+    if (m_a * Other.m_b == m_b * Other.m_a) return true;
+    return false;
+}
+float Line::distanceToLine(const Line &Other) {
+    float x = 1;
+//    float y =
+
+}
+Ray2D::Ray2D(Vector2 Origin, Vector2 Direction) : m_Origin(Origin), m_Direction(Direction) {
+}
+Ray2D Ray2D::bisector(Ray2D Ray1, Ray2D Ray2) {
+    Vector2 Direction1 = Vector2Normalize(Ray1.m_Direction);
+    Vector2 Direction2 = Vector2Normalize(Ray2.m_Direction);
+    Vector2 Direction = Vector2Normalize(Vector2Add(Direction1, Direction2));
+    return Ray2D(Ray1.m_Origin, Direction);
+}
+Line Ray2D::getLine() {
+    std::pair<Vector2, Vector2> DirectionVectorAndPoint(m_Direction, m_Origin);
+    return Line(DirectionVectorAndPoint);
+}
+float dotProduct(Vector2 A, Vector2 B) {
+    return A.x * B.x + A.y * B.y;
+}
+float angle(Vector2 A, Vector2 B) {
+    return acos(dotProduct(A, B) / (Vector2Length(A) * Vector2Length(B)));
 }

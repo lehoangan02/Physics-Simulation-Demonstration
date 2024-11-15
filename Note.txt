@@ -1,0 +1,158 @@
+first attemp:
+std::cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << std::endl;
+                    std::cout << "Collision between: " << &Ball1 << " and " << &Ball2 << std::endl;
+                    std::cout << "Ball1 Position: " << Ball1->m_CurrentPosition.x << " " << Ball1->m_CurrentPosition.y
+                              << std::endl;
+                    std::cout << "Ball1 Previous Position: " << Ball1->m_PreviousPosition.x << " "
+                              << Ball1->m_PreviousPosition.y << std::endl;
+                    std::cout << "Ball2 Position: " << Ball2->m_CurrentPosition.x << " " << Ball2->m_CurrentPosition.y
+                              << std::endl;
+                    std::cout << "Ball 1 Velocity: " << Ball1->m_Velocity.x << " " << Ball1->m_Velocity.y << std::endl;
+                    // use pythagorean theorem to calculate the distance between the two balls
+                    LineSegment DeltaPosition = LineSegment(Ball1->m_PreviousPosition, Ball1->m_CurrentPosition);
+
+                    std::pair<Vector2, Vector2> temp(Vector2Subtract(Ball2 -> m_Velocity, Ball1 -> m_Velocity), Ball1 -> m_CurrentPosition);
+                    Line DeltaVelocity(temp);
+                    Line(DeltaPosition).print();
+                    Line(DeltaVelocity).print();
+                    Vector2 Projection = DeltaVelocity.projection(Ball2->m_CurrentPosition);
+                    LineSegment Altitude(Projection, Ball2->m_CurrentPosition);
+                    float RadicalProjectionLength1 = sqrt(
+                            (Ball1->m_Radius + Ball2->m_Radius) * (Ball1->m_Radius + Ball2->m_Radius) -
+                            Altitude.getLength() * Altitude.getLength());
+                    std::cout << "Radical Projection Length: " << RadicalProjectionLength1 << std::endl;
+                    float ProjectionLength = Vector2Distance(Projection, Ball1->m_PreviousPosition);
+                    float Offset1 = ProjectionLength - RadicalProjectionLength1;
+                    std::cout << "Offset1: " << Offset1 << std::endl;
+                    Vector2 CollidingPosition1 = DeltaPosition.getPointWithDistance(Offset1, "A");
+                    std::cout << "Colliding Position: " << CollidingPosition1.x << " " << CollidingPosition1.y << std::endl;
+                    float DistanceToCollidingPosition = Vector2Distance(CollidingPosition1, Ball1->m_CurrentPosition);
+                    float TimeSinceCollision = DistanceToCollidingPosition /
+                            Vector2Length(Ball1 -> m_Velocity);
+                    Ball1->m_CurrentPosition = CollidingPosition1;
+                    float RadicalProjectionLength2 = sqrt((Ball1->m_Radius + Ball2->m_Radius) * (Ball1->m_Radius + Ball2->m_Radius) - RadicalProjectionLength1* RadicalProjectionLength1);
+                    LineSegment Delta2(Projection, Ball2 -> m_CurrentPosition);
+                    Vector2 CollidingPosition2 = Delta2.getPointWithDistance(RadicalProjectionLength2, "A");
+                    Ball2 -> m_CurrentPosition = CollidingPosition2;
+                    float Velocity1 = Vector2Length(Ball1->m_Velocity);
+                    float Velocity2 = Vector2Length(Ball2->m_Velocity);
+                    calculateFinalVelocity(Ball1->m_Mass, Ball2->m_Mass, Velocity1, Velocity2);
+                    Vector2 Direction = Vector2Normalize(Vector2Subtract(Ball2->m_CurrentPosition, Ball1->m_CurrentPosition));
+                    Ball1 -> m_Velocity = Vector2Scale(Direction, -Velocity1);
+                    Ball2 -> m_Velocity = Vector2Scale(Direction, Velocity2);
+//
+                    Ball1->m_CurrentPosition = Vector2Add(Ball1->m_CurrentPosition, Vector2Scale(Ball1->m_Velocity, TimeSinceCollision));
+                    Ball2->m_CurrentPosition = Vector2Add(Ball2->m_CurrentPosition, Vector2Scale(Ball2->m_Velocity, TimeSinceCollision));
+                    if (Ball1->m_Radius + Ball2->m_Radius >
+                        Vector2Distance(Ball1->m_CurrentPosition, Ball2->m_CurrentPosition)) {
+                        std::cout << "Error: Collision not resolved" << std::endl;
+                    }
+
+
+
+second attemp:
+Vector2Distance(Ball1->m_CurrentPosition, Ball2->m_CurrentPosition)) {
+                    Vector2 Delta1(Vector2Subtract(Ball1->m_CurrentPosition, Ball1->m_PreviousPosition));
+                    Line Line1(Ball1->m_PreviousPosition, Ball1->m_CurrentPosition);
+                    Vector2 Delta2(Vector2Subtract(Ball2->m_CurrentPosition, Ball2->m_PreviousPosition));
+                    Line Line2(Ball2->m_PreviousPosition, Ball2->m_CurrentPosition);
+//                    if (Line1.isParallel(Line2)) {
+////                        float Distance = Line1.dis
+//                        std::cout << "Error: Collision could not be resolved" << std::endl;
+//                    }
+                    Vector2 Intersection = Line1.intersection(Line2);
+                    std::cout << "Intersection: " << Intersection.x << " " << Intersection.y << std::endl;
+                    float Angle = angle(Delta1, Delta2);
+                    Angle /= 2;
+                    float Length = (Ball1 -> m_Radius) / sin(Angle);
+                    LineSegment LineSegment1(Intersection, Ball1 -> m_PreviousPosition);
+                    LineSegment LineSegment2(Intersection, Ball2 -> m_PreviousPosition);
+                    Vector2 NewBallPosition1 = LineSegment1.getPointWithDistance(Length, "A");
+                    Vector2 NewBallPosition2 = LineSegment2.getPointWithDistance(Length, "A");
+                    float DistanceToCollidingPosition = Vector2Distance(NewBallPosition1, Ball1->m_CurrentPosition);
+                    float TimeSinceCollision = DistanceToCollidingPosition / Vector2Length(Ball1 -> m_Velocity);
+                    Ball1 -> m_CurrentPosition = NewBallPosition1;
+                    Ball2 -> m_CurrentPosition = NewBallPosition2;
+                    BeginDrawing();
+                    DrawCircle(Ball1 -> m_CurrentPosition.x, Ball1 -> m_CurrentPosition.y, 10, MAGENTA);
+                    DrawLine(Intersection.x, Intersection.y, Ball1 -> m_CurrentPosition.x, Ball1 -> m_CurrentPosition.y, PURPLE);
+                    DrawLine(Intersection.x, Intersection.y, Ball2 -> m_CurrentPosition.x, Ball2 -> m_CurrentPosition.y, YELLOW);
+                    DrawCircle(Intersection.x, Intersection.y, 5, BLUE);
+                    DrawCircle(NewBallPosition1.x, NewBallPosition1.y, 5, RED);
+                    DrawCircle(NewBallPosition2.x, NewBallPosition2.y, 5, RED);
+                    EndDrawing();
+                    float Velocity1 = Vector2Length(Ball1->m_Velocity);
+                    float Velocity2 = Vector2Length(Ball2->m_Velocity);
+                    calculateFinalVelocity(Ball1->m_Mass, Ball2->m_Mass, Velocity1, Velocity2);
+                    Vector2 Direction = Vector2Normalize(Vector2Subtract(Ball2->m_CurrentPosition, Ball1->m_CurrentPosition));
+                    Ball1 -> m_Velocity = Vector2Scale(Direction, -Velocity1);
+                    Ball2 -> m_Velocity = Vector2Scale(Direction, Velocity2);
+//                    Ball1->m_CurrentPosition = Vector2Add(Ball1->m_CurrentPosition, Vector2Scale(Ball1->m_Velocity, TimeSinceCollision));
+//                    Ball2->m_CurrentPosition = Vector2Add(Ball2->m_CurrentPosition, Vector2Scale(Ball2->m_Velocity, TimeSinceCollision));
+                    if (Ball1->m_Radius + Ball2->m_Radius >
+                        Vector2Distance(Ball1->m_CurrentPosition, Ball2->m_CurrentPosition)) {
+                        std::cout << "Error: Collision not resolved" << std::endl;
+                    }
+third attempt:
+std::cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << std::endl;
+//                std::cout << "Collision between: " << &Ball1 << " and " << &Ball2 << std::endl;
+                std::cout << "Ball1 Position: " << Ball1->m_CurrentPosition.x << " " << Ball1->m_CurrentPosition.y
+                          << std::endl;
+                std::cout << "Ball1 Previous Position: " << Ball1->m_PreviousPosition.x << " "
+                          << Ball1->m_PreviousPosition.y << std::endl;
+                std::cout << "Ball2 Position: " << Ball2->m_CurrentPosition.x << " " << Ball2->m_CurrentPosition.y
+                          << std::endl;
+                std::cout << "Ball2 Previous Position: " << Ball2->m_PreviousPosition.x << " " << Ball2->m_PreviousPosition.y << std::endl;
+                std::cout << "Ball2 Position: " << Ball2->m_CurrentPosition.x << " " << Ball2->m_CurrentPosition.y
+                          << std::endl;
+                std::cout << "Ball 1 Velocity: " << Ball1->m_Velocity.x << " " << Ball1->m_Velocity.y << std::endl;
+                // use pythagorean theorem to calculate the distance between the two balls
+                LineSegment DeltaPosition = LineSegment(Ball1->m_PreviousPosition, Ball1->m_CurrentPosition);
+
+                std::pair<Vector2, Vector2> temp(Vector2Subtract(Ball1 -> m_Velocity, Ball2 -> m_Velocity), Ball1 -> m_CurrentPosition);
+                Line DeltaVelocity(temp);
+                Line(DeltaPosition).print();
+                Line(DeltaVelocity).print();
+                Vector2 Projection = DeltaVelocity.projection(Ball2->m_CurrentPosition);
+                LineSegment Altitude(Projection, Ball2->m_CurrentPosition);
+                float RadicalProjectionLength1 = sqrt(
+                        (Ball1->m_Radius + Ball2->m_Radius) * (Ball1->m_Radius + Ball2->m_Radius) -
+                        Altitude.getLength() * Altitude.getLength());
+                std::cout << "Radical Projection Length: " << RadicalProjectionLength1 << std::endl;
+                float ProjectionLength = Vector2Distance(Projection, Ball1->m_PreviousPosition);
+                std::cout << "Projection Length: " << ProjectionLength << std::endl;
+                float Offset1 = ProjectionLength - RadicalProjectionLength1;
+                std::cout << "Offset1: " << Offset1 << std::endl;
+                Vector2 CollidingPosition1 = DeltaPosition.getPointWithDistance(Offset1, "A");
+                const float m_FrameTime = 0.01666666667f;
+                CollidingPosition1 = Vector2Add(CollidingPosition1, Vector2Scale(Ball2 -> m_Velocity, 0.01666666667f));
+                std::cout << "Colliding Position: " << CollidingPosition1.x << " " << CollidingPosition1.y << std::endl;
+                float DistanceToCollidingPosition = Vector2Distance(CollidingPosition1, Ball1->m_CurrentPosition);
+                float TimeSinceCollision = DistanceToCollidingPosition /
+                                           Vector2Length(Ball1 -> m_Velocity);
+                Ball1->m_CurrentPosition = CollidingPosition1;
+
+
+                LineSegment Delta2(Ball2 -> m_PreviousPosition, Projection);
+                    Projection = Line(DeltaPosition).intersection(Line(Delta2));
+                float a = Vector2Distance(Projection, CollidingPosition1);
+                float RadicalProjectionLength2 = sqrt(
+                        (Ball1->m_Radius + Ball2->m_Radius) * (Ball1->m_Radius + Ball2->m_Radius) -
+                        a * a) - Delta2.getLength();
+                Vector2 CollidingPosition2 = Delta2.getPointWithDistance(RadicalProjectionLength2, "A");
+                Ball2 -> m_CurrentPosition = CollidingPosition2;
+                Ball1 -> m_Velocity = Vector2 (0, 0);
+                Ball2 -> m_Velocity = Vector2 (0, 0);
+                float Velocity1 = Vector2Length(Ball1->m_Velocity);
+                float Velocity2 = Vector2Length(Ball2->m_Velocity);
+                calculateFinalVelocity(Ball1->m_Mass, Ball2->m_Mass, Velocity1, Velocity2);
+                Vector2 Direction = Vector2Normalize(Vector2Subtract(Ball2->m_CurrentPosition, Ball1->m_CurrentPosition));
+                Ball1 -> m_Velocity = Vector2Scale(Direction, -Velocity1);
+                Ball2 -> m_Velocity = Vector2Scale(Direction, Velocity2);
+
+                Ball1->m_CurrentPosition = Vector2Add(Ball1->m_CurrentPosition, Vector2Scale(Ball1->m_Velocity, TimeSinceCollision));
+                Ball2->m_CurrentPosition = Vector2Add(Ball2->m_CurrentPosition, Vector2Scale(Ball2->m_Velocity, TimeSinceCollision));
+                if (Ball1->m_Radius + Ball2->m_Radius >
+                    Vector2Distance(Ball1->m_CurrentPosition, Ball2->m_CurrentPosition)) {
+                    std::cout << "Error: Collision not resolved" << std::endl;
+                }
