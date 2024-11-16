@@ -15,7 +15,7 @@
 				}
 			],
 			"type" : "FILEPATH",
-			"value" : "CMAKE_ADDR2LINE-NOTFOUND"
+			"value" : "/usr/bin/addr2line"
 		},
 		{
 			"name" : "CMAKE_AR",
@@ -31,7 +31,7 @@
 				}
 			],
 			"type" : "FILEPATH",
-			"value" : "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ar"
+			"value" : "/usr/bin/ar"
 		},
 		{
 			"name" : "CMAKE_BUILD_TYPE",
@@ -55,7 +55,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "/Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/cmake-build-debug"
+			"value" : "/home/lehoangan/Documents/Physics-Simulation-Demonstration/cmake-build-debug"
 		},
 		{
 			"name" : "CMAKE_CACHE_MAJOR_VERSION",
@@ -115,7 +115,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "/Volumes/Baracuda/apps/CLion.app/Contents/bin/cmake/mac/aarch64/bin/cmake"
+			"value" : "/snap/clion/296/bin/cmake/linux/x64/bin/cmake"
 		},
 		{
 			"name" : "CMAKE_CPACK_COMMAND",
@@ -127,7 +127,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "/Volumes/Baracuda/apps/CLion.app/Contents/bin/cmake/mac/aarch64/bin/cpack"
+			"value" : "/snap/clion/296/bin/cmake/linux/x64/bin/cpack"
 		},
 		{
 			"name" : "CMAKE_CTEST_COMMAND",
@@ -139,7 +139,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "/Volumes/Baracuda/apps/CLion.app/Contents/bin/cmake/mac/aarch64/bin/ctest"
+			"value" : "/snap/clion/296/bin/cmake/linux/x64/bin/ctest"
 		},
 		{
 			"name" : "CMAKE_CXX_COMPILER",
@@ -154,8 +154,40 @@
 					"value" : "CXX compiler"
 				}
 			],
+			"type" : "STRING",
+			"value" : "/usr/bin/c++"
+		},
+		{
+			"name" : "CMAKE_CXX_COMPILER_AR",
+			"properties" : 
+			[
+				{
+					"name" : "ADVANCED",
+					"value" : "1"
+				},
+				{
+					"name" : "HELPSTRING",
+					"value" : "A wrapper around 'ar' adding the appropriate '--plugin' option for the GCC compiler"
+				}
+			],
 			"type" : "FILEPATH",
-			"value" : "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++"
+			"value" : "/usr/bin/gcc-ar-13"
+		},
+		{
+			"name" : "CMAKE_CXX_COMPILER_RANLIB",
+			"properties" : 
+			[
+				{
+					"name" : "ADVANCED",
+					"value" : "1"
+				},
+				{
+					"name" : "HELPSTRING",
+					"value" : "A wrapper around 'ranlib' adding the appropriate '--plugin' option for the GCC compiler"
+				}
+			],
+			"type" : "FILEPATH",
+			"value" : "/usr/bin/gcc-ranlib-13"
 		},
 		{
 			"name" : "CMAKE_CXX_FLAGS",
@@ -250,8 +282,40 @@
 					"value" : "C compiler"
 				}
 			],
+			"type" : "STRING",
+			"value" : "/usr/bin/cc"
+		},
+		{
+			"name" : "CMAKE_C_COMPILER_AR",
+			"properties" : 
+			[
+				{
+					"name" : "ADVANCED",
+					"value" : "1"
+				},
+				{
+					"name" : "HELPSTRING",
+					"value" : "A wrapper around 'ar' adding the appropriate '--plugin' option for the GCC compiler"
+				}
+			],
 			"type" : "FILEPATH",
-			"value" : "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc"
+			"value" : "/usr/bin/gcc-ar-13"
+		},
+		{
+			"name" : "CMAKE_C_COMPILER_RANLIB",
+			"properties" : 
+			[
+				{
+					"name" : "ADVANCED",
+					"value" : "1"
+				},
+				{
+					"name" : "HELPSTRING",
+					"value" : "A wrapper around 'ranlib' adding the appropriate '--plugin' option for the GCC compiler"
+				}
+			],
+			"type" : "FILEPATH",
+			"value" : "/usr/bin/gcc-ranlib-13"
 		},
 		{
 			"name" : "CMAKE_C_FLAGS",
@@ -359,7 +423,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "MACHO"
+			"value" : "ELF"
 		},
 		{
 			"name" : "CMAKE_EXE_LINKER_FLAGS",
@@ -479,7 +543,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "/Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/cmake-build-debug/CMakeFiles/pkgRedirects"
+			"value" : "/home/lehoangan/Documents/Physics-Simulation-Demonstration/cmake-build-debug/CMakeFiles/pkgRedirects"
 		},
 		{
 			"name" : "CMAKE_GENERATOR",
@@ -539,7 +603,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "/Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration"
+			"value" : "/home/lehoangan/Documents/Physics-Simulation-Demonstration"
 		},
 		{
 			"name" : "CMAKE_INSTALL_NAME_TOOL",
@@ -555,7 +619,7 @@
 				}
 			],
 			"type" : "FILEPATH",
-			"value" : "/Volumes/Baracuda/Anaconda/anaconda3/bin/install_name_tool"
+			"value" : "CMAKE_INSTALL_NAME_TOOL-NOTFOUND"
 		},
 		{
 			"name" : "CMAKE_INSTALL_PREFIX",
@@ -568,6 +632,18 @@
 			],
 			"type" : "PATH",
 			"value" : "/usr/local"
+		},
+		{
+			"name" : "CMAKE_INSTALL_SO_NO_EXE",
+			"properties" : 
+			[
+				{
+					"name" : "HELPSTRING",
+					"value" : "Install .so files without execute permission."
+				}
+			],
+			"type" : "INTERNAL",
+			"value" : "1"
 		},
 		{
 			"name" : "CMAKE_LINKER",
@@ -583,7 +659,7 @@
 				}
 			],
 			"type" : "FILEPATH",
-			"value" : "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ld"
+			"value" : "/usr/bin/ld"
 		},
 		{
 			"name" : "CMAKE_MAKE_PROGRAM",
@@ -595,7 +671,7 @@
 				}
 			],
 			"type" : "UNINITIALIZED",
-			"value" : "/Volumes/Baracuda/apps/CLion.app/Contents/bin/ninja/mac/aarch64/ninja"
+			"value" : "/snap/clion/296/bin/ninja/linux/x64/ninja"
 		},
 		{
 			"name" : "CMAKE_MODULE_LINKER_FLAGS",
@@ -691,7 +767,7 @@
 				}
 			],
 			"type" : "FILEPATH",
-			"value" : "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/nm"
+			"value" : "/usr/bin/nm"
 		},
 		{
 			"name" : "CMAKE_NUMBER_OF_MAKEFILES",
@@ -719,7 +795,7 @@
 				}
 			],
 			"type" : "FILEPATH",
-			"value" : "CMAKE_OBJCOPY-NOTFOUND"
+			"value" : "/usr/bin/objcopy"
 		},
 		{
 			"name" : "CMAKE_OBJDUMP",
@@ -735,7 +811,7 @@
 				}
 			],
 			"type" : "FILEPATH",
-			"value" : "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/objdump"
+			"value" : "/usr/bin/objdump"
 		},
 		{
 			"name" : "CMAKE_OSX_ARCHITECTURES",
@@ -750,18 +826,6 @@
 			"value" : ""
 		},
 		{
-			"name" : "CMAKE_OSX_DEPLOYMENT_TARGET",
-			"properties" : 
-			[
-				{
-					"name" : "HELPSTRING",
-					"value" : "Minimum OS X version to target for deployment (at runtime); newer APIs weak linked. Set to empty string for default value."
-				}
-			],
-			"type" : "STRING",
-			"value" : ""
-		},
-		{
 			"name" : "CMAKE_OSX_SYSROOT",
 			"properties" : 
 			[
@@ -770,8 +834,8 @@
 					"value" : "The product will be built against the headers and libraries located inside the indicated SDK."
 				}
 			],
-			"type" : "PATH",
-			"value" : "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.0.sdk"
+			"type" : "STRING",
+			"value" : ""
 		},
 		{
 			"name" : "CMAKE_PLATFORM_INFO_INITIALIZED",
@@ -784,6 +848,18 @@
 			],
 			"type" : "INTERNAL",
 			"value" : "1"
+		},
+		{
+			"name" : "CMAKE_PREFIX_PATH",
+			"properties" : 
+			[
+				{
+					"name" : "HELPSTRING",
+					"value" : "No help, variable specified on the command line."
+				}
+			],
+			"type" : "UNINITIALIZED",
+			"value" : "/usr/local/lib/cmake/home/lehoangan/Documents/Physics-Simulation-Demonstration"
 		},
 		{
 			"name" : "CMAKE_PROJECT_DESCRIPTION",
@@ -835,7 +911,7 @@
 				}
 			],
 			"type" : "FILEPATH",
-			"value" : "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ranlib"
+			"value" : "/usr/bin/ranlib"
 		},
 		{
 			"name" : "CMAKE_READELF",
@@ -851,7 +927,7 @@
 				}
 			],
 			"type" : "FILEPATH",
-			"value" : "CMAKE_READELF-NOTFOUND"
+			"value" : "/usr/bin/readelf"
 		},
 		{
 			"name" : "CMAKE_ROOT",
@@ -863,7 +939,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "/Volumes/Baracuda/apps/CLion.app/Contents/bin/cmake/mac/aarch64/share/cmake-3.29"
+			"value" : "/snap/clion/296/bin/cmake/linux/x64/share/cmake-3.29"
 		},
 		{
 			"name" : "CMAKE_SHARED_LINKER_FLAGS",
@@ -1071,7 +1147,7 @@
 				}
 			],
 			"type" : "FILEPATH",
-			"value" : "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/strip"
+			"value" : "/usr/bin/strip"
 		},
 		{
 			"name" : "CMAKE_TAPI",
@@ -1087,7 +1163,7 @@
 				}
 			],
 			"type" : "FILEPATH",
-			"value" : "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/tapi"
+			"value" : "CMAKE_TAPI-NOTFOUND"
 		},
 		{
 			"name" : "CMAKE_UNAME",
@@ -1127,7 +1203,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "[/opt/homebrew/lib/libraylib.dylib][/opt/homebrew/include][v(4.5)]"
+			"value" : "[/usr/local/lib/libraylib.so][/usr/local/include][v(4.5)]"
 		},
 		{
 			"name" : "PC_RAYLIB_CFLAGS",
@@ -1139,7 +1215,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : ""
+			"value" : "-I/usr/local/include"
 		},
 		{
 			"name" : "PC_RAYLIB_CFLAGS_I",
@@ -1175,10 +1251,46 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : ""
+			"value" : "1"
 		},
 		{
 			"name" : "PC_RAYLIB_INCLUDEDIR",
+			"properties" : 
+			[
+				{
+					"name" : "HELPSTRING",
+					"value" : ""
+				}
+			],
+			"type" : "INTERNAL",
+			"value" : "/usr/local/include"
+		},
+		{
+			"name" : "PC_RAYLIB_INCLUDE_DIRS",
+			"properties" : 
+			[
+				{
+					"name" : "HELPSTRING",
+					"value" : ""
+				}
+			],
+			"type" : "INTERNAL",
+			"value" : "/usr/local/include"
+		},
+		{
+			"name" : "PC_RAYLIB_LDFLAGS",
+			"properties" : 
+			[
+				{
+					"name" : "HELPSTRING",
+					"value" : ""
+				}
+			],
+			"type" : "INTERNAL",
+			"value" : "-L/usr/local/lib;-lraylib"
+		},
+		{
+			"name" : "PC_RAYLIB_LDFLAGS_OTHER",
 			"properties" : 
 			[
 				{
@@ -1199,7 +1311,31 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : ""
+			"value" : "/usr/local/lib"
+		},
+		{
+			"name" : "PC_RAYLIB_LIBRARIES",
+			"properties" : 
+			[
+				{
+					"name" : "HELPSTRING",
+					"value" : ""
+				}
+			],
+			"type" : "INTERNAL",
+			"value" : "raylib"
+		},
+		{
+			"name" : "PC_RAYLIB_LIBRARY_DIRS",
+			"properties" : 
+			[
+				{
+					"name" : "HELPSTRING",
+					"value" : ""
+				}
+			],
+			"type" : "INTERNAL",
+			"value" : "/usr/local/lib"
 		},
 		{
 			"name" : "PC_RAYLIB_LIBS",
@@ -1259,7 +1395,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : ""
+			"value" : "raylib"
 		},
 		{
 			"name" : "PC_RAYLIB_PREFIX",
@@ -1271,7 +1407,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : ""
+			"value" : "/usr/local"
 		},
 		{
 			"name" : "PC_RAYLIB_STATIC_CFLAGS",
@@ -1283,7 +1419,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : ""
+			"value" : "-I/usr/local/include"
 		},
 		{
 			"name" : "PC_RAYLIB_STATIC_CFLAGS_I",
@@ -1310,6 +1446,42 @@
 			"value" : ""
 		},
 		{
+			"name" : "PC_RAYLIB_STATIC_INCLUDE_DIRS",
+			"properties" : 
+			[
+				{
+					"name" : "HELPSTRING",
+					"value" : ""
+				}
+			],
+			"type" : "INTERNAL",
+			"value" : "/usr/local/include"
+		},
+		{
+			"name" : "PC_RAYLIB_STATIC_LDFLAGS",
+			"properties" : 
+			[
+				{
+					"name" : "HELPSTRING",
+					"value" : ""
+				}
+			],
+			"type" : "INTERNAL",
+			"value" : "-L/usr/local/lib;-lraylib"
+		},
+		{
+			"name" : "PC_RAYLIB_STATIC_LDFLAGS_OTHER",
+			"properties" : 
+			[
+				{
+					"name" : "HELPSTRING",
+					"value" : ""
+				}
+			],
+			"type" : "INTERNAL",
+			"value" : ""
+		},
+		{
 			"name" : "PC_RAYLIB_STATIC_LIBDIR",
 			"properties" : 
 			[
@@ -1320,6 +1492,30 @@
 			],
 			"type" : "INTERNAL",
 			"value" : ""
+		},
+		{
+			"name" : "PC_RAYLIB_STATIC_LIBRARIES",
+			"properties" : 
+			[
+				{
+					"name" : "HELPSTRING",
+					"value" : ""
+				}
+			],
+			"type" : "INTERNAL",
+			"value" : "raylib"
+		},
+		{
+			"name" : "PC_RAYLIB_STATIC_LIBRARY_DIRS",
+			"properties" : 
+			[
+				{
+					"name" : "HELPSTRING",
+					"value" : ""
+				}
+			],
+			"type" : "INTERNAL",
+			"value" : "/usr/local/lib"
 		},
 		{
 			"name" : "PC_RAYLIB_STATIC_LIBS",
@@ -1379,6 +1575,54 @@
 				}
 			],
 			"type" : "INTERNAL",
+			"value" : "5.5.0"
+		},
+		{
+			"name" : "PC_RAYLIB_raylib_INCLUDEDIR",
+			"properties" : 
+			[
+				{
+					"name" : "HELPSTRING",
+					"value" : ""
+				}
+			],
+			"type" : "INTERNAL",
+			"value" : ""
+		},
+		{
+			"name" : "PC_RAYLIB_raylib_LIBDIR",
+			"properties" : 
+			[
+				{
+					"name" : "HELPSTRING",
+					"value" : ""
+				}
+			],
+			"type" : "INTERNAL",
+			"value" : ""
+		},
+		{
+			"name" : "PC_RAYLIB_raylib_PREFIX",
+			"properties" : 
+			[
+				{
+					"name" : "HELPSTRING",
+					"value" : ""
+				}
+			],
+			"type" : "INTERNAL",
+			"value" : ""
+		},
+		{
+			"name" : "PC_RAYLIB_raylib_VERSION",
+			"properties" : 
+			[
+				{
+					"name" : "HELPSTRING",
+					"value" : ""
+				}
+			],
+			"type" : "INTERNAL",
 			"value" : ""
 		},
 		{
@@ -1411,7 +1655,7 @@
 				}
 			],
 			"type" : "FILEPATH",
-			"value" : "PKG_CONFIG_EXECUTABLE-NOTFOUND"
+			"value" : "/usr/bin/pkg-config"
 		},
 		{
 			"name" : "Physics_Simulation_Demonstration_BINARY_DIR",
@@ -1423,7 +1667,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "/Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/cmake-build-debug"
+			"value" : "/home/lehoangan/Documents/Physics-Simulation-Demonstration/cmake-build-debug"
 		},
 		{
 			"name" : "Physics_Simulation_Demonstration_IS_TOP_LEVEL",
@@ -1447,7 +1691,31 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "/Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration"
+			"value" : "/home/lehoangan/Documents/Physics-Simulation-Demonstration"
+		},
+		{
+			"name" : "_CMAKE_LINKER_PUSHPOP_STATE_SUPPORTED",
+			"properties" : 
+			[
+				{
+					"name" : "HELPSTRING",
+					"value" : "linker supports push/pop state"
+				}
+			],
+			"type" : "INTERNAL",
+			"value" : "TRUE"
+		},
+		{
+			"name" : "__pkg_config_arguments_PC_RAYLIB",
+			"properties" : 
+			[
+				{
+					"name" : "HELPSTRING",
+					"value" : ""
+				}
+			],
+			"type" : "INTERNAL",
+			"value" : "QUIET;raylib"
 		},
 		{
 			"name" : "__pkg_config_checked_PC_RAYLIB",
@@ -1462,6 +1730,34 @@
 			"value" : "1"
 		},
 		{
+			"name" : "pkgcfg_lib_PC_RAYLIB_raylib",
+			"properties" : 
+			[
+				{
+					"name" : "ADVANCED",
+					"value" : "1"
+				},
+				{
+					"name" : "HELPSTRING",
+					"value" : "Path to a library."
+				}
+			],
+			"type" : "FILEPATH",
+			"value" : "/usr/local/lib/libraylib.so"
+		},
+		{
+			"name" : "prefix_result",
+			"properties" : 
+			[
+				{
+					"name" : "HELPSTRING",
+					"value" : ""
+				}
+			],
+			"type" : "INTERNAL",
+			"value" : "/usr/local/lib"
+		},
+		{
 			"name" : "raylib_DIR",
 			"properties" : 
 			[
@@ -1471,7 +1767,7 @@
 				}
 			],
 			"type" : "PATH",
-			"value" : "/opt/homebrew/lib/cmake/raylib"
+			"value" : "/usr/local/lib/cmake/raylib"
 		},
 		{
 			"name" : "raylib_INCLUDE_DIR",
@@ -1487,7 +1783,7 @@
 				}
 			],
 			"type" : "PATH",
-			"value" : "/opt/homebrew/include"
+			"value" : "/usr/local/include"
 		},
 		{
 			"name" : "raylib_LIBRARY",
@@ -1503,7 +1799,7 @@
 				}
 			],
 			"type" : "FILEPATH",
-			"value" : "/opt/homebrew/lib/libraylib.dylib"
+			"value" : "/usr/local/lib/libraylib.so"
 		}
 	],
 	"kind" : "cache",
