@@ -7,7 +7,7 @@
 #include "Buttons/Buttons.hpp"
 using namespace std;
 int main() {
-    InitWindow(1800, 1040, "Physics Simulation Demonstration");
+    InitWindow(1800, 1000, "Physics Simulation Demonstration");
 //    SetTargetFPS(10);
     SetTargetFPS(60);
     Utilities* MyUtilities = Utilities::getUtilities();

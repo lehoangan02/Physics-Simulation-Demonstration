@@ -128,8 +128,8 @@ private:
     vector<VerletRoundBall*> m_VerletRoundBallList;
     Camera2D m_EulerianCamera = {0};
     Camera2D m_VerletCamera = {0};
-    RenderTexture screenCamera1 = LoadRenderTexture(1800/2, 1040);
-    RenderTexture screenCamera2 = LoadRenderTexture(1800/2, 1040);
+    RenderTexture screenCamera1 = LoadRenderTexture(1800/2, 1000);
+    RenderTexture screenCamera2 = LoadRenderTexture(1800/2, 1000);
     Rectangle splitScreenRect = { 0.0f, 0.0f, (float)screenCamera1.texture.width, (float)-screenCamera1.texture.height };
 private:
     TunnellingComparisonState();
@@ -149,8 +149,8 @@ private:
     vector<VerletRoundBall*> m_VerletRoundBallList;
     Camera2D m_EulerianCamera = {0};
     Camera2D m_VerletCamera = {0};
-    RenderTexture screenCamera1 = LoadRenderTexture(1800/2, 1040);
-    RenderTexture screenCamera2 = LoadRenderTexture(1800/2, 1040);
+    RenderTexture screenCamera1 = LoadRenderTexture(1800/2, 1000);
+    RenderTexture screenCamera2 = LoadRenderTexture(1800/2, 1000);
     Rectangle splitScreenRect = { 0.0f, 0.0f, (float)screenCamera1.texture.width, (float)-screenCamera1.texture.height };
 private:
     EnergyComparisonState();
@@ -170,8 +170,8 @@ private:
     vector<EulerianRoundBall*> m_RoundBallList2;
     Camera2D m_Camera1 = {0};
     Camera2D m_Camera2 = {0};
-    RenderTexture screenCamera1 = LoadRenderTexture(1800/2, 1040);
-    RenderTexture screenCamera2 = LoadRenderTexture(1800/2, 1040);
+    RenderTexture screenCamera1 = LoadRenderTexture(1800/2, 1000);
+    RenderTexture screenCamera2 = LoadRenderTexture(1800/2, 1000);
     Rectangle splitScreenRect = { 0.0f, 0.0f, (float)screenCamera1.texture.width, (float)-screenCamera1.texture.height };
     int m_FrameCount = 0;
 private:
@@ -191,6 +191,20 @@ private:
 private:
     ParticleGravityState();
     ~ParticleGravityState();
+    void reset() override;
+};
+class Optimization1State : public SimulationState {
+public:
+    static SimulationState* getOptimization1State();
+    SimulationState* update() override;
+    void draw() override;
+    void onNotify() override;
+private:
+    UniformGridEngine m_Engine;
+    vector<EulerianRoundBall*> m_RoundBallList;
+private:
+    Optimization1State();
+    ~Optimization1State();
     void reset() override;
 };
 #endif //PHYSICS_SIMULATION_DEMONSTRATION_SIMULATIONSTATE_HPP

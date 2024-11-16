@@ -49,11 +49,14 @@ public:
     void draw();
     friend class ContinuousEulerianEngine;
     friend class DisceteEulerianEngine;
+    friend class Grid;
+    friend class Cell;
     friend class Spring;
     friend class EulerianDropState;
     friend class TunnellingComparisonState;
     friend class EnergyComparisonState;
     friend class FPSInvariantStateForContinuousIntegration;
     friend class ParticleGravityState;
+    friend class Optimization1State;
 };
 #endif //PHYSICS_SIMULATION_DEMONSTRATION_ROUNDBALL_HPP

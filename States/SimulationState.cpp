@@ -12,7 +12,7 @@ SimulationState* VerletDropState::getVerletDropState()
     static VerletDropState MyVerletDropState;
     return &MyVerletDropState;
 }
-VerletDropState::VerletDropState() : m_Engine(1800, 1040) {
+VerletDropState::VerletDropState() : m_Engine(1800, 1000) {
     reset();
 }
 VerletDropState::~VerletDropState() {
@@ -147,6 +147,11 @@ SimulationState* HomeState::update() {
         BackHomeButton::getBackHomeButton()->m_Active = true;
         return ParticleGravityState::getParticleGravityState();
     }
+    else if (IsKeyPressed(KEY_I))
+    {
+        BackHomeButton::getBackHomeButton()->m_Active = true;
+        return Optimization1State::getOptimization1State();
+    }
     BackHomeButton::getBackHomeButton()->m_Active = false;
     return nullptr;
 }
@@ -255,7 +260,7 @@ SimulationState* VerletChainState::update() {
 //    printf("ENGINE SUCCESSFULLY UPDATED\n");
     return nullptr;
 }
-VerletChainState::VerletChainState() : m_Engine(1800, 1040) {
+VerletChainState::VerletChainState() : m_Engine(1800, 1000) {
     reset();
 }
 VerletChainState::~VerletChainState() {
@@ -272,7 +277,7 @@ SimulationState* VerletChainBasketState::getVerletChainBasketState()
     printf("Get Verlet VerletChain Basket State\n");
     return &MyVerletChainBasketState;
 }
-VerletChainBasketState::VerletChainBasketState() : m_Engine(1800, 1040) {
+VerletChainBasketState::VerletChainBasketState() : m_Engine(1800, 1000) {
     reset();
 }
 VerletChainBasketState::~VerletChainBasketState() {
@@ -418,7 +423,7 @@ SimulationState* VerletChainBasketState::update() {
     m_Engine.update(0.1f);
     return nullptr;
 }
-EulerianDropState::EulerianDropState() : m_Engine(1800, 1040) {
+EulerianDropState::EulerianDropState() : m_Engine(1800, 1000) {
     reset();
 }
 
@@ -477,7 +482,7 @@ SimulationState *TunnellingComparisonState::getComparisonState() {
     static TunnellingComparisonState MyComparisonState;
     return &MyComparisonState;
 }
-TunnellingComparisonState::TunnellingComparisonState() : m_EulerianEngine(1800 / 2 - 10, 1040), m_VerletEngine(1800 / 2 - 10, 1040) {
+TunnellingComparisonState::TunnellingComparisonState() : m_EulerianEngine(1800 / 2 - 10, 1000), m_VerletEngine(1800 / 2 - 10, 1000) {
     reset();
 }
 TunnellingComparisonState::~TunnellingComparisonState() {
@@ -572,14 +577,14 @@ void TunnellingComparisonState::draw() {
     DrawTextureRec(screenCamera1.texture, splitScreenRect, (Vector2){ 0, 0 }, WHITE);
     DrawTextureRec(screenCamera2.texture, splitScreenRect, (Vector2){ 1800/2.0f, 0 }, WHITE);
     Color MidBarColor = Color(68, 3, 129, 255);
-    DrawRectangle(1800 / 2 - 10, 0, 20, 1040, MidBarColor);
+    DrawRectangle(1800 / 2 - 10, 0, 20, 1000, MidBarColor);
 }
 
 SimulationState *EnergyComparisonState::getEnergyComparisonState() {
     static EnergyComparisonState MyEnergyComparisonState;
     return &MyEnergyComparisonState;
 }
-EnergyComparisonState::EnergyComparisonState() : m_EulerianEngine(1800 / 2 - 10, 1040), m_VerletEngine(1800 / 2 - 10, 1040) {
+EnergyComparisonState::EnergyComparisonState() : m_EulerianEngine(1800 / 2 - 10, 1000), m_VerletEngine(1800 / 2 - 10, 1000) {
     reset();
 }
 EnergyComparisonState::~EnergyComparisonState() {
@@ -669,9 +674,9 @@ void EnergyComparisonState::draw() {
     DrawTextureRec(screenCamera1.texture, splitScreenRect, (Vector2){ 0, 0 }, WHITE);
     DrawTextureRec(screenCamera2.texture, splitScreenRect, (Vector2){ 1800/2.0f, 0 }, WHITE);
     Color MidBarColor = Color(68, 3, 129, 255);
-    DrawRectangle(1800 / 2 - 10, 0, 20, 1040, MidBarColor);
+    DrawRectangle(1800 / 2 - 10, 0, 20, 1000, MidBarColor);
 }
-FPSInvariantStateForContinuousIntegration::FPSInvariantStateForContinuousIntegration() : m_Engine1(1800 / 2, 1040), m_Engine2(1800 / 2, 1040) {
+FPSInvariantStateForContinuousIntegration::FPSInvariantStateForContinuousIntegration() : m_Engine1(1800 / 2, 1000), m_Engine2(1800 / 2, 1000) {
     reset();
 }
 FPSInvariantStateForContinuousIntegration::~FPSInvariantStateForContinuousIntegration() {
@@ -781,9 +786,9 @@ void FPSInvariantStateForContinuousIntegration::draw() {
     DrawTextureRec(screenCamera1.texture, splitScreenRect, (Vector2){ 0, 0 }, WHITE);
     DrawTextureRec(screenCamera2.texture, splitScreenRect, (Vector2){ 1800/2.0f, 0 }, WHITE);
     Color MidBarColor = Color(68, 3, 129, 255);
-    DrawRectangle(1800 / 2 - 10, 0, 20, 1040, MidBarColor);
+    DrawRectangle(1800 / 2 - 10, 0, 20, 1000, MidBarColor);
 }
-ParticleGravityState::ParticleGravityState() : m_Engine(1800, 1040) {
+ParticleGravityState::ParticleGravityState() : m_Engine(1800, 1000) {
     reset();
 }
 ParticleGravityState::~ParticleGravityState() {
@@ -840,4 +845,64 @@ void ParticleGravityState::draw() {
 SimulationState* ParticleGravityState::getParticleGravityState() {
     static ParticleGravityState MyParticleGravityState;
     return &MyParticleGravityState;
+}
+
+SimulationState *Optimization1State::getOptimization1State() {
+    static Optimization1State MyOptimization1State;
+    return &MyOptimization1State;
+}
+Optimization1State::Optimization1State() : m_Engine(1800, 1000, 10, 10) {
+    reset();
+}
+Optimization1State::~Optimization1State() {
+    m_IsActive = true;
+    for (auto& ball : m_RoundBallList)
+    {
+        delete ball;
+        ball = nullptr;
+    }
+    m_RoundBallList.clear();
+    m_Engine.reset();
+}
+void Optimization1State::reset() {
+    m_IsActive = true;
+    for (auto& ball : m_RoundBallList)
+    {
+        delete ball;
+    }
+    m_RoundBallList.clear();
+    m_Engine.reset();
+    EulerianRoundBall* RoundBall1 = new EulerianRoundBall(Vector2{100, 100}, MY_ORANGE, 1.0f);
+    RoundBall1 -> m_Velocity = Vector2{0, 50};
+    RoundBall1 -> m_Radius = 10.0f;
+    m_RoundBallList.push_back(RoundBall1);
+    m_Engine.attachRoundBall(RoundBall1);
+//    for (int i = 0; i < 15; ++i)
+//    {
+//        float StartX = 100 + 100 * i;
+//        for (int j = 0; j < 9; ++j)
+//        {
+//            EulerianRoundBall* RoundBall = new EulerianRoundBall(Vector2{StartX, float(100 + 80 * j)}, MY_ORANGE, 1.0f);
+//            RoundBall -> m_Velocity = Vector2{00, 0};
+//            RoundBall -> m_Radius = 10.0f;
+//            m_RoundBallList.push_back(RoundBall);
+//            m_Engine.attachRoundBall(RoundBall);
+//        }
+//    }
+}
+void Optimization1State::onNotify() {
+    exitState();
+}
+SimulationState* Optimization1State::update() {
+    if (!m_IsActive) {
+        return HomeState::getHomeState();
+    }
+    for (int i = 0; i < 6; ++i)
+    {
+        m_Engine.update(m_FrameTime);
+    }
+    return nullptr;
+}
+void Optimization1State::draw() {
+    m_Engine.draw();
 }

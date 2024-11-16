@@ -75,7 +75,7 @@ private:
 class DisceteEulerianEngine
 {
     class ColorSquare {
-    private:
+    protected:
         static Color m_RED;
         static Color m_YELLOW;
         static Color m_GREEN;
@@ -88,7 +88,7 @@ class DisceteEulerianEngine
         Color chooseColor(vector<EulerianRoundBall*> m_RoundBallList, EulerianRoundBall* Ball);
         bool isInsideSquare(EulerianRoundBall* Ball);
     };
-private:
+protected:
     int m_Width;
     int m_Height;
     int m_TotalEngery;
@@ -100,10 +100,59 @@ public:
     void update(float DeltaTime);
     void draw();
     void reset();
-private:
+protected:
     void applyConstraints();
     void collideRoundBalls();
     void accelerateMutually();
     Color calculateColor(EulerianRoundBall* Ball);
+};
+class Cell
+{
+    friend class Grid;
+private:
+    Vector2 m_TopLeft;
+    static float m_Width;
+    static float m_Height;
+    vector<EulerianRoundBall*> m_RoundBallList;
+    void applyConstraintLeft();
+    void applyConstraintRight();
+    void applyConstraintTop();
+    void applyConstraintBottom();
+public:
+    void attachRoundBall(EulerianRoundBall* NewRoundBall);
+    Cell(Vector2 TopLeft);
+    void drawOutline();
+};
+class Grid
+{
+    friend class Cell;
+private:
+    static int m_Width;
+    static int m_Height;
+    int m_NumColumn;
+    int m_NumRow;
+    vector<vector<Cell*>> m_CellMatrix;
+public:
+    Grid(int Width, int Height, int DivideWidth, int DivideHeight);
+    ~Grid();
+    void attachRoundBall(EulerianRoundBall* NewRoundBall);
+    vector<EulerianRoundBall*> m_RoundBallList;
+    void update(float DeltaTime);
+    void reset();
+    void draw();
+private:
+    Cell* findCell(Vector2 Position);
+    void applyConstraints();
+    void collideRoundBalls();
+};
+class UniformGridEngine: public DisceteEulerianEngine
+{
+private:
+    Grid m_Grid;
+public:
+    UniformGridEngine(int Width, int Height, int NumRow, int NumColumn);
+    void attachRoundBall(EulerianRoundBall* NewRoundBall);
+    void draw();
+    void update(float DeltaTime);
 };
 #endif //PHYSICS_SIMULATION_DEMONSTRATION_ENGINE_HPP

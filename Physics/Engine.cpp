@@ -478,3 +478,164 @@ Color DisceteEulerianEngine::calculateColor(EulerianRoundBall *Ball) {
     Square.m_TopLeft = Vector2{Square.m_Center.x - Square.m_Width / 2, Square.m_Center.y - Square.m_Height / 2};
     return Square.chooseColor(m_RoundBallList, Ball);
 }
+
+int Grid::m_Width = 0.0f;
+int Grid::m_Height = 0.0f;
+Grid::Grid(int Width, int Height, int NumRow, int NumColumn) : m_NumRow(NumRow), m_NumColumn(NumColumn) {
+    m_Width = Width;
+    m_Height = Height;
+    float CellWidth = Width / NumRow;
+    float CellHeight = Height / NumColumn;
+    Cell::m_Height = CellHeight;
+    Cell::m_Width = CellWidth;
+    for (int i = 0; i < NumRow; ++i)
+    {
+        vector<Cell*> Column;
+        for (int j = 0; j < NumColumn; ++j)
+        {
+            Column.push_back(new Cell(Vector2{CellWidth * i, CellHeight * j}));
+        }
+        m_CellMatrix.push_back(Column);
+    }
+}
+Grid::~Grid() {
+    for (auto& Row : m_CellMatrix)
+    {
+        for (auto& Cell : Row)
+        {
+            delete Cell;
+        }
+    }
+}
+Cell* Grid::findCell(Vector2 Position) {
+//    std::cout << Position.x << " " << Position.y << std::endl;
+    int i = Position.x / (m_Width / m_NumRow);
+    int j = Position.y / (m_Height/ m_NumColumn);
+    std::cout << i << " " << j << std::endl;
+    return m_CellMatrix[i][j];
+}
+void Grid::attachRoundBall(EulerianRoundBall *NewRoundBall) {
+    Cell* TargetCell = findCell(NewRoundBall -> m_CurrentPosition);
+    TargetCell -> attachRoundBall(NewRoundBall);
+    m_RoundBallList.push_back(NewRoundBall);
+}
+void Grid::update(float DeltaTime) {
+    for (auto& CellRow : m_CellMatrix)
+    {
+        for (auto& Cell : CellRow)
+        {
+            Cell -> m_RoundBallList.clear();
+        }
+    }
+    for (auto& Ball : m_RoundBallList) {
+        Cell *TargetCell = findCell(Ball->m_CurrentPosition);
+        TargetCell->attachRoundBall(Ball);
+    }
+//    collideRoundBalls();
+    applyConstraints();
+}
+void Grid::applyConstraints() {
+    int RowSize = m_CellMatrix[0].size();
+    for (int i = 0; i < RowSize; ++i)
+    {
+        m_CellMatrix[0][i] -> applyConstraintLeft();
+    }
+    for (int i = 0; i < RowSize; ++i)
+    {
+        m_CellMatrix[m_CellMatrix.size() - 1][i] -> applyConstraintRight();
+    }
+    for (int i = 0; i < m_CellMatrix.size(); ++i)
+    {
+        m_CellMatrix[i][0] -> applyConstraintBottom();
+    }
+    for (int i = 0; i < m_CellMatrix.size(); ++i) {
+
+        m_CellMatrix[i][m_CellMatrix[0].size() - 1]->applyConstraintTop();
+    }
+}
+void Grid::draw() {
+    float CellWidth = m_Width / m_NumRow;
+    for (int i = 0; i < m_NumRow; ++i)
+    {
+        Rectangle Rec = {(float)i * CellWidth,0, 1, (float)m_Height};
+        DrawRectangleRec(Rec, BLACK);
+    }
+    float CellHeight = m_Height / m_NumColumn;
+    for (int i = 0; i < m_NumColumn; ++i)
+    {
+        Rectangle Rec = {0, (float)i * CellHeight, (float)m_Width, 1};
+        DrawRectangleRec(Rec, BLACK);
+    }
+    findCell(m_RoundBallList[0] -> m_CurrentPosition) -> drawOutline();
+}
+
+float Cell::m_Width = 0.0f;
+float Cell::m_Height = 0.0f;
+Cell::Cell(Vector2 TopLeft) : m_TopLeft(TopLeft) {
+
+}
+void Cell::attachRoundBall(EulerianRoundBall *NewRoundBall) {
+    m_RoundBallList.push_back(NewRoundBall);
+}
+void Cell::applyConstraintLeft() {
+    for (auto& Ball : m_RoundBallList)
+    {
+        if (Ball -> m_CurrentPosition.x - Ball -> m_Radius < 0.0f)
+        {
+            Ball -> m_CurrentPosition.x = 0.0f + Ball -> m_Radius;
+            Ball -> m_Velocity.x = -(Ball -> m_Velocity.x);
+        }
+    }
+}
+void Cell::applyConstraintRight() {
+    for (auto& Ball : m_RoundBallList)
+    {
+        if (Ball -> m_CurrentPosition.x + Ball -> m_Radius > Grid::m_Width)
+        {
+            Ball -> m_CurrentPosition.x = Grid::m_Width - Ball -> m_Radius;
+            Ball -> m_Velocity.x = -(Ball -> m_Velocity.x);
+        }
+    }
+}
+void Cell::applyConstraintTop() {
+    for (auto& Ball : m_RoundBallList)
+    {
+        if (Ball -> m_CurrentPosition.y - Ball -> m_Radius < 0.0f)
+        {
+            Ball -> m_CurrentPosition.y = 0.0f + Ball -> m_Radius;
+            Ball -> m_Velocity.y = -(Ball -> m_Velocity.y);
+        }
+    }
+}
+void Cell::applyConstraintBottom() {
+    for (auto& Ball : m_RoundBallList)
+    {
+        if (Ball -> m_CurrentPosition.y + Ball -> m_Radius > Grid::m_Height)
+        {
+            std::cout << "Bottom" << std::endl;
+            Ball -> m_CurrentPosition.y = Grid::m_Height - Ball -> m_Radius;
+            Ball -> m_Velocity.y = -(Ball -> m_Velocity.y);
+        }
+    }
+}
+void Cell::drawOutline() {
+    DrawRectangleLines(m_TopLeft.x, m_TopLeft.y, Cell::m_Width, Cell::m_Height, RED);
+}
+
+UniformGridEngine::UniformGridEngine(int Width, int Height, int NumRow, int NumColumn) : DisceteEulerianEngine(Width, Height),
+                                                                                         m_Grid(Width, Height, NumRow, NumColumn) {
+}
+void UniformGridEngine::draw() {
+    DisceteEulerianEngine::draw();
+    m_Grid.draw();
+}
+void UniformGridEngine::attachRoundBall(EulerianRoundBall *NewRoundBall) {
+    DisceteEulerianEngine::attachRoundBall(NewRoundBall);
+    m_Grid.attachRoundBall(NewRoundBall);
+}
+void UniformGridEngine::update(float DeltaTime) {
+    for (auto& ball : m_RoundBallList) {
+        ball->update(DeltaTime);
+    }
+    m_Grid.update(DeltaTime);
+}
