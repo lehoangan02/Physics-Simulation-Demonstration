@@ -1,6 +1,6 @@
 file(REMOVE_RECURSE
-  "/Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/Physics_Simulation_Demonstration"
-  "/Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/Physics_Simulation_Demonstration.pdb"
+  "/home/lehoangan/Documents/Physics-Simulation-Demonstration/Physics_Simulation_Demonstration"
+  "/home/lehoangan/Documents/Physics-Simulation-Demonstration/Physics_Simulation_Demonstration.pdb"
   "CMakeFiles/Physics_Simulation_Demonstration.dir/Buttons/Buttons.cpp.o"
   "CMakeFiles/Physics_Simulation_Demonstration.dir/Buttons/Buttons.cpp.o.d"
   "CMakeFiles/Physics_Simulation_Demonstration.dir/Commands/Command.cpp.o"
@@ -17,8 +17,6 @@ file(REMOVE_RECURSE
   "CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/PlatformTriangle.cpp.o.d"
   "CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/RoundBall.cpp.o"
   "CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/RoundBall.cpp.o.d"
-  "CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/Springs.cpp.o"
-  "CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/Springs.cpp.o.d"
   "CMakeFiles/Physics_Simulation_Demonstration.dir/States/Observer.cpp.o"
   "CMakeFiles/Physics_Simulation_Demonstration.dir/States/Observer.cpp.o.d"
   "CMakeFiles/Physics_Simulation_Demonstration.dir/States/SimulationState.cpp.o"

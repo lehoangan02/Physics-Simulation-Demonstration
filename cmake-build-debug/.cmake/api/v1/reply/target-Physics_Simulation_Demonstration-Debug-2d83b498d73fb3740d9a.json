@@ -79,7 +79,7 @@
 			[
 				{
 					"backtrace" : 6,
-					"path" : "/opt/homebrew/Cellar/raylib/5.0/include"
+					"path" : "/home/lehoangan/raylib/src"
 				}
 			],
 			"language" : "CXX",

@@ -5,6 +5,7 @@
 #ifndef PHYSICS_SIMULATION_DEMONSTRATION_EQUATIONSSOLVER_HPP
 #define PHYSICS_SIMULATION_DEMONSTRATION_EQUATIONSSOLVER_HPP
 #include <iostream>
+#include <cmath>
 class LinearEquationsSolver
 {
 private:
