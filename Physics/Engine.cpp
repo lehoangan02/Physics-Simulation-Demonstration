@@ -497,6 +497,7 @@ Grid::Grid(int Width, int Height, int NumRow, int NumColumn) : m_NumRow(NumRow),
         }
         m_CellMatrix.push_back(Column);
     }
+
 }
 Grid::~Grid() {
     for (auto& Row : m_CellMatrix)
@@ -508,37 +509,68 @@ Grid::~Grid() {
     }
 }
 Cell* Grid::findCell(Vector2 Position) {
-//    std::cout << Position.x << " " << Position.y << std::endl;
     int i = Position.x / (m_Width / m_NumRow);
     int j = Position.y / (m_Height/ m_NumColumn);
-    i = std::max(0, std::min(i, m_NumRow - 1));
-    j = std::max(0, std::min(j, m_NumColumn - 1));
-//    std::cout << i << " " << j << std::endl;
+    if (i >= m_NumRow || i < 0)
+    {
+        return nullptr;
+    }
+    if (j >= m_NumColumn || j < 0)
+    {
+        return nullptr;
+    }
     return m_CellMatrix[i][j];
 }
 void Grid::attachRoundBall(EulerianRoundBall *NewRoundBall) {
-    Cell* TargetCell = findCell(NewRoundBall -> m_CurrentPosition);
-    TargetCell -> attachRoundBall(NewRoundBall);
     m_RoundBallList.push_back(NewRoundBall);
 }
-void Grid::update(float DeltaTime) {
-    for (auto& CellRow : m_CellMatrix)
+void Grid::organiseBall(EulerianRoundBall *Ball) {
+    Vector2 TopLeft = Vector2Subtract(Ball -> m_CurrentPosition, Vector2{Ball -> m_Radius, Ball -> m_Radius});
+    Vector2 TopRight = Vector2Add(Ball -> m_CurrentPosition, Vector2{Ball -> m_Radius, -Ball -> m_Radius});
+    Vector2 BottomLeft = Vector2Add(Ball -> m_CurrentPosition, Vector2{-Ball -> m_Radius, Ball -> m_Radius});
+    Vector2 BottomRight = Vector2Add(Ball -> m_CurrentPosition, Vector2{Ball -> m_Radius, Ball -> m_Radius});
+    vector<Cell*> CellList;
+    Cell* TopLeftCell = findCell(TopLeft);
+    if (TopLeftCell)
     {
-        for (auto& Cell : CellRow)
-        {
-            Cell -> m_RoundBallList.clear();
+        CellList.push_back(TopLeftCell);
+        TopLeftCell -> attachRoundBall(Ball);
+    }
+    Cell* TopRightCell = findCell(TopRight);
+    if (TopRightCell && find(CellList.begin(), CellList.end(), TopRightCell) == CellList.end())
+    {
+        CellList.push_back(TopRightCell);
+        TopRightCell -> attachRoundBall(Ball);
+    }
+    Cell* BottomLeftCell = findCell(BottomLeft);
+    if (BottomLeftCell && find(CellList.begin(), CellList.end(), BottomLeftCell) == CellList.end())
+    {
+        CellList.push_back(BottomLeftCell);
+        BottomLeftCell -> attachRoundBall(Ball);
+    }
+    Cell* BottomRightCell = findCell(BottomRight);
+    if (BottomRightCell && find(CellList.begin(), CellList.end(), BottomRightCell) == CellList.end())
+    {
+        CellList.push_back(BottomRightCell);
+        BottomRightCell -> attachRoundBall(Ball);
+    }
+}
+void Grid::update(float DeltaTime) {
+    for (auto& CellRow : m_CellMatrix) {
+        for (auto &Cell: CellRow) {
+            Cell->m_RoundBallList.clear();
         }
     }
-    for (auto& Ball : m_RoundBallList) {
-        Cell *TargetCell = findCell(Ball->m_CurrentPosition);
-        TargetCell->attachRoundBall(Ball);
+    for (auto& Ball : m_RoundBallList)
+    {
+        organiseBall(Ball);
     }
-//    collideRoundBalls();
+    collideRoundBalls();
     applyConstraints();
 }
 void Grid::applyConstraints() {
-    int RowSize = m_CellMatrix[0].size();
-    int ColumnSize = m_CellMatrix.size();
+    int RowSize = m_CellMatrix.size();
+    int ColumnSize = m_CellMatrix[0].size();
     for (int i = 0; i < RowSize; ++i)
     {
         m_CellMatrix[i][ColumnSize - 1] -> applyConstraintBottom();
@@ -556,20 +588,56 @@ void Grid::applyConstraints() {
         m_CellMatrix[0][i] -> applyConstraintLeft();
     }
 }
+void Grid::collideRoundBalls() {
+    for (auto& CellRow : m_CellMatrix)
+    {
+        for (auto& Cell : CellRow)
+        {
+            Cell -> collideRoundBalls();
+        }
+    }
+}
 void Grid::draw() {
     float CellWidth = m_Width / m_NumRow;
     for (int i = 0; i < m_NumRow; ++i)
     {
         Rectangle Rec = {(float)i * CellWidth,0, 1, (float)m_Height};
-        DrawRectangleRec(Rec, BLACK);
+        DrawRectangleRec(Rec, GRAY);
     }
     float CellHeight = m_Height / m_NumColumn;
     for (int i = 0; i < m_NumColumn; ++i)
     {
         Rectangle Rec = {0, (float)i * CellHeight, (float)m_Width, 1};
-        DrawRectangleRec(Rec, BLACK);
+        DrawRectangleRec(Rec, GRAY);
     }
-    findCell(m_RoundBallList[0] -> m_CurrentPosition) -> drawOutline();
+    for (auto& CellRow : m_CellMatrix)
+    {
+        for (auto& Cell : CellRow)
+        {
+            if (Cell -> m_RoundBallList.size() > 0)
+            {
+                Cell -> drawRectangle();
+            }
+        }
+    }
+}
+void Grid::reset() {
+    m_RoundBallList.clear();
+    for (auto& Row : m_CellMatrix)
+    {
+        for (auto& Cell : Row)
+        {
+            delete Cell;
+        }
+    }
+    for (auto& CellRow : m_CellMatrix)
+    {
+        for (auto& Cell : CellRow)
+        {
+            Cell -> m_RoundBallList.clear();
+        }
+    }
+
 }
 
 float Cell::m_Width = 0.0f;
@@ -593,9 +661,9 @@ void Cell::applyConstraintLeft() {
 void Cell::applyConstraintRight() {
     for (auto& Ball : m_RoundBallList)
     {
-        if (Ball -> m_CurrentPosition.x + Ball -> m_Radius > Grid::m_Width)
+        if (Ball -> m_CurrentPosition.x + Ball -> m_Radius > (float)Grid::m_Width)
         {
-            Ball -> m_CurrentPosition.x = Grid::m_Width - Ball -> m_Radius;
+            Ball -> m_CurrentPosition.x = (float)Grid::m_Width - Ball -> m_Radius;
             Ball -> m_Velocity.x = -(Ball -> m_Velocity.x);
         }
     }
@@ -613,24 +681,51 @@ void Cell::applyConstraintTop() {
 void Cell::applyConstraintBottom() {
     for (auto& Ball : m_RoundBallList)
     {
-        if (Ball -> m_CurrentPosition.y + Ball -> m_Radius > Grid::m_Height)
+        if (Ball -> m_CurrentPosition.y + Ball -> m_Radius > (float)Grid::m_Height)
         {
-            std::cout << "Bottom" << std::endl;
-            Ball -> m_CurrentPosition.y = Grid::m_Height - Ball -> m_Radius;
+            Ball -> m_CurrentPosition.y = (float)Grid::m_Height - Ball -> m_Radius;
             Ball -> m_Velocity.y = -(Ball -> m_Velocity.y);
+        }
+    }
+}
+void Cell::collideRoundBalls() {
+    for (auto& Ball1 : m_RoundBallList)
+    {
+        for (auto& Ball2 : m_RoundBallList)
+        {
+            if (Ball1 != Ball2)
+            {
+                Vector2 DirectVector = Vector2Subtract(Ball2 -> m_CurrentPosition, Ball1 -> m_CurrentPosition);
+                float Distance = Vector2Length(DirectVector);
+                if (Distance < 2 * Ball1 -> m_Radius)
+                {
+                    Vector2 NormalizedDirectVector = Vector2Normalize(DirectVector);
+                    if (!(Ball1->m_Fixed) && !(Ball2 -> m_Fixed)) {
+                        Ball2 -> m_CurrentPosition = Vector2Add(Ball2 -> m_CurrentPosition, Vector2Scale(NormalizedDirectVector, 0.5 * (2 * Ball1 -> m_Radius - Distance)));
+                        Ball1 -> m_CurrentPosition = Vector2Subtract(Ball1 -> m_CurrentPosition, Vector2Scale(NormalizedDirectVector, 0.5 * (2 * Ball1 -> m_Radius - Distance)));
+                    }
+                    calculateFinalVelocity(Ball1->m_Mass, Ball2->m_Mass, Ball1->m_Velocity, Ball2->m_Velocity);
+                }
+            }
         }
     }
 }
 void Cell::drawOutline() {
     DrawRectangleLines(m_TopLeft.x, m_TopLeft.y, Cell::m_Width, Cell::m_Height, RED);
 }
+void Cell::drawRectangle() {
+    DrawRectangle(m_TopLeft.x, m_TopLeft.y, Cell::m_Width, Cell::m_Height, Color(126, 212, 173, 70));
+}
 
 UniformGridEngine::UniformGridEngine(int Width, int Height, int NumRow, int NumColumn) : DisceteEulerianEngine(Width, Height),
                                                                                          m_Grid(Width, Height, NumRow, NumColumn) {
 }
 void UniformGridEngine::draw() {
-    DisceteEulerianEngine::draw();
+    DrawTexture(m_Background, 0, 0, WHITE);
     m_Grid.draw();
+    for (auto& ball : m_RoundBallList) {
+        ball->draw();
+    }
 }
 void UniformGridEngine::attachRoundBall(EulerianRoundBall *NewRoundBall) {
     DisceteEulerianEngine::attachRoundBall(NewRoundBall);
@@ -641,4 +736,5 @@ void UniformGridEngine::update(float DeltaTime) {
         ball->update(DeltaTime);
     }
     m_Grid.update(DeltaTime);
+
 }
