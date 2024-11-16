@@ -851,7 +851,7 @@ SimulationState *Optimization1State::getOptimization1State() {
     static Optimization1State MyOptimization1State;
     return &MyOptimization1State;
 }
-Optimization1State::Optimization1State() : m_Engine(1800, 1000, 72, 40) {
+Optimization1State::Optimization1State() : m_Engine(1800, 1000, 75, 50) {
     reset();
 }
 Optimization1State::~Optimization1State() {
@@ -872,15 +872,10 @@ void Optimization1State::reset() {
     }
     m_RoundBallList.clear();
     m_Engine.reset();
-//    EulerianRoundBall* RoundBall1 = new EulerianRoundBall(Vector2{500, 100}, MY_ORANGE, 1.0f);
-//    RoundBall1 -> m_Velocity = Vector2{70, 50};
-//    RoundBall1 -> m_Radius = 50.0f;
-//    m_RoundBallList.push_back(RoundBall1);
-//    m_Engine.attachRoundBall(RoundBall1);
-    for (int i = 0; i < 25; ++i)
+    for (int i = 0; i < 30; ++i)
     {
         float StartX = 100 + 50 * i;
-        for (int j = 0; j < 15; ++j)
+        for (int j = 0; j < 20; ++j)
         {
             EulerianRoundBall* RoundBall = new EulerianRoundBall(Vector2{StartX, float(100 + 50 * j)}, MY_ORANGE, 1.0f);
             float VelX = static_cast<int>(std::rand() % 50);

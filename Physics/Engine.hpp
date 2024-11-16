@@ -100,7 +100,7 @@ public:
     virtual void attachRoundBall(EulerianRoundBall* NewRoundBall);
     virtual void update(float DeltaTime);
     virtual void draw();
-    void reset();
+    virtual void reset();
 protected:
     void applyConstraints();
     void collideRoundBalls();
@@ -155,8 +155,9 @@ private:
     Grid m_Grid;
 public:
     UniformGridEngine(int Width, int Height, int NumRow, int NumColumn);
-    void attachRoundBall(EulerianRoundBall* NewRoundBall);
-    void draw();
-    void update(float DeltaTime);
+    void attachRoundBall(EulerianRoundBall* NewRoundBall) override;
+    void draw() override;
+    void update(float DeltaTime) override;
+    void reset() override;
 };
 #endif //PHYSICS_SIMULATION_DEMONSTRATION_ENGINE_HPP
