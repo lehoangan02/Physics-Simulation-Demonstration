@@ -12,6 +12,7 @@
 #include "Chains.hpp"
 #include <vector>
 #include <cmath>
+#include <algorithm>
 using namespace std;
 void calculateFinalVelocity(const float &Mass1, const float &Mass2, Vector2 &Velocity1,
                             Vector2 &Velocity2);
