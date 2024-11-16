@@ -484,20 +484,11 @@ int Grid::m_Height = 0.0f;
 Grid::Grid(int Width, int Height, int NumRow, int NumColumn) : m_NumRow(NumRow), m_NumColumn(NumColumn) {
     m_Width = Width;
     m_Height = Height;
-    float CellWidth = Width / NumRow;
-    float CellHeight = Height / NumColumn;
+    float CellWidth = m_Width / m_NumRow;
+    float CellHeight = m_Height / m_NumColumn;
     Cell::m_Height = CellHeight;
     Cell::m_Width = CellWidth;
-    for (int i = 0; i < NumRow; ++i)
-    {
-        vector<Cell*> Column;
-        for (int j = 0; j < NumColumn; ++j)
-        {
-            Column.push_back(new Cell(Vector2{CellWidth * i, CellHeight * j}));
-        }
-        m_CellMatrix.push_back(Column);
-    }
-
+    reset();
 }
 Grid::~Grid() {
     for (auto& Row : m_CellMatrix)
@@ -630,14 +621,16 @@ void Grid::reset() {
             delete Cell;
         }
     }
-    for (auto& CellRow : m_CellMatrix)
+    m_CellMatrix.clear();
+    for (int i = 0; i < m_NumRow; ++i)
     {
-        for (auto& Cell : CellRow)
+        vector<Cell*> Column;
+        for (int j = 0; j < m_NumColumn; ++j)
         {
-            Cell -> m_RoundBallList.clear();
+            Column.push_back(new Cell(Vector2{Cell::m_Width * i, Cell::m_Height * j}));
         }
+        m_CellMatrix.push_back(Column);
     }
-
 }
 
 float Cell::m_Width = 0.0f;
@@ -736,5 +729,8 @@ void UniformGridEngine::update(float DeltaTime) {
         ball->update(DeltaTime);
     }
     m_Grid.update(DeltaTime);
-
+}
+void UniformGridEngine::reset() {
+    DisceteEulerianEngine::reset();
+    m_Grid.reset();
 }
