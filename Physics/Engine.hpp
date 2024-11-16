@@ -96,9 +96,9 @@ protected:
     vector<EulerianRoundBall*> m_RoundBallList;
 public:
     DisceteEulerianEngine(int Width, int Height);
-    void attachRoundBall(EulerianRoundBall* NewRoundBall);
-    void update(float DeltaTime);
-    void draw();
+    virtual void attachRoundBall(EulerianRoundBall* NewRoundBall);
+    virtual void update(float DeltaTime);
+    virtual void draw();
     void reset();
 protected:
     void applyConstraints();
@@ -118,10 +118,12 @@ private:
     void applyConstraintRight();
     void applyConstraintTop();
     void applyConstraintBottom();
+    void collideRoundBalls();
 public:
     void attachRoundBall(EulerianRoundBall* NewRoundBall);
-    Cell(Vector2 TopLeft);
+    explicit Cell(Vector2 TopLeft);
     void drawOutline();
+    void drawRectangle();
 };
 class Grid
 {
@@ -138,9 +140,10 @@ public:
     void attachRoundBall(EulerianRoundBall* NewRoundBall);
     vector<EulerianRoundBall*> m_RoundBallList;
     void update(float DeltaTime);
-    void reset();
     void draw();
+    void reset();
 private:
+    void organiseBall(EulerianRoundBall* Ball);
     Cell* findCell(Vector2 Position);
     void applyConstraints();
     void collideRoundBalls();
