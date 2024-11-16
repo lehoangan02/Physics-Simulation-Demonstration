@@ -872,8 +872,8 @@ void Optimization1State::reset() {
     }
     m_RoundBallList.clear();
     m_Engine.reset();
-    EulerianRoundBall* RoundBall1 = new EulerianRoundBall(Vector2{100, 100}, MY_ORANGE, 1.0f);
-    RoundBall1 -> m_Velocity = Vector2{0, 50};
+    EulerianRoundBall* RoundBall1 = new EulerianRoundBall(Vector2{500, 100}, MY_ORANGE, 1.0f);
+    RoundBall1 -> m_Velocity = Vector2{70, 50};
     RoundBall1 -> m_Radius = 10.0f;
     m_RoundBallList.push_back(RoundBall1);
     m_Engine.attachRoundBall(RoundBall1);

@@ -511,7 +511,9 @@ Cell* Grid::findCell(Vector2 Position) {
 //    std::cout << Position.x << " " << Position.y << std::endl;
     int i = Position.x / (m_Width / m_NumRow);
     int j = Position.y / (m_Height/ m_NumColumn);
-    std::cout << i << " " << j << std::endl;
+    i = std::max(0, std::min(i, m_NumRow - 1));
+    j = std::max(0, std::min(j, m_NumColumn - 1));
+//    std::cout << i << " " << j << std::endl;
     return m_CellMatrix[i][j];
 }
 void Grid::attachRoundBall(EulerianRoundBall *NewRoundBall) {
@@ -536,21 +538,22 @@ void Grid::update(float DeltaTime) {
 }
 void Grid::applyConstraints() {
     int RowSize = m_CellMatrix[0].size();
+    int ColumnSize = m_CellMatrix.size();
     for (int i = 0; i < RowSize; ++i)
+    {
+        m_CellMatrix[i][ColumnSize - 1] -> applyConstraintBottom();
+    }
+    for (int i = 0; i < RowSize; ++i)
+    {
+        m_CellMatrix[i][0] -> applyConstraintTop();
+    }
+    for (int i = 0; i < ColumnSize; ++i)
+    {
+        m_CellMatrix[RowSize - 1][i] -> applyConstraintRight();
+    }
+    for (int i = 0; i < ColumnSize; ++i)
     {
         m_CellMatrix[0][i] -> applyConstraintLeft();
-    }
-    for (int i = 0; i < RowSize; ++i)
-    {
-        m_CellMatrix[m_CellMatrix.size() - 1][i] -> applyConstraintRight();
-    }
-    for (int i = 0; i < m_CellMatrix.size(); ++i)
-    {
-        m_CellMatrix[i][0] -> applyConstraintBottom();
-    }
-    for (int i = 0; i < m_CellMatrix.size(); ++i) {
-
-        m_CellMatrix[i][m_CellMatrix[0].size() - 1]->applyConstraintTop();
     }
 }
 void Grid::draw() {
