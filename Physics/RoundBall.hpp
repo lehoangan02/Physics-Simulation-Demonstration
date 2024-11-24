@@ -48,7 +48,7 @@ public:
     void update(float DeltaTime);
     void draw();
     friend class ContinuousEulerianEngine;
-    friend class DisceteEulerianEngine;
+    friend class DiscreteEulerianEngine;
     friend class Grid;
     friend class Cell;
     friend class Spring;
@@ -58,5 +58,7 @@ public:
     friend class FPSInvariantStateForContinuousIntegration;
     friend class ParticleGravityState;
     friend class Optimization1State;
+    friend class SpringState;
+    friend class SpringSoftBodyState;
 };
 #endif //PHYSICS_SIMULATION_DEMONSTRATION_ROUNDBALL_HPP

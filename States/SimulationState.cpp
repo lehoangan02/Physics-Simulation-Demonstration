@@ -9,6 +9,7 @@ void SimulationState::exitState() {
 }
 SimulationState* VerletDropState::getVerletDropState()
 {
+    VerletRoundBall::m_Radius = 10.0f;
     static VerletDropState MyVerletDropState;
     return &MyVerletDropState;
 }
@@ -66,8 +67,6 @@ void VerletDropState::reset() {
     m_RoundBall.clear();
     m_TotalTime = 0.0f;
     m_Engine.reset();
-//    printf("Reset\n");
-
     VerletRoundBall* RoundBall1 = new VerletRoundBall(Vector2(StartX, StartY), Color(16, 55, 92, 255));
     RoundBall1->giveSpeed(Vector2{StartSppedX, -StartSppedY});
     m_RoundBall.push_back(RoundBall1);
@@ -151,6 +150,16 @@ SimulationState* HomeState::update() {
     {
         BackHomeButton::getBackHomeButton()->m_Active = true;
         return Optimization1State::getOptimization1State();
+    }
+    else if (IsKeyPressed(KEY_J))
+    {
+        BackHomeButton::getBackHomeButton()->m_Active = true;
+        return SpringState::getSpringState();
+    }
+    else if (IsKeyPressed(KEY_K))
+    {
+        BackHomeButton::getBackHomeButton()->m_Active = true;
+        return SpringSoftBodyState::getSpringSoftBodyState();
     }
     BackHomeButton::getBackHomeButton()->m_Active = false;
     return nullptr;
@@ -581,6 +590,7 @@ void TunnellingComparisonState::draw() {
 }
 
 SimulationState *EnergyComparisonState::getEnergyComparisonState() {
+    VerletRoundBall::m_Radius = 100.0f;
     static EnergyComparisonState MyEnergyComparisonState;
     return &MyEnergyComparisonState;
 }
@@ -808,9 +818,8 @@ void ParticleGravityState::reset() {
         delete ball;
     }
     m_RoundBallList.clear();
-    m_Engine.reset();;
-//    EulerianRoundBall* RoundBall1 = new EulerianRoundBall(Vector2{100, 100}, MY_ORANGE, 1.0f);
-//    RoundBall1 -> m_Velocity = Vector2{100, 0};
+    m_Engine.reset();
+    m_Engine.turnOffGravity();
     for (int i = 0; i < 15; ++i)
     {
         float StartX = 100 + 100 * i;
@@ -823,8 +832,6 @@ void ParticleGravityState::reset() {
             m_Engine.attachRoundBall(RoundBall);
         }
     }
-//    m_RoundBallList.push_back(RoundBall1);
-//    m_Engine.attachRoundBall(RoundBall1);
 }
 void ParticleGravityState::onNotify() {
     exitState();
@@ -833,7 +840,7 @@ SimulationState* ParticleGravityState::update() {
     if (!m_IsActive) {
         return HomeState::getHomeState();
     }
-    for (int i = 0; i < 6; ++i)
+    for (int i = 0; i < 12; ++i)
     {
         m_Engine.update(m_FrameTime);
     }
@@ -902,5 +909,270 @@ SimulationState* Optimization1State::update() {
     return nullptr;
 }
 void Optimization1State::draw() {
+    m_Engine.draw();
+}
+
+SimulationState *SpringState::getSpringState() {
+    static SpringState MySpringState;
+    return &MySpringState;
+}
+SpringState::SpringState() : m_Engine(1800, 1000) {
+    reset();
+}
+SpringState::~SpringState() {
+    m_IsActive = true;
+    for (auto& ball : m_RoundBallList)
+    {
+        delete ball;
+        ball = nullptr;
+    }
+    for (auto& spring : m_SpringList)
+    {
+        delete spring;
+        spring = nullptr;
+    }
+    for (auto& rectangle : m_PlatformRectangleList)
+    {
+        delete rectangle;
+        rectangle = nullptr;
+    }
+    m_RoundBallList.clear();
+    m_SpringList.clear();
+    m_PlatformRectangleList.clear();
+    m_Engine.reset();
+}
+void SpringState::onNotify() {
+    exitState();
+}
+void SpringState::reset() {
+    m_IsActive = true;
+    for (auto& ball : m_RoundBallList)
+    {
+        delete ball;
+        ball = nullptr;
+    }
+    for (auto& spring : m_SpringList)
+    {
+        delete spring;
+        spring = nullptr;
+    }
+    for (auto& rectangle : m_PlatformRectangleList)
+    {
+        delete rectangle;
+        rectangle = nullptr;
+    }
+    m_RoundBallList.clear();
+    m_SpringList.clear();
+    m_PlatformRectangleList.clear();
+    m_Engine.reset();
+    m_Engine.turnOffProximityColoring();
+    m_Engine.turnOffMutualAcceleration();
+    Vector2 StartingPosition = Vector2{400, 200};
+    Vector2 PositionDifference = Vector2{50, 30};
+    Color BallColor = Color(33, 155, 157, 255);
+    EulerianRoundBall* RoundBall1 = new EulerianRoundBall(StartingPosition, BallColor, 1.0f);
+    RoundBall1 -> m_Radius = 10.0f;
+    StartingPosition = Vector2Add(StartingPosition, PositionDifference);
+    EulerianRoundBall *RoundBall2 = new EulerianRoundBall(StartingPosition, BallColor, 1.0f);
+    RoundBall2 -> m_Radius = 10.0f;
+    StartingPosition = Vector2Add(StartingPosition, PositionDifference);
+    EulerianRoundBall *RoundBall3 = new EulerianRoundBall(StartingPosition, BallColor, 1.0f);
+    RoundBall3 -> m_Radius = 10.0f;
+    StartingPosition = Vector2Add(StartingPosition, PositionDifference);
+    EulerianRoundBall *RoundBall4 = new EulerianRoundBall(StartingPosition, BallColor, 1.0f);
+    RoundBall4 -> m_Radius = 10.0f;
+    float SpringStrength = 20.0f;
+
+    Color SpringColor = Color(76, 31, 122, 255);
+    Spring *Spring1 = new Spring(RoundBall1, RoundBall2, 20.0f, SpringStrength, SpringColor);
+    Spring *Spring2 = new Spring(RoundBall2, RoundBall3, 20.0f, SpringStrength, SpringColor);
+    Spring *Spring3 = new Spring(RoundBall3, RoundBall4, 20.0f, SpringStrength, SpringColor);
+    EulerianRoundBall *RoundBall5 = new EulerianRoundBall(Vector2{500, 200}, BallColor, 1.0f);
+    RoundBall5 -> m_Radius = 10.0f;
+    RoundBall5 -> m_Velocity = Vector2{250, 150};
+    EulerianRoundBall *RoundBall6 = new EulerianRoundBall(Vector2{600, 200}, BallColor, 1.0f);
+    RoundBall6 -> m_Radius = 10.0f;
+    RoundBall6 -> m_Velocity = Vector2{150, -50};
+    EulerianRoundBall *RoundBall7 = new EulerianRoundBall(Vector2{700, 200}, BallColor, 1.0f);
+    RoundBall7 -> m_Radius = 10.0f;
+    RoundBall7 -> m_Velocity = Vector2{50, 350};
+
+
+    m_RoundBallList.push_back(RoundBall1);
+    m_RoundBallList.push_back(RoundBall2);
+    m_RoundBallList.push_back(RoundBall3);
+    m_RoundBallList.push_back(RoundBall4);
+    m_RoundBallList.push_back(RoundBall5);
+    m_RoundBallList.push_back(RoundBall6);
+    m_RoundBallList.push_back(RoundBall7);
+    m_SpringList.push_back(Spring1);
+    m_Engine.attachRoundBall(RoundBall1);
+    m_Engine.attachRoundBall(RoundBall2);
+    m_Engine.attachRoundBall(RoundBall3);
+    m_Engine.attachRoundBall(RoundBall4);
+    m_Engine.attachRoundBall(RoundBall5);
+    m_Engine.attachRoundBall(RoundBall6);
+    m_Engine.attachRoundBall(RoundBall7);
+
+    m_Engine.attachSpring(Spring1);
+    m_Engine.attachSpring(Spring2);
+    m_Engine.attachSpring(Spring3);
+
+    Color RectangleColor = Color(182, 162, 142, 255);
+    PlatformRectangle *Rectangle1 = new PlatformRectangle(Vector2{230, 400}, 380, 40, 50, RectangleColor);
+    PlatformRectangle *Rectangle2 = new PlatformRectangle(Vector2{1350, 430}, 380, 40, 130, RectangleColor);
+    PlatformRectangle *Rectangle3 = new PlatformRectangle(Vector2{500, 100}, 380, 40, 0, RectangleColor);
+    PlatformRectangle *Rectangle4 = new PlatformRectangle(Vector2{400, 650}, 800, 40, 0, RectangleColor);
+    m_PlatformRectangleList.push_back(Rectangle1);
+    m_PlatformRectangleList.push_back(Rectangle2);
+    m_PlatformRectangleList.push_back(Rectangle3);
+    m_PlatformRectangleList.push_back(Rectangle4);
+    m_Engine.attachRectangle(Rectangle1);
+    m_Engine.attachRectangle(Rectangle2);
+    m_Engine.attachRectangle(Rectangle3);
+    m_Engine.attachRectangle(Rectangle4);
+}
+SimulationState* SpringState::update() {
+    if (!m_IsActive) {
+        return HomeState::getHomeState();
+    }
+    m_Engine.update(m_FrameTime);
+    return nullptr;
+}
+void SpringState::draw() {
+    m_Engine.draw();
+}
+
+SimulationState *SpringSoftBodyState::getSpringSoftBodyState() {
+    static SpringSoftBodyState MySpringSoftBodyState;
+    return &MySpringSoftBodyState;
+}
+SpringSoftBodyState::SpringSoftBodyState() : m_Engine(1800, 1000) {
+    reset();
+}
+SpringSoftBodyState::~SpringSoftBodyState() {
+    m_IsActive = true;
+    for (auto& ball : m_RoundBallMatrix)
+    {
+        for (auto& roundball : ball)
+        {
+            delete roundball;
+            roundball = nullptr;
+        }
+    }
+    for (auto& spring : m_SpringList)
+    {
+        delete spring;
+        spring = nullptr;
+    }
+    for (auto& rectangle : m_PlatformRectangleList)
+    {
+        delete rectangle;
+        rectangle = nullptr;
+    }
+    m_RoundBallMatrix.clear();
+    m_SpringList.clear();
+    m_PlatformRectangleList.clear();
+    m_Engine.reset();
+    m_Engine.turnOffProximityColoring();
+    m_Engine.turnOffMutualAcceleration();
+}
+void SpringSoftBodyState::reset() {
+    m_IsActive = true;
+    for (auto& ball : m_RoundBallMatrix)
+    {
+        for (auto& roundball : ball)
+        {
+            delete roundball;
+            roundball = nullptr;
+        }
+    }
+    for (auto& spring : m_SpringList)
+    {
+        delete spring;
+        spring = nullptr;
+    }
+    for (auto& rectangle : m_PlatformRectangleList)
+    {
+        delete rectangle;
+        rectangle = nullptr;
+    }
+    m_RoundBallMatrix.clear();
+    m_SpringList.clear();
+    m_PlatformRectangleList.clear();
+    m_Engine.reset();
+    m_Engine.turnOffProximityColoring();
+    m_Engine.turnOffMutualAcceleration();
+
+    Color BallColor = Color(33, 155, 157, 255);
+    Color SpringColor = Color(76, 31, 122, 255);
+    Vector2 StartingPosition = Vector2{300, 200};
+    Vector2 PositionDifference = Vector2{40, 40};
+    float AllignedSpringStrength = 4000.0f;
+    float AllignedSpringLength = PositionDifference.x;
+    float SpringDiagonalStrength = 4000.0f;
+    float SpringDiagonalLength = PositionDifference.x * sqrt(2);
+    int NumBalls = 10;
+    float BallRadius = 13.0f;
+
+    for (int i = 0; i < NumBalls; ++i)
+    {
+        vector<EulerianRoundBall*> Row;
+        for (int j = 0; j < NumBalls; ++j)
+        {
+            EulerianRoundBall *Roundball = new EulerianRoundBall(Vector2{StartingPosition.x + i * PositionDifference.x, StartingPosition.y + j * PositionDifference.y}, BallColor, 1.0f);
+            Roundball -> m_Radius = BallRadius;
+            Row.push_back(Roundball);
+            m_Engine.attachRoundBall(Roundball);
+        }
+        m_RoundBallMatrix.push_back(Row);
+        for (int j = 0; j < NumBalls - 1; ++j)
+        {
+            Spring *Spring1 = new Spring(m_RoundBallMatrix[i][j], m_RoundBallMatrix[i][j + 1], AllignedSpringLength, AllignedSpringStrength, SpringColor);
+            m_SpringList.push_back(Spring1);
+            m_Engine.attachSpring(Spring1);
+        }
+        if (i > 0)
+        {
+            for (int j = 0; j < NumBalls; ++j)
+            {
+                Spring *Spring1 = new Spring(m_RoundBallMatrix[i][j], m_RoundBallMatrix[i - 1][j], PositionDifference.y, AllignedSpringStrength, SpringColor);
+                m_SpringList.push_back(Spring1);
+                m_Engine.attachSpring(Spring1);
+
+            }
+            for (int j = 1; j < NumBalls; ++j)
+            {
+                Spring *Spring1 = new Spring(m_RoundBallMatrix[i][j], m_RoundBallMatrix[i - 1][j - 1], SpringDiagonalLength, SpringDiagonalStrength, SpringColor);
+                m_SpringList.push_back(Spring1);
+                m_Engine.attachSpring(Spring1);
+            }
+            for (int j = 0; j < NumBalls - 1; ++j)
+            {
+                Spring *Spring1 = new Spring(m_RoundBallMatrix[i][j], m_RoundBallMatrix[i - 1][j + 1], SpringDiagonalLength, SpringDiagonalStrength, SpringColor);
+                m_SpringList.push_back(Spring1);
+                m_Engine.attachSpring(Spring1);
+            }
+        }
+    }
+    PlatformRectangle *Rectangle1 = new PlatformRectangle(Vector2{230, 500}, 380, 100, 40, Color(182, 162, 142, 255));
+    m_PlatformRectangleList.push_back(Rectangle1);
+    m_Engine.attachRectangle(Rectangle1);
+}
+void SpringSoftBodyState::onNotify() {
+    exitState();
+}
+SimulationState* SpringSoftBodyState::update() {
+    if (!m_IsActive) {
+        return HomeState::getHomeState();
+    }
+    int SubStep = 10;
+    for (int i = 0; i < SubStep; ++i)
+    {
+        m_Engine.update(m_FrameTime / SubStep);
+    }
+    return nullptr;
+}
+void SpringSoftBodyState::draw() {
     m_Engine.draw();
 }
