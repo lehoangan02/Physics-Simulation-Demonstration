@@ -795,7 +795,47 @@
 				}
 			],
 			"type" : "FILEPATH",
+<<<<<<<< HEAD:cmake-build-debug/.cmake/api/v1/reply/cache-v2-2341c097787f5a2cfc7b.json
 			"value" : "/usr/bin/objdump"
+========
+			"value" : "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/objdump"
+		},
+		{
+			"name" : "CMAKE_OSX_ARCHITECTURES",
+			"properties" : 
+			[
+				{
+					"name" : "HELPSTRING",
+					"value" : "Build architectures for OSX"
+				}
+			],
+			"type" : "STRING",
+			"value" : ""
+		},
+		{
+			"name" : "CMAKE_OSX_DEPLOYMENT_TARGET",
+			"properties" : 
+			[
+				{
+					"name" : "HELPSTRING",
+					"value" : "Minimum OS X version to target for deployment (at runtime); newer APIs weak linked. Set to empty string for default value."
+				}
+			],
+			"type" : "STRING",
+			"value" : ""
+		},
+		{
+			"name" : "CMAKE_OSX_SYSROOT",
+			"properties" : 
+			[
+				{
+					"name" : "HELPSTRING",
+					"value" : "The product will be built against the headers and libraries located inside the indicated SDK."
+				}
+			],
+			"type" : "PATH",
+			"value" : "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.1.sdk"
+>>>>>>>> main:cmake-build-debug/.cmake/api/v1/reply/cache-v2-247f36cbbf70e3f772e6.json
 		},
 		{
 			"name" : "CMAKE_PLATFORM_INFO_INITIALIZED",

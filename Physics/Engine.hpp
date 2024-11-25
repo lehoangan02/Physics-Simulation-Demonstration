@@ -7,12 +7,14 @@
 #include "raylib.h"
 #include "raymath.h"
 #include "RoundBall.hpp"
+#include "PlatformRectangle.h"
 #include "PlatformTriangle.hpp"
 #include "../Math/Geometry.hpp"
+#include "../Physics/Spring.hpp"
 #include "Chains.hpp"
 #include <vector>
 #include <cmath>
-#include <algorithm>
+
 using namespace std;
 void calculateFinalVelocity(const float &Mass1, const float &Mass2, Vector2 &Velocity1,
                             Vector2 &Velocity2);
@@ -73,7 +75,7 @@ private:
     friend class FPSInvariantStateForContinuousIntegration;
 };
 
-class DisceteEulerianEngine
+class DiscreteEulerianEngine
 {
     class ColorSquare {
     protected:
@@ -93,18 +95,34 @@ protected:
     int m_Width;
     int m_Height;
     int m_TotalEngery;
+    Vector2 m_Gravity = {0, 400.0f};
     Texture2D m_Background;
     vector<EulerianRoundBall*> m_RoundBallList;
+    vector<PlatformRectangle*> m_PlatformRectangleList;
+    vector<Spring*> m_SpringList;
+    bool m_GravityOn = true;
+    bool m_ProximityColoring = true;
+    bool m_MuttualyAccelerate = true;
 public:
-    DisceteEulerianEngine(int Width, int Height);
+    DiscreteEulerianEngine(int Width, int Height);
     virtual void attachRoundBall(EulerianRoundBall* NewRoundBall);
+    virtual void attachSpring(Spring* NewSpring);
+    virtual void attachRectangle(PlatformRectangle* NewRectangle);
     virtual void update(float DeltaTime);
     virtual void draw();
     virtual void reset();
+    void turnOffGravity();
+    void turnOffProximityColoring();
+    void turnOnGravity();
+    void turnOnProximityColoring();
+    void turnOffMutualAcceleration();
+    void turnOnMutualAcceleration();
 protected:
     void applyConstraints();
     void collideRoundBalls();
+    void collidePlatformRectangle();
     void accelerateMutually();
+    void applyGravity();
     Color calculateColor(EulerianRoundBall* Ball);
 };
 class Cell
@@ -115,6 +133,7 @@ private:
     static float m_Width;
     static float m_Height;
     vector<EulerianRoundBall*> m_RoundBallList;
+private:
     void applyConstraintLeft();
     void applyConstraintRight();
     void applyConstraintTop();
@@ -149,7 +168,7 @@ private:
     void applyConstraints();
     void collideRoundBalls();
 };
-class UniformGridEngine: public DisceteEulerianEngine
+class UniformGridEngine: public DiscreteEulerianEngine
 {
 private:
     Grid m_Grid;

@@ -247,3 +247,13 @@ float dotProduct(Vector2 A, Vector2 B) {
 float angle(Vector2 A, Vector2 B) {
     return acos(dotProduct(A, B) / (Vector2Length(A) * Vector2Length(B)));
 }
+Vector2 flipVector(Vector2 Initial, Vector2 Mirror) {
+    Vector2 Normalized = Vector2Normalize(Mirror);
+    float DotProduct = dotProduct(Initial, Normalized);
+    Normalized = Vector2Scale(Normalized, DotProduct * 2);
+    Vector2 Result = Vector2Subtract(Normalized, Initial);
+//    std::cout << "Initial: " << Initial.x << " " << Initial.y << std::endl;
+//    std::cout << "Mirror: " << Mirror.x << " " << Mirror.y << std::endl;
+//    std::cout << "Result: " << Result.x << " " << Result.y << std::endl;
+    return Vector2Negate(Result);
+}

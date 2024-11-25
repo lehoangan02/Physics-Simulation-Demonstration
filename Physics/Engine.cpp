@@ -318,16 +318,17 @@ void ContinuousEulerianEngine::collideRoundBalls(float DeltaTime) {
                     float TimeToCollision = Solver(A, B, C);
                     Ball1 -> m_CurrentPosition = Vector2Add(Ball1 -> m_PreviousPosition, Vector2Scale(Ball1 -> m_Velocity, TimeToCollision));
                     Ball2 -> m_CurrentPosition = Vector2Add(Ball2 -> m_PreviousPosition, Vector2Scale(Ball2 -> m_Velocity, TimeToCollision));
-                    if (Ball1->m_Radius + Ball2->m_Radius >
-                        Vector2Distance(Ball1->m_CurrentPosition, Ball2->m_CurrentPosition)) {
-                        std::cout << "Error: Collision not resolved" << std::endl;
-                    }
+
                     Ball1 -> m_PreviousPosition = Ball1 -> m_CurrentPosition;
                     Ball2 -> m_PreviousPosition = Ball2 -> m_CurrentPosition;
                     float TimeSinceCollision = DeltaTime - TimeToCollision;
                     calculateFinalVelocity(Ball1->m_Mass, Ball2->m_Mass, Ball1->m_Velocity, Ball2->m_Velocity);
                     Ball1->m_CurrentPosition = Vector2Add(Ball1->m_CurrentPosition, Vector2Scale(Ball1->m_Velocity, TimeSinceCollision));
                     Ball2->m_CurrentPosition = Vector2Add(Ball2->m_CurrentPosition, Vector2Scale(Ball2->m_Velocity, TimeSinceCollision));
+                    if (Ball1->m_Radius + Ball2->m_Radius >
+                        Vector2Distance(Ball1->m_CurrentPosition, Ball2->m_CurrentPosition)) {
+                        std::cout << "Error: Collision not resolved" << std::endl;
+                    }
             }
             }
         }
@@ -349,22 +350,34 @@ void calculateFinalVelocity(const float &Mass1, const float &Mass2, float &Veloc
     Velocity1 = v1;
     Velocity2 = v2;
 }
-DisceteEulerianEngine::DisceteEulerianEngine(int Width, int Height) : m_Width(Width), m_Height(Height), m_TotalEngery(0) {
+DiscreteEulerianEngine::DiscreteEulerianEngine(int Width, int Height) : m_Width(Width), m_Height(Height), m_TotalEngery(0) {
     m_Background = LoadTexture("Assets/Textures/GridBackground.png");
 
 }
-void DisceteEulerianEngine::attachRoundBall(EulerianRoundBall *NewRoundBall) {
+void DiscreteEulerianEngine::attachRoundBall(EulerianRoundBall *NewRoundBall) {
     m_RoundBallList.push_back(NewRoundBall);
 }
-void DisceteEulerianEngine::update(float DeltaTime) {
+void DiscreteEulerianEngine::attachSpring(Spring *NewSpring) {
+    m_SpringList.push_back(NewSpring);
+}
+void DiscreteEulerianEngine::attachRectangle(PlatformRectangle *NewRectangle) {
+    m_PlatformRectangleList.push_back(NewRectangle);
+}
+void DiscreteEulerianEngine::update(float DeltaTime) {
     for (auto& ball : m_RoundBallList) {
         ball->update(DeltaTime);
     }
-    accelerateMutually();
+    if (m_MuttualyAccelerate) accelerateMutually();
     collideRoundBalls();
+    collidePlatformRectangle();
+    for (auto& string: m_SpringList)
+    {
+        string -> update();
+    }
     applyConstraints();
+    if (m_GravityOn) applyGravity();
 }
-void DisceteEulerianEngine::applyConstraints() {
+void DiscreteEulerianEngine::applyConstraints() {
     for (auto &Ball : m_RoundBallList) {
         if (Ball-> m_CurrentPosition.x + Ball->m_Radius > m_Width) {
             Ball -> m_CurrentPosition.x = m_Width - Ball -> m_Radius;
@@ -384,7 +397,7 @@ void DisceteEulerianEngine::applyConstraints() {
         }
     }
 }
-void DisceteEulerianEngine::collideRoundBalls() {
+void DiscreteEulerianEngine::collideRoundBalls() {
     for (auto& Ball1 : m_RoundBallList)
     {
         for (auto& Ball2 : m_RoundBallList)
@@ -410,20 +423,71 @@ void DisceteEulerianEngine::collideRoundBalls() {
         }
     }
 }
-void DisceteEulerianEngine::draw() {
-    DrawTexture(m_Background, 0, 0, WHITE);
-    for (auto& ball : m_RoundBallList) {
-        ball -> m_Color = calculateColor(ball);
-        ball->draw();
+void DiscreteEulerianEngine::collidePlatformRectangle() {
+    for (auto& ball : m_RoundBallList)
+    {
+        for (auto& platform : m_PlatformRectangleList)
+        {
+            if (platform->isInside(ball -> m_CurrentPosition))
+            {
+                vector<float> DistanceToLineSegment;
+                for (auto& lineSegment : platform -> m_LineSegmentList)
+                {
+                    DistanceToLineSegment.push_back(Line(lineSegment).distanceToPoint(ball -> m_CurrentPosition));
+                }
+                int k = 0;
+                for (int i = 0; i < 4; ++i)
+                {
+                    if (DistanceToLineSegment[i] < DistanceToLineSegment[k])
+                    {
+                        k = i;
+                    }
+                }
+                Vector2 Last = ball -> m_CurrentPosition;
+                ball -> m_PreviousPosition = ball -> m_CurrentPosition;
+
+                ball -> m_CurrentPosition = Line(platform -> m_LineSegmentList[k]).projection(ball -> m_CurrentPosition);
+                ball -> m_CurrentPosition.y += 0.01f;
+                Vector2 NormalVector = Vector2Subtract(ball -> m_CurrentPosition, ball -> m_PreviousPosition);
+                ball -> m_Velocity = (flipVector(ball -> m_Velocity, NormalVector));
+            }
+        }
     }
 }
-void DisceteEulerianEngine::reset() {
-    m_RoundBallList.clear();
+void DiscreteEulerianEngine::draw() {
+    DrawTexture(m_Background, 0, 0, WHITE);
+    for (auto& rectangle : m_PlatformRectangleList)
+    {
+        rectangle -> draw();
+    }
+    for (auto& spring : m_SpringList)
+    {
+        spring -> draw();
+    }
+    for (auto& ball : m_RoundBallList) {
+        if (m_ProximityColoring) ball -> m_Color = calculateColor(ball);
+        ball->draw();
+    }
+
 }
-Color DisceteEulerianEngine::ColorSquare::m_RED = Color(238, 66, 102, 255);
-Color DisceteEulerianEngine::ColorSquare::m_YELLOW = Color(255, 210, 63, 255);
-Color DisceteEulerianEngine::ColorSquare::m_GREEN = Color(51, 115, 87, 255);
-Color DisceteEulerianEngine::ColorSquare::chooseColor(vector<EulerianRoundBall*> m_RoundBallList, EulerianRoundBall* Ball) {
+void DiscreteEulerianEngine::reset() {
+    m_RoundBallList.clear();
+    m_PlatformRectangleList.clear();
+    m_SpringList.clear();
+    turnOnGravity();
+    turnOnProximityColoring();
+}
+void DiscreteEulerianEngine::applyGravity() {
+    for (auto& ball : m_RoundBallList) {
+        if (!(ball -> m_Fixed)) {
+            ball->accelerate(m_Gravity);
+        }
+    }
+}
+Color DiscreteEulerianEngine::ColorSquare::m_RED = Color(238, 66, 102, 255);
+Color DiscreteEulerianEngine::ColorSquare::m_YELLOW = Color(255, 210, 63, 255);
+Color DiscreteEulerianEngine::ColorSquare::m_GREEN = Color(51, 115, 87, 255);
+Color DiscreteEulerianEngine::ColorSquare::chooseColor(vector<EulerianRoundBall*> m_RoundBallList, EulerianRoundBall* Ball) {
     int Count = 0;
     for (auto& ball : m_RoundBallList)
     {
@@ -445,7 +509,7 @@ Color DisceteEulerianEngine::ColorSquare::chooseColor(vector<EulerianRoundBall*>
         return m_GREEN;
     }
 }
-void DisceteEulerianEngine::accelerateMutually() {
+void DiscreteEulerianEngine::accelerateMutually() {
     for (auto& Ball1 : m_RoundBallList)
     {
         for (auto& Ball2 : m_RoundBallList)
@@ -456,9 +520,7 @@ void DisceteEulerianEngine::accelerateMutually() {
                 Vector2 DirectVector = Vector2Subtract(Ball2 -> m_CurrentPosition, Ball1 -> m_CurrentPosition);
                 float Distance = Vector2Length(DirectVector);
                 float Acceleration = 6.67f * 10 * 1 / (Distance * Distance);
-//                float Acceleration = ;
                 Vector2 AccelerationVector = Vector2Scale(Vector2Normalize(DirectVector), Acceleration);
-                Vector2 NormalizedDirectVector = Vector2Normalize(DirectVector);
                 if (!(Ball1->m_Fixed) && !(Ball2 -> m_Fixed)) {
                     Ball1 ->accelerate(AccelerationVector);
                     Ball2 ->accelerate(Vector2Scale(AccelerationVector, -1));
@@ -467,16 +529,34 @@ void DisceteEulerianEngine::accelerateMutually() {
         }
     }
 }
-bool DisceteEulerianEngine::ColorSquare::isInsideSquare(EulerianRoundBall* Ball) {
+bool DiscreteEulerianEngine::ColorSquare::isInsideSquare(EulerianRoundBall* Ball) {
     return Ball -> m_CurrentPosition.x > m_TopLeft.x && Ball -> m_CurrentPosition.x < m_TopLeft.x + m_Width && Ball -> m_CurrentPosition.y > m_TopLeft.y && Ball -> m_CurrentPosition.y < m_TopLeft.y + m_Height;
 }
-Color DisceteEulerianEngine::calculateColor(EulerianRoundBall *Ball) {
+Color DiscreteEulerianEngine::calculateColor(EulerianRoundBall *Ball) {
     ColorSquare Square;
     Square.m_Center = Ball -> m_CurrentPosition;
     Square.m_Width = 100.0f;
     Square.m_Height = 100.0f;
     Square.m_TopLeft = Vector2{Square.m_Center.x - Square.m_Width / 2, Square.m_Center.y - Square.m_Height / 2};
     return Square.chooseColor(m_RoundBallList, Ball);
+}
+void DiscreteEulerianEngine::turnOffGravity() {
+    m_GravityOn = false;
+}
+void DiscreteEulerianEngine::turnOffProximityColoring() {
+    m_ProximityColoring = false;
+}
+void DiscreteEulerianEngine::turnOnGravity() {
+    m_GravityOn = true;
+}
+void DiscreteEulerianEngine::turnOnProximityColoring() {
+    m_ProximityColoring = true;
+}
+void DiscreteEulerianEngine::turnOffMutualAcceleration() {
+    m_MuttualyAccelerate = false;
+}
+void DiscreteEulerianEngine::turnOnMutualAcceleration() {
+    m_MuttualyAccelerate = true;
 }
 
 int Grid::m_Width = 0.0f;
@@ -710,7 +790,7 @@ void Cell::drawRectangle() {
     DrawRectangle(m_TopLeft.x, m_TopLeft.y, Cell::m_Width, Cell::m_Height, Color(126, 212, 173, 70));
 }
 
-UniformGridEngine::UniformGridEngine(int Width, int Height, int NumRow, int NumColumn) : DisceteEulerianEngine(Width, Height),
+UniformGridEngine::UniformGridEngine(int Width, int Height, int NumRow, int NumColumn) : DiscreteEulerianEngine(Width, Height),
                                                                                          m_Grid(Width, Height, NumRow, NumColumn) {
 }
 void UniformGridEngine::draw() {
@@ -721,7 +801,7 @@ void UniformGridEngine::draw() {
     }
 }
 void UniformGridEngine::attachRoundBall(EulerianRoundBall *NewRoundBall) {
-    DisceteEulerianEngine::attachRoundBall(NewRoundBall);
+    DiscreteEulerianEngine::attachRoundBall(NewRoundBall);
     m_Grid.attachRoundBall(NewRoundBall);
 }
 void UniformGridEngine::update(float DeltaTime) {
@@ -731,6 +811,6 @@ void UniformGridEngine::update(float DeltaTime) {
     m_Grid.update(DeltaTime);
 }
 void UniformGridEngine::reset() {
-    DisceteEulerianEngine::reset();
+    DiscreteEulerianEngine::reset();
     m_Grid.reset();
 }

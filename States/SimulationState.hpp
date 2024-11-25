@@ -7,10 +7,12 @@
 #include "../Physics/Engine.hpp"
 #include "../Physics/RoundBall.hpp"
 #include "../Physics/PlatformTriangle.hpp"
+#include "../Physics/PlatformRectangle.h"
 #include <vector>
 #include "Observer.hpp"
 #include "../Buttons/Buttons.hpp"
 #include "../Physics/Chains.hpp"
+#include "../Physics/Spring.hpp"
 enum StateNumber {
     HOME_STATE,
     VERLET_DROP_STATE
@@ -186,7 +188,7 @@ public:
     void draw() override;
     void onNotify() override;
 private:
-    DisceteEulerianEngine m_Engine;
+    DiscreteEulerianEngine m_Engine;
     vector<EulerianRoundBall*> m_RoundBallList;
 private:
     ParticleGravityState();
@@ -205,6 +207,38 @@ private:
 private:
     Optimization1State();
     ~Optimization1State();
+    void reset() override;
+};
+class SpringState : public SimulationState {
+public:
+    static SimulationState* getSpringState();
+    SimulationState* update() override;
+    void draw() override;
+    void onNotify() override;
+private:
+    DiscreteEulerianEngine m_Engine;
+    vector<EulerianRoundBall*> m_RoundBallList;
+    vector<Spring*> m_SpringList;
+    vector<PlatformRectangle*> m_PlatformRectangleList;
+private:
+    SpringState();
+    ~SpringState();
+    void reset() override;
+};
+class SpringSoftBodyState : public SimulationState {
+public:
+    static SimulationState* getSpringSoftBodyState();
+    SimulationState* update() override;
+    void draw() override;
+    void onNotify() override;
+private:
+    DiscreteEulerianEngine m_Engine;
+    vector<vector<EulerianRoundBall*>> m_RoundBallMatrix;
+    vector<Spring*> m_SpringList;
+    vector<PlatformRectangle*> m_PlatformRectangleList;
+private:
+    SpringSoftBodyState();
+    ~SpringSoftBodyState();
     void reset() override;
 };
 #endif //PHYSICS_SIMULATION_DEMONSTRATION_SIMULATIONSTATE_HPP
