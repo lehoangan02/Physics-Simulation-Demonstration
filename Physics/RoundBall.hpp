@@ -35,7 +35,7 @@ private:
     Vector2 m_PreviousPosition;
     Vector2 m_CurrentPosition;
     Vector2 m_Acceleration;
-    Vector2 m_Velocity;
+    Vector2 m_Velocity = {0, 0};
     float m_Radius = 100.0f;
     Color m_Color;
     bool m_Fixed = false;

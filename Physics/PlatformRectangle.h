@@ -6,7 +6,7 @@
 #define PHYSICS_SIMULATION_DEMONSTRATION_PLATFORMRECTANGLE_H
 
 #include "../Math/Geometry.hpp"
-#include "Raylib.h"
+#include "raylib.h"
 #include <vector>
 #include <cmath>
 class PlatformRectangle {
@@ -18,7 +18,7 @@ private:
     Vector2 m_BottomLeft;
     float m_Width;
     float m_Height;
-    Vector2 m_Origin;
+    Vector2 m_Origin = {0, 0};
     float m_Rotation; // degree
     Color m_Color;
     vector<LineSegment> m_LineSegmentList;
