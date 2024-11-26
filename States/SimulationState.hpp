@@ -15,7 +15,28 @@
 #include "../Physics/Spring.hpp"
 enum StateNumber {
     HOME_STATE,
-    VERLET_DROP_STATE
+    VERLET_DROP_STATE,
+    VERLET_CHAIN_STATE,
+    VERLET_CHAIN_BASKET_STATE,
+    EULERIAN_DROP_STATE,
+    TUNNELLING_COMPARISON_STATE,
+    ENERGY_COMPARISON_STATE,
+    FPS_INVARIANT_STATE_FOR_CONTINUOUS_INTEGRATION,
+    PARTICLE_GRAVITY_STATE,
+    OPTIMIZATION_1_STATE,
+    SPRING_STATE,
+    SPRING_SOFT_BODY_STATE,
+    PLAYABLE_SPRING_SOFT_BODY_STATE
+};
+class SimulationState;
+class StateFactory
+{
+public:
+    static SimulationState* getState(int StateNumber);
+    static StateFactory* getStateFactory();
+private:
+    StateFactory() = default;
+    ~StateFactory() = default;
 };
 class SimulationState: public Observer{
     friend class BackHome;
@@ -25,6 +46,7 @@ public:
     virtual void draw() = 0;
     virtual ~SimulationState() = default;
     virtual void reset() = 0;
+    int m_StateNumber = 0;
 protected:
     bool m_IsActive = true;
     int m_ExitState = StateNumber::HOME_STATE;
@@ -63,7 +85,7 @@ private:
     const float StartY = 300;
 private:
     VerletDropState();
-    ~VerletDropState();
+    ~VerletDropState() override;
     void reset() override;
 };
 class VerletChainState : public SimulationState {
@@ -77,7 +99,7 @@ private:
     vector<VerletRoundBall*> m_RoundBall;
     VerletChain* m_Chain;
 private:
-    ~VerletChainState();
+    ~VerletChainState() override;
     VerletChainState();
     void reset() override;
 };
@@ -98,7 +120,7 @@ private:
     const float StartX = 900;
     const float StartY = 400;
 private:
-    ~VerletChainBasketState();
+    ~VerletChainBasketState() override;
     VerletChainBasketState();
     void reset() override;
 };
@@ -114,7 +136,7 @@ private:
     vector<PlatformTriangle*> m_PlatformTriangleList;
 private:
     EulerianDropState();
-    ~EulerianDropState();
+    ~EulerianDropState() override;
     void reset() override;
 };
 class TunnellingComparisonState : public SimulationState {
@@ -135,7 +157,7 @@ private:
     Rectangle splitScreenRect = { 0.0f, 0.0f, (float)screenCamera1.texture.width, (float)-screenCamera1.texture.height };
 private:
     TunnellingComparisonState();
-    ~TunnellingComparisonState();
+    ~TunnellingComparisonState() override;
     void reset() override;
 };
 class EnergyComparisonState : public SimulationState {
@@ -156,7 +178,7 @@ private:
     Rectangle splitScreenRect = { 0.0f, 0.0f, (float)screenCamera1.texture.width, (float)-screenCamera1.texture.height };
 private:
     EnergyComparisonState();
-    ~EnergyComparisonState();
+    ~EnergyComparisonState() override;
     void reset() override;
 };
 class FPSInvariantStateForContinuousIntegration : public SimulationState {
@@ -178,7 +200,7 @@ private:
     int m_FrameCount = 0;
 private:
     FPSInvariantStateForContinuousIntegration();
-    ~FPSInvariantStateForContinuousIntegration();
+    ~FPSInvariantStateForContinuousIntegration() override;
     void reset() override;
 };
 class ParticleGravityState : public SimulationState {
@@ -192,7 +214,7 @@ private:
     vector<EulerianRoundBall*> m_RoundBallList;
 private:
     ParticleGravityState();
-    ~ParticleGravityState();
+    ~ParticleGravityState() override;
     void reset() override;
 };
 class Optimization1State : public SimulationState {
@@ -206,7 +228,7 @@ private:
     vector<EulerianRoundBall*> m_RoundBallList;
 private:
     Optimization1State();
-    ~Optimization1State();
+    ~Optimization1State() override;
     void reset() override;
 };
 class SpringState : public SimulationState {
@@ -222,7 +244,7 @@ private:
     vector<PlatformRectangle*> m_PlatformRectangleList;
 private:
     SpringState();
-    ~SpringState();
+    ~SpringState() override;
     void reset() override;
 };
 class SpringSoftBodyState : public SimulationState {
@@ -231,14 +253,33 @@ public:
     SimulationState* update() override;
     void draw() override;
     void onNotify() override;
-private:
+protected:
     DiscreteEulerianEngine m_Engine;
-    vector<vector<EulerianRoundBall*>> m_RoundBallMatrix;
+    vector<vector<ClickableEulerianRoundBall*>> m_RoundBallMatrix;
     vector<Spring*> m_SpringList;
     vector<PlatformRectangle*> m_PlatformRectangleList;
-private:
+    float m_PushRectangleTime = 14.0f;
+    float m_TotalTime = 0.0f;
+    Color m_BallColor = Color(66, 62, 117, 255);
+    Color m_SpringColor = Color(66, 62, 117, 255);
+protected:
     SpringSoftBodyState();
-    ~SpringSoftBodyState();
+    ~SpringSoftBodyState() override;
     void reset() override;
+};
+class PlayableSpringSoftBodyState : public SpringSoftBodyState {
+public:
+    static SimulationState* getPlayableSpringSoftBodyState();
+    SimulationState* update() override;
+    void draw() override;
+    void onNotify() override;
+private:
+    PlayableSpringSoftBodyState();
+    ~PlayableSpringSoftBodyState() override;
+    void reset() override;
+private:
+    EulerianRoundBall* m_SelectedBall = nullptr;
+    Color m_SelectedColor = Color(255, 128, 0, 255);
+    float m_Force = 300000.f;
 };
 #endif //PHYSICS_SIMULATION_DEMONSTRATION_SIMULATIONSTATE_HPP

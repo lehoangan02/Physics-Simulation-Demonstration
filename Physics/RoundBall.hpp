@@ -31,7 +31,7 @@ private:
     friend class EnergyComparisonState;
 };
 class EulerianRoundBall {
-private:
+protected:
     Vector2 m_PreviousPosition;
     Vector2 m_CurrentPosition;
     Vector2 m_Acceleration;
@@ -46,7 +46,7 @@ public:
     void accelerate(Vector2 Acceleration);
     void applyForce(Vector2 Force);
     void update(float DeltaTime);
-    void draw();
+    virtual void draw();
     friend class ContinuousEulerianEngine;
     friend class DiscreteEulerianEngine;
     friend class Grid;
@@ -60,5 +60,12 @@ public:
     friend class Optimization1State;
     friend class SpringState;
     friend class SpringSoftBodyState;
+    friend class PlayableSpringSoftBodyState;
+};
+class ClickableEulerianRoundBall : public EulerianRoundBall {
+public:
+    bool isInside(Vector2 Position);
+    ClickableEulerianRoundBall(Vector2 Position, Color Color, float Mass);
+    void draw() override;
 };
 #endif //PHYSICS_SIMULATION_DEMONSTRATION_ROUNDBALL_HPP

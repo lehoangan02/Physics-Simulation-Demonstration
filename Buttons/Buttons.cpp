@@ -9,11 +9,12 @@ SoundButton *SoundButton::getSoundButton() {
     return &soundButton;
 }
 SoundButton::SoundButton() {
+    m_Position = {1600, 100};
     m_TextureOn = LoadTexture("Assets/Textures/SoundOn.png");
     m_TextureOff = LoadTexture("Assets/Textures/SoundOff.png");
     m_CurrentTexture = &m_TextureOn;
 }
-void SoundButton::update() {
+bool SoundButton::update() {
     if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
     {
         if (CheckCollisionPointRec(GetMousePosition(), {m_Position.x, m_Position.y, static_cast<float>(m_CurrentTexture->width), static_cast<float>(m_CurrentTexture->height)}))
@@ -22,8 +23,10 @@ void SoundButton::update() {
             switchSoundState();
             switchTexture();
             m_SoundState = !m_SoundState;
+            return true;
         }
     }
+    return false;
 }
 void SoundButton::draw() {
     DrawTexture(*m_CurrentTexture, m_Position.x, m_Position.y, WHITE);
@@ -54,20 +57,62 @@ BackHomeButton *BackHomeButton::getBackHomeButton() {
     return &backHomeButton;
 }
 BackHomeButton::BackHomeButton() {
+    m_Position = {100, 100};
     m_Texture = LoadTexture("Assets/Textures/BackHome.png");
 }
-void BackHomeButton::update() {
-    if (!m_Active) return;
+bool BackHomeButton::update() {
+    if (!m_Active) return false;
     if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
     {
         if (CheckCollisionPointRec(GetMousePosition(), {m_Position.x, m_Position.y, static_cast<float>(m_Texture.width), static_cast<float>(m_Texture.height)}))
         {
-            printf("Mouse left button is pressed\n");
+//            printf("Mouse left button is pressed\n");
             BackHome::getBackHome()->execute();
+            return true;
         }
     }
+    return false;
 }
 void BackHomeButton::draw() {
     if (!m_Active) return;
     DrawTexture(m_Texture, m_Position.x, m_Position.y, WHITE);
+}
+TextButton::TextButton(std::string Text, Vector2 Position, Vector2 Size) {
+    m_Text = Text;
+    m_Position = Position;
+    m_Size = Size;
+}
+bool TextButton::update() {
+    if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
+    {
+        if (CheckCollisionPointRec(GetMousePosition(), {m_Position.x, m_Position.y, m_Size.x, m_Size.y}))
+        {
+            return true;
+        }
+    }
+    return false;
+}
+void TextButton::draw() {
+    DrawRectangle(m_Position.x, m_Position.y, m_Size.x, m_Size.y, WHITE);
+    DrawLine(m_Position.x, m_Position.y, m_Position.x + m_Size.x, m_Position.y, BLACK);
+    DrawText(m_Text.c_str(), m_Position.x + 10.0f, m_Position.y + 10.0f, 20, BLACK);
+}
+void TextButton::scroll() {
+    m_ScrollY = 0;
+    if (IsKeyDown(KEY_DOWN))
+    {
+        m_ScrollY += 3;
+    }
+    if (IsKeyDown(KEY_UP))
+    {
+        m_ScrollY -= 3;
+    }
+    m_ScrollY += (GetMouseWheelMove() * 10.0f);
+    m_Position.y += m_ScrollY;
+}
+void TextButton::setPosition(Vector2 Position) {
+    m_Position = Position;
+}
+void TextButton::printPosition() {
+    printf("Position: %f %f\n", m_Position.x, m_Position.y);
 }

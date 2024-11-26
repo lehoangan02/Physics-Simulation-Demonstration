@@ -195,19 +195,19 @@ CMakeFiles/Physics_Simulation_Demonstration.dir/Buttons/Buttons.cpp.s: cmake_for
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/Physics_Simulation_Demonstration.dir/Buttons/Buttons.cpp.s"
 	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/lehoangan/Documents/Physics-Simulation-Demonstration/Buttons/Buttons.cpp -o CMakeFiles/Physics_Simulation_Demonstration.dir/Buttons/Buttons.cpp.s
 
-CMakeFiles/Physics_Simulation_Demonstration.dir/Utilites/Utilities.cpp.o: CMakeFiles/Physics_Simulation_Demonstration.dir/flags.make
-CMakeFiles/Physics_Simulation_Demonstration.dir/Utilites/Utilities.cpp.o: /home/lehoangan/Documents/Physics-Simulation-Demonstration/Utilites/Utilities.cpp
-CMakeFiles/Physics_Simulation_Demonstration.dir/Utilites/Utilities.cpp.o: CMakeFiles/Physics_Simulation_Demonstration.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/lehoangan/Documents/Physics-Simulation-Demonstration/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object CMakeFiles/Physics_Simulation_Demonstration.dir/Utilites/Utilities.cpp.o"
-	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/Physics_Simulation_Demonstration.dir/Utilites/Utilities.cpp.o -MF CMakeFiles/Physics_Simulation_Demonstration.dir/Utilites/Utilities.cpp.o.d -o CMakeFiles/Physics_Simulation_Demonstration.dir/Utilites/Utilities.cpp.o -c /home/lehoangan/Documents/Physics-Simulation-Demonstration/Utilites/Utilities.cpp
+CMakeFiles/Physics_Simulation_Demonstration.dir/Utilites/SoundUtilities.cpp.o: CMakeFiles/Physics_Simulation_Demonstration.dir/flags.make
+CMakeFiles/Physics_Simulation_Demonstration.dir/Utilites/SoundUtilities.cpp.o: /home/lehoangan/Documents/Physics-Simulation-Demonstration/Utilites/SoundUtilities.cpp
+CMakeFiles/Physics_Simulation_Demonstration.dir/Utilites/SoundUtilities.cpp.o: CMakeFiles/Physics_Simulation_Demonstration.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/lehoangan/Documents/Physics-Simulation-Demonstration/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object CMakeFiles/Physics_Simulation_Demonstration.dir/Utilites/SoundUtilities.cpp.o"
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/Physics_Simulation_Demonstration.dir/Utilites/SoundUtilities.cpp.o -MF CMakeFiles/Physics_Simulation_Demonstration.dir/Utilites/SoundUtilities.cpp.o.d -o CMakeFiles/Physics_Simulation_Demonstration.dir/Utilites/SoundUtilities.cpp.o -c /home/lehoangan/Documents/Physics-Simulation-Demonstration/Utilites/SoundUtilities.cpp
 
-CMakeFiles/Physics_Simulation_Demonstration.dir/Utilites/Utilities.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/Physics_Simulation_Demonstration.dir/Utilites/Utilities.cpp.i"
-	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/lehoangan/Documents/Physics-Simulation-Demonstration/Utilites/Utilities.cpp > CMakeFiles/Physics_Simulation_Demonstration.dir/Utilites/Utilities.cpp.i
+CMakeFiles/Physics_Simulation_Demonstration.dir/Utilites/SoundUtilities.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/Physics_Simulation_Demonstration.dir/Utilites/SoundUtilities.cpp.i"
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/lehoangan/Documents/Physics-Simulation-Demonstration/Utilites/SoundUtilities.cpp > CMakeFiles/Physics_Simulation_Demonstration.dir/Utilites/SoundUtilities.cpp.i
 
-CMakeFiles/Physics_Simulation_Demonstration.dir/Utilites/Utilities.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/Physics_Simulation_Demonstration.dir/Utilites/Utilities.cpp.s"
-	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/lehoangan/Documents/Physics-Simulation-Demonstration/Utilites/Utilities.cpp -o CMakeFiles/Physics_Simulation_Demonstration.dir/Utilites/Utilities.cpp.s
+CMakeFiles/Physics_Simulation_Demonstration.dir/Utilites/SoundUtilities.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/Physics_Simulation_Demonstration.dir/Utilites/SoundUtilities.cpp.s"
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/lehoangan/Documents/Physics-Simulation-Demonstration/Utilites/SoundUtilities.cpp -o CMakeFiles/Physics_Simulation_Demonstration.dir/Utilites/SoundUtilities.cpp.s
 
 CMakeFiles/Physics_Simulation_Demonstration.dir/Utilites/BackgroundMusic.cpp.o: CMakeFiles/Physics_Simulation_Demonstration.dir/flags.make
 CMakeFiles/Physics_Simulation_Demonstration.dir/Utilites/BackgroundMusic.cpp.o: /home/lehoangan/Documents/Physics-Simulation-Demonstration/Utilites/BackgroundMusic.cpp
@@ -262,7 +262,7 @@ Physics_Simulation_Demonstration_OBJECTS = \
 "CMakeFiles/Physics_Simulation_Demonstration.dir/Math/EquationsSolver.cpp.o" \
 "CMakeFiles/Physics_Simulation_Demonstration.dir/Commands/Command.cpp.o" \
 "CMakeFiles/Physics_Simulation_Demonstration.dir/Buttons/Buttons.cpp.o" \
-"CMakeFiles/Physics_Simulation_Demonstration.dir/Utilites/Utilities.cpp.o" \
+"CMakeFiles/Physics_Simulation_Demonstration.dir/Utilites/SoundUtilities.cpp.o" \
 "CMakeFiles/Physics_Simulation_Demonstration.dir/Utilites/BackgroundMusic.cpp.o" \
 "CMakeFiles/Physics_Simulation_Demonstration.dir/States/Observer.cpp.o" \
 "CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/Chains.cpp.o"
@@ -279,7 +279,7 @@ Physics_Simulation_Demonstration_EXTERNAL_OBJECTS =
 /home/lehoangan/Documents/Physics-Simulation-Demonstration/Physics_Simulation_Demonstration: CMakeFiles/Physics_Simulation_Demonstration.dir/Math/EquationsSolver.cpp.o
 /home/lehoangan/Documents/Physics-Simulation-Demonstration/Physics_Simulation_Demonstration: CMakeFiles/Physics_Simulation_Demonstration.dir/Commands/Command.cpp.o
 /home/lehoangan/Documents/Physics-Simulation-Demonstration/Physics_Simulation_Demonstration: CMakeFiles/Physics_Simulation_Demonstration.dir/Buttons/Buttons.cpp.o
-/home/lehoangan/Documents/Physics-Simulation-Demonstration/Physics_Simulation_Demonstration: CMakeFiles/Physics_Simulation_Demonstration.dir/Utilites/Utilities.cpp.o
+/home/lehoangan/Documents/Physics-Simulation-Demonstration/Physics_Simulation_Demonstration: CMakeFiles/Physics_Simulation_Demonstration.dir/Utilites/SoundUtilities.cpp.o
 /home/lehoangan/Documents/Physics-Simulation-Demonstration/Physics_Simulation_Demonstration: CMakeFiles/Physics_Simulation_Demonstration.dir/Utilites/BackgroundMusic.cpp.o
 /home/lehoangan/Documents/Physics-Simulation-Demonstration/Physics_Simulation_Demonstration: CMakeFiles/Physics_Simulation_Demonstration.dir/States/Observer.cpp.o
 /home/lehoangan/Documents/Physics-Simulation-Demonstration/Physics_Simulation_Demonstration: CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/Chains.cpp.o

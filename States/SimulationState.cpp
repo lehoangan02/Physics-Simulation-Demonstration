@@ -4,16 +4,51 @@
 #include "SimulationState.hpp"
 #define MY_ORANGE Color(235, 131, 23, 255)
 #define MY_YELLOW Color(243, 198, 35, 255)
+
+SimulationState *StateFactory::getState(int StateNumber) {
+    switch (StateNumber) {
+        case StateNumber::HOME_STATE:
+            return HomeState::getHomeState();
+        case StateNumber::VERLET_DROP_STATE:
+            return VerletDropState::getVerletDropState();
+        case StateNumber::VERLET_CHAIN_STATE:
+            return VerletChainState::getVerletChainState();
+        case StateNumber::VERLET_CHAIN_BASKET_STATE:
+            return VerletChainBasketState::getVerletChainBasketState();
+        case StateNumber::EULERIAN_DROP_STATE:
+            return EulerianDropState::getEulerianDropState();
+        case StateNumber::TUNNELLING_COMPARISON_STATE:
+            return TunnellingComparisonState::getComparisonState();
+        case StateNumber::ENERGY_COMPARISON_STATE:
+            return EnergyComparisonState::getEnergyComparisonState();
+        case StateNumber::FPS_INVARIANT_STATE_FOR_CONTINUOUS_INTEGRATION:
+            return FPSInvariantStateForContinuousIntegration::getFPSInvariantStateForContinuousIntegration();
+        case StateNumber::PARTICLE_GRAVITY_STATE:
+            return ParticleGravityState::getParticleGravityState();
+        case StateNumber::OPTIMIZATION_1_STATE:
+            return Optimization1State::getOptimization1State();
+        case StateNumber::SPRING_STATE:
+            return SpringState::getSpringState();
+        case StateNumber::SPRING_SOFT_BODY_STATE:
+            return SpringSoftBodyState::getSpringSoftBodyState();
+        case StateNumber::PLAYABLE_SPRING_SOFT_BODY_STATE:
+            return PlayableSpringSoftBodyState::getPlayableSpringSoftBodyState();
+        default:
+            return nullptr;
+    }
+}
 void SimulationState::exitState() {
     m_IsActive = false;
 }
 SimulationState* VerletDropState::getVerletDropState()
 {
+
     VerletRoundBall::m_Radius = 10.0f;
     static VerletDropState MyVerletDropState;
     return &MyVerletDropState;
 }
 VerletDropState::VerletDropState() : m_Engine(1800, 1000) {
+    m_StateNumber = StateNumber::VERLET_DROP_STATE;
     reset();
 }
 VerletDropState::~VerletDropState() {
@@ -106,62 +141,6 @@ HomeState::HomeState() {
 }
 
 SimulationState* HomeState::update() {
-    if (IsKeyPressed(KEY_A))
-    {
-        BackHomeButton::getBackHomeButton()->m_Active = true;
-        return VerletDropState::getVerletDropState();
-    }
-    else if (IsKeyPressed(KEY_B))
-    {
-        BackHomeButton::getBackHomeButton()->m_Active = true;
-        return VerletChainState::getVerletChainState();
-    }
-    else if (IsKeyPressed(KEY_C))
-    {
-        BackHomeButton::getBackHomeButton()->m_Active = true;
-        return VerletChainBasketState::getVerletChainBasketState();
-    }
-    else if (IsKeyPressed(KEY_D))
-    {
-        BackHomeButton::getBackHomeButton()->m_Active = true;
-        return EulerianDropState::getEulerianDropState();
-    }
-    else if (IsKeyPressed(KEY_E))
-    {
-        BackHomeButton::getBackHomeButton()->m_Active = true;
-        return TunnellingComparisonState::getComparisonState();
-    }
-    else if (IsKeyPressed(KEY_F))
-    {
-        BackHomeButton::getBackHomeButton()->m_Active = true;
-        return EnergyComparisonState::getEnergyComparisonState();
-    }
-    else if (IsKeyPressed(KEY_G))
-    {
-        BackHomeButton::getBackHomeButton()->m_Active = true;
-        return FPSInvariantStateForContinuousIntegration::getFPSInvariantStateForContinuousIntegration();
-    }
-    else if (IsKeyPressed(KEY_H))
-    {
-        BackHomeButton::getBackHomeButton()->m_Active = true;
-        return ParticleGravityState::getParticleGravityState();
-    }
-    else if (IsKeyPressed(KEY_I))
-    {
-        BackHomeButton::getBackHomeButton()->m_Active = true;
-        return Optimization1State::getOptimization1State();
-    }
-    else if (IsKeyPressed(KEY_J))
-    {
-        BackHomeButton::getBackHomeButton()->m_Active = true;
-        return SpringState::getSpringState();
-    }
-    else if (IsKeyPressed(KEY_K))
-    {
-        BackHomeButton::getBackHomeButton()->m_Active = true;
-        return SpringSoftBodyState::getSpringSoftBodyState();
-    }
-    BackHomeButton::getBackHomeButton()->m_Active = false;
     return nullptr;
 }
 void HomeState::onNotify() {
@@ -270,6 +249,7 @@ SimulationState* VerletChainState::update() {
     return nullptr;
 }
 VerletChainState::VerletChainState() : m_Engine(1800, 1000) {
+    m_StateNumber = StateNumber::VERLET_CHAIN_STATE;
     reset();
 }
 VerletChainState::~VerletChainState() {
@@ -287,6 +267,7 @@ SimulationState* VerletChainBasketState::getVerletChainBasketState()
     return &MyVerletChainBasketState;
 }
 VerletChainBasketState::VerletChainBasketState() : m_Engine(1800, 1000) {
+    m_StateNumber = StateNumber::VERLET_CHAIN_BASKET_STATE;
     reset();
 }
 VerletChainBasketState::~VerletChainBasketState() {
@@ -433,6 +414,7 @@ SimulationState* VerletChainBasketState::update() {
     return nullptr;
 }
 EulerianDropState::EulerianDropState() : m_Engine(1800, 1000) {
+    m_StateNumber = StateNumber::EULERIAN_DROP_STATE;
     reset();
 }
 
@@ -492,6 +474,7 @@ SimulationState *TunnellingComparisonState::getComparisonState() {
     return &MyComparisonState;
 }
 TunnellingComparisonState::TunnellingComparisonState() : m_EulerianEngine(1800 / 2 - 10, 1000), m_VerletEngine(1800 / 2 - 10, 1000) {
+    m_StateNumber = StateNumber::TUNNELLING_COMPARISON_STATE;
     reset();
 }
 TunnellingComparisonState::~TunnellingComparisonState() {
@@ -595,6 +578,7 @@ SimulationState *EnergyComparisonState::getEnergyComparisonState() {
     return &MyEnergyComparisonState;
 }
 EnergyComparisonState::EnergyComparisonState() : m_EulerianEngine(1800 / 2 - 10, 1000), m_VerletEngine(1800 / 2 - 10, 1000) {
+    m_StateNumber = StateNumber::ENERGY_COMPARISON_STATE;
     reset();
 }
 EnergyComparisonState::~EnergyComparisonState() {
@@ -687,6 +671,7 @@ void EnergyComparisonState::draw() {
     DrawRectangle(1800 / 2 - 10, 0, 20, 1000, MidBarColor);
 }
 FPSInvariantStateForContinuousIntegration::FPSInvariantStateForContinuousIntegration() : m_Engine1(1800 / 2, 1000), m_Engine2(1800 / 2, 1000) {
+    m_StateNumber = StateNumber::FPS_INVARIANT_STATE_FOR_CONTINUOUS_INTEGRATION;
     reset();
 }
 FPSInvariantStateForContinuousIntegration::~FPSInvariantStateForContinuousIntegration() {
@@ -799,6 +784,7 @@ void FPSInvariantStateForContinuousIntegration::draw() {
     DrawRectangle(1800 / 2 - 10, 0, 20, 1000, MidBarColor);
 }
 ParticleGravityState::ParticleGravityState() : m_Engine(1800, 1000) {
+    m_StateNumber = StateNumber::PARTICLE_GRAVITY_STATE;
     reset();
 }
 ParticleGravityState::~ParticleGravityState() {
@@ -840,7 +826,7 @@ SimulationState* ParticleGravityState::update() {
     if (!m_IsActive) {
         return HomeState::getHomeState();
     }
-    for (int i = 0; i < 12; ++i)
+    for (int i = 0; i < 6; ++i)
     {
         m_Engine.update(m_FrameTime);
     }
@@ -859,6 +845,7 @@ SimulationState *Optimization1State::getOptimization1State() {
     return &MyOptimization1State;
 }
 Optimization1State::Optimization1State() : m_Engine(1800, 1000, 75, 50) {
+    m_StateNumber = StateNumber::OPTIMIZATION_1_STATE;
     reset();
 }
 Optimization1State::~Optimization1State() {
@@ -917,6 +904,7 @@ SimulationState *SpringState::getSpringState() {
     return &MySpringState;
 }
 SpringState::SpringState() : m_Engine(1800, 1000) {
+    m_StateNumber = StateNumber::SPRING_STATE;
     reset();
 }
 SpringState::~SpringState() {
@@ -1048,6 +1036,7 @@ SimulationState *SpringSoftBodyState::getSpringSoftBodyState() {
     return &MySpringSoftBodyState;
 }
 SpringSoftBodyState::SpringSoftBodyState() : m_Engine(1800, 1000) {
+    m_StateNumber = StateNumber::SPRING_SOFT_BODY_STATE;
     reset();
 }
 SpringSoftBodyState::~SpringSoftBodyState() {
@@ -1079,6 +1068,7 @@ SpringSoftBodyState::~SpringSoftBodyState() {
 }
 void SpringSoftBodyState::reset() {
     m_IsActive = true;
+    m_TotalTime = 0.0f;
     for (auto& ball : m_RoundBallMatrix)
     {
         for (auto& roundball : ball)
@@ -1104,23 +1094,22 @@ void SpringSoftBodyState::reset() {
     m_Engine.turnOffProximityColoring();
     m_Engine.turnOffMutualAcceleration();
 
-    Color BallColor = Color(33, 155, 157, 255);
-    Color SpringColor = Color(76, 31, 122, 255);
+
     Vector2 StartingPosition = Vector2{300, 200};
     Vector2 PositionDifference = Vector2{40, 40};
-    float AllignedSpringStrength = 4000.0f;
+    float AllignedSpringStrength = 3000.0f;
     float AllignedSpringLength = PositionDifference.x;
-    float SpringDiagonalStrength = 4000.0f;
+    float SpringDiagonalStrength = 20000.0f;
     float SpringDiagonalLength = PositionDifference.x * sqrt(2);
     int NumBalls = 10;
     float BallRadius = 13.0f;
 
     for (int i = 0; i < NumBalls; ++i)
     {
-        vector<EulerianRoundBall*> Row;
+        vector<ClickableEulerianRoundBall*> Row;
         for (int j = 0; j < NumBalls; ++j)
         {
-            EulerianRoundBall *Roundball = new EulerianRoundBall(Vector2{StartingPosition.x + i * PositionDifference.x, StartingPosition.y + j * PositionDifference.y}, BallColor, 1.0f);
+            ClickableEulerianRoundBall *Roundball = new ClickableEulerianRoundBall(Vector2{StartingPosition.x + i * PositionDifference.x, StartingPosition.y + j * PositionDifference.y}, m_BallColor, 1.0f);
             Roundball -> m_Radius = BallRadius;
             Row.push_back(Roundball);
             m_Engine.attachRoundBall(Roundball);
@@ -1128,7 +1117,7 @@ void SpringSoftBodyState::reset() {
         m_RoundBallMatrix.push_back(Row);
         for (int j = 0; j < NumBalls - 1; ++j)
         {
-            Spring *Spring1 = new Spring(m_RoundBallMatrix[i][j], m_RoundBallMatrix[i][j + 1], AllignedSpringLength, AllignedSpringStrength, SpringColor);
+            Spring *Spring1 = new Spring(m_RoundBallMatrix[i][j], m_RoundBallMatrix[i][j + 1], AllignedSpringLength, AllignedSpringStrength, m_SpringColor);
             m_SpringList.push_back(Spring1);
             m_Engine.attachSpring(Spring1);
         }
@@ -1136,28 +1125,39 @@ void SpringSoftBodyState::reset() {
         {
             for (int j = 0; j < NumBalls; ++j)
             {
-                Spring *Spring1 = new Spring(m_RoundBallMatrix[i][j], m_RoundBallMatrix[i - 1][j], PositionDifference.y, AllignedSpringStrength, SpringColor);
+                Spring *Spring1 = new Spring(m_RoundBallMatrix[i][j], m_RoundBallMatrix[i - 1][j], PositionDifference.y, AllignedSpringStrength, m_SpringColor);
                 m_SpringList.push_back(Spring1);
                 m_Engine.attachSpring(Spring1);
 
             }
             for (int j = 1; j < NumBalls; ++j)
             {
-                Spring *Spring1 = new Spring(m_RoundBallMatrix[i][j], m_RoundBallMatrix[i - 1][j - 1], SpringDiagonalLength, SpringDiagonalStrength, SpringColor);
+                Spring *Spring1 = new Spring(m_RoundBallMatrix[i][j], m_RoundBallMatrix[i - 1][j - 1], SpringDiagonalLength, SpringDiagonalStrength, m_SpringColor);
                 m_SpringList.push_back(Spring1);
                 m_Engine.attachSpring(Spring1);
             }
             for (int j = 0; j < NumBalls - 1; ++j)
             {
-                Spring *Spring1 = new Spring(m_RoundBallMatrix[i][j], m_RoundBallMatrix[i - 1][j + 1], SpringDiagonalLength, SpringDiagonalStrength, SpringColor);
+                Spring *Spring1 = new Spring(m_RoundBallMatrix[i][j], m_RoundBallMatrix[i - 1][j + 1], SpringDiagonalLength, SpringDiagonalStrength, m_SpringColor);
                 m_SpringList.push_back(Spring1);
                 m_Engine.attachSpring(Spring1);
             }
         }
     }
+    for (auto& spring : m_SpringList)
+    {
+        spring -> m_Damping = true;
+
+
+    }
     PlatformRectangle *Rectangle1 = new PlatformRectangle(Vector2{230, 500}, 380, 100, 40, Color(182, 162, 142, 255));
+    PlatformRectangle *Rectangle2 = new PlatformRectangle(Vector2{2050, 1000}, 380, 100, 130, Color(182, 162, 142, 255));
+//    PlatformRectangle *Rectangle2 = new PlatformRectangle(Vector2{1750, 700}, 380, 100, 130, Color(182, 162, 142, 255));
+
     m_PlatformRectangleList.push_back(Rectangle1);
+    m_PlatformRectangleList.push_back(Rectangle2);
     m_Engine.attachRectangle(Rectangle1);
+    m_Engine.attachRectangle(Rectangle2);
 }
 void SpringSoftBodyState::onNotify() {
     exitState();
@@ -1166,9 +1166,16 @@ SimulationState* SpringSoftBodyState::update() {
     if (!m_IsActive) {
         return HomeState::getHomeState();
     }
-    int SubStep = 10;
-    for (int i = 0; i < SubStep; ++i)
+    m_TotalTime += GetFrameTime();
+    float Speed = 200.0f;
+    float PushAmount = Speed * GetFrameTime();
+    if (m_TotalTime > m_PushRectangleTime && m_TotalTime < m_PushRectangleTime + 1.0f)
     {
+//        std::cout << "Pushing rectangle\n";
+        m_PlatformRectangleList[1]->move(Vector2{-PushAmount, -PushAmount});
+    }
+    int SubStep = 10;
+    for (int i = 0; i < SubStep; ++i) {
         m_Engine.update(m_FrameTime / SubStep);
     }
     return nullptr;
@@ -1176,3 +1183,173 @@ SimulationState* SpringSoftBodyState::update() {
 void SpringSoftBodyState::draw() {
     m_Engine.draw();
 }
+
+SimulationState *PlayableSpringSoftBodyState::getPlayableSpringSoftBodyState() {
+    static PlayableSpringSoftBodyState MyPlayableSpringSoftBodyState;
+    return &MyPlayableSpringSoftBodyState;
+}
+PlayableSpringSoftBodyState::PlayableSpringSoftBodyState() {
+    m_StateNumber = StateNumber::PLAYABLE_SPRING_SOFT_BODY_STATE;
+    reset();
+}
+PlayableSpringSoftBodyState::~PlayableSpringSoftBodyState() {
+    m_IsActive = true;
+    for (auto& ball : m_RoundBallMatrix)
+    {
+        for (auto& roundball : ball)
+        {
+            delete roundball;
+            roundball = nullptr;
+        }
+    }
+    for (auto& spring : m_SpringList)
+    {
+        delete spring;
+        spring = nullptr;
+    }
+    for (auto& rectangle : m_PlatformRectangleList)
+    {
+        delete rectangle;
+        rectangle = nullptr;
+    }
+    m_RoundBallMatrix.clear();
+    m_SpringList.clear();
+    m_PlatformRectangleList.clear();
+    m_Engine.reset();
+    m_Engine.turnOffProximityColoring();
+    m_Engine.turnOffMutualAcceleration();
+}
+void PlayableSpringSoftBodyState::reset() {
+    m_IsActive = true;
+    m_TotalTime = 0.0f;
+    m_BallColor = Color(96, 76, 195, 255);
+    m_SpringColor = Color(143, 209, 79, 200);
+    for (auto &ball: m_RoundBallMatrix) {
+        for (auto &roundball: ball) {
+            delete roundball;
+            roundball = nullptr;
+        }
+    }
+    for (auto &spring: m_SpringList) {
+        delete spring;
+        spring = nullptr;
+    }
+    for (auto &rectangle: m_PlatformRectangleList) {
+        delete rectangle;
+        rectangle = nullptr;
+    }
+    m_RoundBallMatrix.clear();
+    m_SpringList.clear();
+    m_PlatformRectangleList.clear();
+    m_Engine.reset();
+    m_Engine.turnOffProximityColoring();
+    m_Engine.turnOffMutualAcceleration();
+
+
+    Vector2 StartingPosition = Vector2{300, 200};
+    Vector2 PositionDifference = Vector2{40, 40};
+    float AllignedSpringStrength = 5000.0f;
+    float AllignedSpringLength = PositionDifference.x;
+    float SpringDiagonalStrength = 5000.0f;
+    float SpringDiagonalLength = PositionDifference.x * sqrt(2);
+    int NumBalls = 10;
+    float BallRadius = 17.0f;
+
+    for (int i = 0; i < NumBalls; ++i) {
+        vector<ClickableEulerianRoundBall *> Row;
+        for (int j = 0; j < NumBalls; ++j) {
+            ClickableEulerianRoundBall *Roundball = new ClickableEulerianRoundBall(Vector2{StartingPosition.x + i * PositionDifference.x,
+                                                                         StartingPosition.y + j * PositionDifference.y},
+                                                                                   m_BallColor, 1.0f);
+            Roundball->m_Radius = BallRadius;
+            Row.push_back(Roundball);
+            m_Engine.attachRoundBall(Roundball);
+        }
+        m_RoundBallMatrix.push_back(Row);
+        for (int j = 0; j < NumBalls - 1; ++j) {
+            Spring *Spring1 = new Spring(m_RoundBallMatrix[i][j], m_RoundBallMatrix[i][j + 1], AllignedSpringLength,
+                                         AllignedSpringStrength, m_SpringColor);
+            m_SpringList.push_back(Spring1);
+            m_Engine.attachSpring(Spring1);
+        }
+        if (i > 0) {
+            for (int j = 0; j < NumBalls; ++j) {
+                Spring *Spring1 = new Spring(m_RoundBallMatrix[i][j], m_RoundBallMatrix[i - 1][j], PositionDifference.y,
+                                             AllignedSpringStrength, m_SpringColor);
+                m_SpringList.push_back(Spring1);
+                m_Engine.attachSpring(Spring1);
+
+            }
+            for (int j = 1; j < NumBalls; ++j) {
+                Spring *Spring1 = new Spring(m_RoundBallMatrix[i][j], m_RoundBallMatrix[i - 1][j - 1],
+                                             SpringDiagonalLength, SpringDiagonalStrength, m_SpringColor);
+                m_SpringList.push_back(Spring1);
+                m_Engine.attachSpring(Spring1);
+            }
+            for (int j = 0; j < NumBalls - 1; ++j) {
+                Spring *Spring1 = new Spring(m_RoundBallMatrix[i][j], m_RoundBallMatrix[i - 1][j + 1],
+                                             SpringDiagonalLength, SpringDiagonalStrength, m_SpringColor);
+                m_SpringList.push_back(Spring1);
+                m_Engine.attachSpring(Spring1);
+            }
+        }
+    }
+    for (auto &spring: m_SpringList) {
+        spring->m_Damping = true;
+        spring->m_DampingFactor = 1.5f;
+    }
+}
+void PlayableSpringSoftBodyState::onNotify() {
+    exitState();
+}
+SimulationState *PlayableSpringSoftBodyState::update() {
+    if (!m_IsActive) {
+        return HomeState::getHomeState();
+    }
+    if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
+    {
+        Vector2 MousePosition = GetMousePosition();
+        for (auto& row : m_RoundBallMatrix)
+        {
+            for (auto& ball : row)
+            {
+                if (ball ->isInside(MousePosition))
+                {
+                    if (m_SelectedBall)
+                    {
+                        m_SelectedBall -> m_Color = m_BallColor;
+                    }
+                    ball -> m_Color = m_SelectedColor;
+                    m_SelectedBall = ball;
+                }
+            }
+        }
+    }
+    if (IsMouseButtonDown(MOUSE_LEFT_BUTTON) && m_SelectedBall)
+    {
+        Vector2 MousePosition = GetMousePosition();
+        Vector2 Direction = Vector2Subtract(MousePosition, m_SelectedBall -> m_CurrentPosition);
+        Direction = Vector2Normalize(Direction);
+        Vector2 Force = Vector2Scale(Direction, m_Force);
+        m_SelectedBall ->applyForce(Force);
+//        std::cout << "Applying force\n";
+    }
+    int SubStep = 10;
+    for (int i = 0; i < SubStep; ++i) {
+        m_Engine.update(m_FrameTime / SubStep);
+    }
+    return nullptr;
+}
+void PlayableSpringSoftBodyState::draw() {
+    m_Engine.draw();
+    DrawText("Click on a ball to select it", 100, 10, 20, RED);
+    DrawText("Hold left mouse button to apply force", 100, 30, 20, RED);
+    DrawText("Enjoy the soft body simulation", 100, 50, 20, RED);
+    if (IsMouseButtonDown(MOUSE_LEFT_BUTTON) && m_SelectedBall)
+    {
+        Color LineColor = Color(249, 84, 84, 255);
+        DrawLineAsRectangle(m_SelectedBall -> m_CurrentPosition, GetMousePosition(), 5, LineColor);
+        DrawCircle(GetMousePosition().x, GetMousePosition().y, 7, LineColor);
+    }
+}
+

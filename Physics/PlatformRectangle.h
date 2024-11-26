@@ -28,6 +28,7 @@ public:
     bool isInside(Vector2 Point);
     void setRotation(float Rotation);
     void setOrigin(Vector2 Origin);
+    void move(Vector2 Delta);
 };
 
 

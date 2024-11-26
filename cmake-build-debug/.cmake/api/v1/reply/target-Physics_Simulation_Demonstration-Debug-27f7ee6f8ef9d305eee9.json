@@ -2,7 +2,7 @@
 	"artifacts" : 
 	[
 		{
-			"path" : "/home/lehoangan/Documents/Physics-Simulation-Demonstration/Physics_Simulation_Demonstration"
+			"path" : "/Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/Physics_Simulation_Demonstration"
 		}
 	],
 	"backtrace" : 1,
@@ -12,14 +12,11 @@
 		[
 			"add_executable",
 			"target_link_libraries",
-			"set_target_properties",
-			"find_package",
 			"include_directories"
 		],
 		"files" : 
 		[
-			"CMakeLists.txt",
-			"/usr/local/lib/cmake/raylib/raylib-config.cmake"
+			"CMakeLists.txt"
 		],
 		"nodes" : 
 		[
@@ -29,35 +26,19 @@
 			{
 				"command" : 0,
 				"file" : 0,
-				"line" : 11,
+				"line" : 7,
 				"parent" : 0
 			},
 			{
 				"command" : 1,
 				"file" : 0,
-				"line" : 42,
-				"parent" : 0
-			},
-			{
-				"command" : 3,
-				"file" : 0,
 				"line" : 41,
 				"parent" : 0
 			},
 			{
-				"file" : 1,
-				"parent" : 3
-			},
-			{
 				"command" : 2,
-				"file" : 1,
-				"line" : 63,
-				"parent" : 4
-			},
-			{
-				"command" : 4,
 				"file" : 0,
-				"line" : 39,
+				"line" : 38,
 				"parent" : 0
 			}
 		]
@@ -68,18 +49,19 @@
 			"compileCommandFragments" : 
 			[
 				{
-					"fragment" : "-g -std=gnu++20 -fdiagnostics-color=always"
-				},
-				{
-					"backtrace" : 2,
-					"fragment" : "-I/usr/local/include"
+					"fragment" : "-g -std=gnu++20 -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.1.sdk -fcolor-diagnostics"
 				}
 			],
 			"includes" : 
 			[
 				{
-					"backtrace" : 6,
-					"path" : "/home/lehoangan/raylib/src"
+					"backtrace" : 3,
+					"path" : "/opt/homebrew/Cellar/raylib/5.0/include"
+				},
+				{
+					"backtrace" : 2,
+					"isSystem" : true,
+					"path" : "/opt/homebrew/include"
 				}
 			],
 			"language" : "CXX",
@@ -102,12 +84,13 @@
 				11,
 				13,
 				15,
-				17,
+				18,
 				19,
-				22,
+				21,
 				23,
 				25,
-				27
+				27,
+				29
 			]
 		}
 	],
@@ -125,17 +108,8 @@
 				"role" : "flags"
 			},
 			{
-				"fragment" : "-Wl,-rpath,/usr/local/lib",
-				"role" : "libraries"
-			},
-			{
 				"backtrace" : 2,
-				"fragment" : "/usr/local/lib/libraylib.so",
-				"role" : "libraries"
-			},
-			{
-				"backtrace" : 5,
-				"fragment" : "-L/usr/local/lib -lraylib",
+				"fragment" : "/opt/homebrew/lib/libraylib.dylib",
 				"role" : "libraries"
 			}
 		],
@@ -163,12 +137,13 @@
 				11,
 				13,
 				15,
-				17,
+				18,
 				19,
-				22,
+				21,
 				23,
 				25,
-				27
+				27,
+				29
 			]
 		},
 		{
@@ -183,11 +158,13 @@
 				12,
 				14,
 				16,
-				18,
+				17,
 				20,
-				21,
+				22,
 				24,
-				26
+				26,
+				28,
+				30
 			]
 		}
 	],
@@ -242,28 +219,6 @@
 			"compileGroupIndex" : 0,
 			"path" : "Physics/PlatformTriangle.cpp",
 			"sourceGroupIndex" : 0
-		},
-		{
-			"backtrace" : 1,
-			"compileGroupIndex" : 0,
-			"path" : "Physics/PlatformRectangle.cpp",
-			"sourceGroupIndex" : 0
-		},
-		{
-			"backtrace" : 1,
-			"path" : "Physics/PlatformRectangle.h",
-			"sourceGroupIndex" : 1
-		},
-		{
-			"backtrace" : 1,
-			"compileGroupIndex" : 0,
-			"path" : "Physics/Spring.cpp",
-			"sourceGroupIndex" : 0
-		},
-		{
-			"backtrace" : 1,
-			"path" : "Physics/Spring.hpp",
-			"sourceGroupIndex" : 1
 		},
 		{
 			"backtrace" : 1,
@@ -347,6 +302,44 @@
 			"compileGroupIndex" : 0,
 			"path" : "Physics/Chains.cpp",
 			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "Physics/Chains.hpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "Physics/Spring.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "Physics/Spring.hpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "Physics/PlatformRectangle.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "Physics/PlatformRectangle.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "Utilites/Mediator.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "Utilites/Mediator.h",
+			"sourceGroupIndex" : 1
 		}
 	],
 	"type" : "EXECUTABLE"

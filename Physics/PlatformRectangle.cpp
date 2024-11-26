@@ -51,4 +51,14 @@ void PlatformRectangle::setRotation(float Rotation) {
 void PlatformRectangle::setOrigin(Vector2 Origin) {
     m_Origin = Origin;
 }
+void PlatformRectangle::move(Vector2 Delta) {
+    m_TopLeft = Vector2Add(m_TopLeft, Delta);
+    m_TopRight = Vector2Add(m_TopRight, Delta);
+    m_BottomRight = Vector2Add(m_BottomRight, Delta);
+    m_BottomLeft = Vector2Add(m_BottomLeft, Delta);
+    m_LineSegmentList[0] = LineSegment(m_TopLeft, m_TopRight);
+    m_LineSegmentList[1] = LineSegment(m_TopRight, m_BottomRight);
+    m_LineSegmentList[2] = LineSegment(m_BottomRight, m_BottomLeft);
+    m_LineSegmentList[3] = LineSegment(m_BottomLeft, m_TopLeft);
+}
 

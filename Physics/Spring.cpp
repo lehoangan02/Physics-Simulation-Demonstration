@@ -12,18 +12,28 @@ void Spring::update() {
     float Distance = Vector2Length(Direction);
     if (Distance != m_Length)
     {
-        float DampingFactor = 0.9;
         float Delta = Distance - m_Length;
         Vector2 Normalized = Vector2Normalize(Direction);
         Vector2 Force = Vector2Scale(Normalized, m_k * Delta);
         if (!(m_Ball1 -> m_Fixed)) m_Ball1->applyForce(Force);
         if (!(m_Ball2 -> m_Fixed)) m_Ball2->applyForce(Vector2Negate(Force));
-
+        if (m_Damping)
+        {
+            Vector2 DampingForce = calculateDampingForce();
+            if (!(m_Ball1 -> m_Fixed)) m_Ball1->applyForce(DampingForce);
+            if (!(m_Ball2 -> m_Fixed)) m_Ball2->applyForce(Vector2Negate(DampingForce));
+        }
     }
+}
+Vector2 Spring::calculateDampingForce() {
+    Vector2 Direction = Vector2Subtract(m_Ball2->m_CurrentPosition, m_Ball1->m_CurrentPosition);
+    Direction = Vector2Normalize(Direction);
+    float DotProduct = Vector2DotProduct(Vector2Subtract(m_Ball2->m_Velocity, m_Ball1->m_Velocity), Direction);
+    return Vector2Scale(Direction, DotProduct * m_DampingFactor);
 }
 void Spring::draw() {
     int Width = 4;
-    int Height = Vector2Distance(m_Ball1->m_CurrentPosition, m_Ball2->m_CurrentPosition);
+//    int Height = Vector2Distance(m_Ball1->m_CurrentPosition, m_Ball2->m_CurrentPosition);
     DrawLineAsRectangle(m_Ball1->m_CurrentPosition, m_Ball2->m_CurrentPosition, Width, m_Color);
 }
 void DrawLineAsRectangle(Vector2 A, Vector2 B, float thickness, Color color) {
