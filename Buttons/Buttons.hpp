@@ -60,6 +60,6 @@ public:
     void scroll();
     void printPosition();
 private:
-
+    bool isMouseOver();
 };
 #endif //PHYSICS_SIMULATION_DEMONSTRATION_BUTTONS_HPP

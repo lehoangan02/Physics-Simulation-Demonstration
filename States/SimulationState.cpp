@@ -148,7 +148,7 @@ void HomeState::onNotify() {
 }
 void HomeState::draw() {
     DrawTexture(m_Background, 0, 0, WHITE);
-    DrawText("Press A to start the simulation", 100, 10, 20, WHITE);
+//    DrawText("Press A to start the simulation", 100, 10, 20, WHITE);
 //    DrawText("VERLET_STATE", 10, 80, 20, BLACK);
 }
 void HomeState::reset() {
@@ -740,6 +740,7 @@ void FPSInvariantStateForContinuousIntegration::onNotify() {
     exitState();
 }
 SimulationState* FPSInvariantStateForContinuousIntegration::update() {
+//    SetTargetFPS(24);
     static int FrameSkipped = 0;
     static float SkippingFrameTime = 0.0f;
     if (!m_IsActive) {
@@ -1098,8 +1099,10 @@ void SpringSoftBodyState::reset() {
     Vector2 StartingPosition = Vector2{300, 200};
     Vector2 PositionDifference = Vector2{40, 40};
     float AllignedSpringStrength = 3000.0f;
+
     float AllignedSpringLength = PositionDifference.x;
     float SpringDiagonalStrength = 20000.0f;
+
     float SpringDiagonalLength = PositionDifference.x * sqrt(2);
     int NumBalls = 10;
     float BallRadius = 13.0f;

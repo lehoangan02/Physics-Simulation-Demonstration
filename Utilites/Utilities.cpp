@@ -42,7 +42,7 @@ int StateSelector::update()
     {
         if (m_Buttons[i] -> update())
         {
-            return i;
+            return i + 1;
         }
     }
     return -1;
@@ -107,9 +107,22 @@ void StateSelector::setPosition(Vector2 Position) {
     }
 }
 StateSelector::StateSelector(Vector2 Position) : m_Position(Position) {
-    for (int i = 0; i < 10; i++)
+    m_ButtonText[0] = "Verlet Platform Collision";
+    m_ButtonText[1] = "Verlet Chain";
+    m_ButtonText[2] = "Verlet Ball Bag";
+    m_ButtonText[3] = "Continuous Eulerian Integration";
+    m_ButtonText[4] = "Tunneling";
+    m_ButtonText[5] = "Energy Comparison";
+    m_ButtonText[6] = "FPS Invariant";
+    m_ButtonText[7] = "Mutual Gravity";
+    m_ButtonText[8] = "Uniform Grid Optimization";
+    m_ButtonText[9] = "Spring";
+    m_ButtonText[10] = "Soft Body";
+    m_ButtonText[11] = "Playable Jelly";
+    for (int i = 0; i < 12; i++)
     {
-        std::string Text = "Button " + std::to_string(i);
+//        std::string Text = "Button " + std::to_string(i);
+        std::string Text = m_ButtonText[i];
         Vector2 Size = {800, 50};
         Vector2 ButtonPosition = {Position.x, float(Position.y + Size.y * i)};
         m_Buttons.push_back(std::make_shared<TextButton>(Text, ButtonPosition, Size));

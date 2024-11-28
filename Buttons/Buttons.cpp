@@ -93,9 +93,17 @@ bool TextButton::update() {
     return false;
 }
 void TextButton::draw() {
+
     DrawRectangle(m_Position.x, m_Position.y, m_Size.x, m_Size.y, WHITE);
     DrawLine(m_Position.x, m_Position.y, m_Position.x + m_Size.x, m_Position.y, BLACK);
     DrawText(m_Text.c_str(), m_Position.x + 10.0f, m_Position.y + 10.0f, 20, BLACK);
+    if (isMouseOver())
+    {
+//        std::cout << "Mouse is over\n";
+        DrawRectangleLinesEx({m_Position.x, m_Position.y, m_Size.x, m_Size.y}, 2, BLACK);
+        DrawRectangle(m_Position.x, m_Position.y, m_Size.x, m_Size.y, ColorAlpha(GRAY, 0.3f));
+    }
+
 }
 void TextButton::scroll() {
     m_ScrollY = 0;
@@ -115,4 +123,7 @@ void TextButton::setPosition(Vector2 Position) {
 }
 void TextButton::printPosition() {
     printf("Position: %f %f\n", m_Position.x, m_Position.y);
+}
+bool TextButton::isMouseOver() {
+    return CheckCollisionPointRec(GetMousePosition(), {m_Position.x, m_Position.y, m_Size.x, m_Size.y});
 }

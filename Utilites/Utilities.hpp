@@ -35,6 +35,7 @@ private:
     Vector2 m_Position;
     Vector2 m_Size = {800, 50 * 10};
     Vector2 m_ScollRange = {0, 400};
+    std::string m_ButtonText[12];
 public:
     bool m_Active = true;
 public:
