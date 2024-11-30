@@ -180,4 +180,12 @@ public:
     void update(float DeltaTime) override;
     void reset() override;
 };
+class KMeansEngine : public DiscreteEulerianEngine
+{
+private:
+    vector<Vector2> m_Centroids;
+    vector<Color> m_ColorList;
+    vector<Color> m_CentroidColorList;
+    vector<Color> m_AssignmentColorList;
+};
 #endif //PHYSICS_SIMULATION_DEMONSTRATION_ENGINE_HPP

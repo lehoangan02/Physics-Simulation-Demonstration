@@ -13,6 +13,7 @@
 #include "../Buttons/Buttons.hpp"
 #include "../Physics/Chains.hpp"
 #include "../Physics/Spring.hpp"
+#include "../Machine Learning/KMeansCalculator.h"
 enum StateNumber {
     HOME_STATE,
     VERLET_DROP_STATE,
@@ -26,7 +27,8 @@ enum StateNumber {
     OPTIMIZATION_1_STATE,
     SPRING_STATE,
     SPRING_SOFT_BODY_STATE,
-    PLAYABLE_SPRING_SOFT_BODY_STATE
+    PLAYABLE_SPRING_SOFT_BODY_STATE,
+    KMEANS_GROUPING_STATE,
 };
 class SimulationState;
 class StateFactory
@@ -282,4 +284,20 @@ private:
     Color m_SelectedColor = Color(255, 128, 0, 255);
     float m_Force = 300000.f;
 };
+class KmeansGroupingState : public SimulationState {
+public:
+    static SimulationState* getKmeansGroupingState();
+    SimulationState* update() override;
+    void draw() override;
+    void onNotify() override;
+private:
+    DiscreteEulerianEngine m_Engine;
+    vector<EulerianRoundBall*> m_RoundBallList;
+    vector<Vector2> m_Centroids;
+private:
+    KmeansGroupingState();
+    ~KmeansGroupingState() override;
+    void reset() override;
+};
+
 #endif //PHYSICS_SIMULATION_DEMONSTRATION_SIMULATIONSTATE_HPP

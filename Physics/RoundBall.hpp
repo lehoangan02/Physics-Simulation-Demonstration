@@ -61,11 +61,17 @@ public:
     friend class SpringState;
     friend class SpringSoftBodyState;
     friend class PlayableSpringSoftBodyState;
+    friend class KmeansGroupingState;
 };
 class ClickableEulerianRoundBall : public EulerianRoundBall {
 public:
     bool isInside(Vector2 Position);
     ClickableEulerianRoundBall(Vector2 Position, Color Color, float Mass);
+    void draw() override;
+};
+class VelocityVisualizer : public EulerianRoundBall {
+public:
+    VelocityVisualizer(Vector2 Position, Color Color, float Mass);
     void draw() override;
 };
 #endif //PHYSICS_SIMULATION_DEMONSTRATION_ROUNDBALL_HPP

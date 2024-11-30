@@ -56,3 +56,10 @@ ClickableEulerianRoundBall::ClickableEulerianRoundBall(Vector2 Position, Color C
 void ClickableEulerianRoundBall::draw() {
     DrawCircle(m_CurrentPosition.x, m_CurrentPosition.y, m_Radius - 10.0f, m_Color);
 }
+VelocityVisualizer::VelocityVisualizer(Vector2 Position, Color Color, float Mass) : EulerianRoundBall(Position, Color, Mass) {
+    m_Velocity = {100, 100};
+}
+void VelocityVisualizer::draw() {
+    DrawCircle(m_CurrentPosition.x, m_CurrentPosition.y, m_Radius, m_Color);
+    DrawLineEx(m_CurrentPosition, Vector2Add(m_CurrentPosition, m_Velocity), 5, BLACK);
+}

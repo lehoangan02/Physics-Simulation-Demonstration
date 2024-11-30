@@ -182,6 +182,8 @@ int ShortcutSelector::update()
             return 11;
         case KEY_L:
             return 12;
+        case KEY_N:
+            return 13;
         default:
             return -1;
     }

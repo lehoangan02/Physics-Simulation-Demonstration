@@ -33,6 +33,8 @@ SimulationState *StateFactory::getState(int StateNumber) {
             return SpringSoftBodyState::getSpringSoftBodyState();
         case StateNumber::PLAYABLE_SPRING_SOFT_BODY_STATE:
             return PlayableSpringSoftBodyState::getPlayableSpringSoftBodyState();
+        case StateNumber::KMEANS_GROUPING_STATE:
+            return KmeansGroupingState::getKmeansGroupingState();
         default:
             return nullptr;
     }
@@ -1355,4 +1357,82 @@ void PlayableSpringSoftBodyState::draw() {
         DrawCircle(GetMousePosition().x, GetMousePosition().y, 7, LineColor);
     }
 }
+KmeansGroupingState::KmeansGroupingState() : m_Engine(1800, 1000) {
+    m_StateNumber = StateNumber::KMEANS_GROUPING_STATE;
+    reset();
+}
+KmeansGroupingState::~KmeansGroupingState() {
+    m_IsActive = true;
+    for (auto& ball : m_RoundBallList)
+    {
+        delete ball;
+        ball = nullptr;
+    }
+    m_RoundBallList.clear();
+    m_Engine.reset();
+}
+void KmeansGroupingState::reset() {
+    m_IsActive = true;
+    for (auto& ball : m_RoundBallList)
+    {
+        delete ball;
+    }
+    m_RoundBallList.clear();
+    m_Engine.reset();
+    m_Engine.turnOffGravity();
+    m_Engine.turnOffProximityColoring();
+    for (int i = 0; i < 15; ++i)
+    {
+        float StartX = 100 + 100 * i;
+        for (int j = 0; j < 9; ++j)
+        {
+            EulerianRoundBall* RoundBall = new EulerianRoundBall(Vector2{StartX, float(100 + 80 * j)}, MY_ORANGE, 1.0f);
+            RoundBall -> m_Velocity = Vector2{00, 0};
+            RoundBall -> m_Radius = 10.0f;
+            RoundBall -> m_Color = BLACK;
+            m_RoundBallList.push_back(RoundBall);
+            m_Engine.attachRoundBall(RoundBall);
+        }
+    }
+}
+void KmeansGroupingState::onNotify() {
+    exitState();
+}
+SimulationState* KmeansGroupingState::update() {
+    if (!m_IsActive) {
+        return HomeState::getHomeState();
+    }
+    static int FrameSkipped = 0;
+    static std::vector<Vector2> Data;
+    for (int i = 0; i < 6; ++i)
+    {
+        m_Engine.update(m_FrameTime);
+    }
 
+    ++FrameSkipped;
+    if (FrameSkipped == 10)
+    {
+        FrameSkipped = 0;
+        Data.clear();
+        for (auto& ball : m_RoundBallList)
+        {
+            Data.push_back(ball -> m_CurrentPosition);
+
+        }
+        KMeansCalculator* MyKMeansCalculator = KMeansCalculator::getKMeansCalculator();
+        m_Centroids = (*MyKMeansCalculator)(Data, 2);
+    }
+    return nullptr;
+}
+void KmeansGroupingState::draw() {
+    m_Engine.draw();
+    for (auto& centroid : m_Centroids)
+    {
+        DrawCircle(centroid.x, centroid.y, 200, ColorAlpha(RED, 0.1));
+        DrawRing(centroid, 200, 210, 0, 360, 100, ColorAlpha(RED, 0.5));
+    }
+}
+SimulationState *KmeansGroupingState::getKmeansGroupingState() {
+    static KmeansGroupingState MyKmeansGroupingState;
+    return &MyKmeansGroupingState;
+}
