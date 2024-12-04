@@ -862,7 +862,7 @@ void KMeansEngine::accelerateMutally() {
     if (FrameSkipped == 100) {
         m_Centroids = (*m_KMeansCalculator)(m_Data, m_NumCentroids);
         m_Assignment = m_KMeansCalculator->getAssignment();
-//        sortColors();
+        sortColors();
         FrameSkipped = 0;
     }
     ++FrameSkipped;
@@ -882,7 +882,7 @@ void KMeansEngine::accelerateMutally() {
             Vector2 DirectVector = Vector2Subtract(m_Centroids[j], m_RoundBallList[i]->m_CurrentPosition);
             float Distance = Vector2Length(DirectVector);
             if (Distance == 0) continue;
-            float Acceleration = 6.67f * 10000000 / (Distance * Distance);
+            float Acceleration = 6.67f * 1000000000 / (Distance * Distance);
             if (Acceleration > 10e1) {
                 Acceleration = 10e1;
             }

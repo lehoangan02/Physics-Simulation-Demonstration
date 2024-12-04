@@ -1466,8 +1466,8 @@ void KMeansOptimizedState::reset() {
     m_Engine.reset();
     m_Engine.turnOffGravity();
     m_Engine.turnOffProximityColoring();
-    Vector2 StartingPosition = Vector2{100, 100};
-    Vector2 PositionDifference = Vector2{50, 50};
+    Vector2 StartingPosition = Vector2{600, 100};
+    Vector2 PositionDifference = Vector2{30, 30};
     for (int i = 0; i < 25; ++i)
     {
         float StartX = StartingPosition.x + PositionDifference.x * i;
@@ -1492,7 +1492,7 @@ SimulationState *KMeansOptimizedState::update() {
     if (!m_IsActive) {
         return HomeState::getHomeState();
     }
-    m_Engine.update(m_FrameTime);
+    for (int i = 0; i < 8; ++i) m_Engine.update(m_FrameTime / 8);
     return nullptr;
 }
 
