@@ -62,6 +62,8 @@ public:
     friend class SpringSoftBodyState;
     friend class PlayableSpringSoftBodyState;
     friend class KmeansGroupingState;
+    friend class KMeansEngine;
+    friend class KMeansOptimizedState;
 };
 class ClickableEulerianRoundBall : public EulerianRoundBall {
 public:

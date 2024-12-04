@@ -7,9 +7,9 @@ KMeansCalculator* KMeansCalculator::getKMeansCalculator() {
     static KMeansCalculator MyKMeansCalculator;
     return &MyKMeansCalculator;
 }
-std::vector<Vector2> KMeansCalculator::operator()(std::vector<Vector2> Data, int K)
+std::vector<Vector2> KMeansCalculator::operator()(const std::vector<Vector2>& Data, const int &K)
 {
-    int NumData = Data.size();
+    int NumData = static_cast<int>(Data.size());
     std::vector<Vector2> TempCentroids(K);
     std::vector<Vector2> Centroids(K);
     float MinCost = 1e9;
@@ -17,7 +17,10 @@ std::vector<Vector2> KMeansCalculator::operator()(std::vector<Vector2> Data, int
     {
         for (int j = 0; j < K; ++j)
         {
-            TempCentroids[j] = Data[std::rand() % NumData];
+            TempCentroids[j] = Data[static_cast<int>(std::rand() % NumData)];
+//            std::sort(TempCentroids.begin(), TempCentroids.end(), [](Vector2 A, Vector2 B) {
+//                return A.x < B.x;
+//            });
         }
         std::vector<int> Assignment(NumData);
         for (int j = 0; j < m_Limit; ++j) {
@@ -46,9 +49,10 @@ std::vector<Vector2> KMeansCalculator::operator()(std::vector<Vector2> Data, int
                         }
                     }
                     if (Count > 0) {
-                        TempCentroids[l] = Vector2Scale(Average, 1.0f / Count);
+                        TempCentroids[l] = Vector2Scale(Average, 1.0f / static_cast<float>(Count));
                     }
                 }
+
             }
         }
         float Cost = calculateCost(Data, TempCentroids, Assignment);
@@ -56,7 +60,9 @@ std::vector<Vector2> KMeansCalculator::operator()(std::vector<Vector2> Data, int
         {
             MinCost = Cost;
             Centroids = TempCentroids;
+            m_Assignment = Assignment;
         }
+
     }
     return Centroids;
 }
@@ -64,11 +70,15 @@ float KMeansCalculator::calculateSquareDistance(Vector2 A, Vector2 B)
 {
     return (A.x - B.x) * (A.x - B.x) + (A.y - B.y) * (A.y - B.y);
 }
-float KMeansCalculator::calculateCost(std::vector<Vector2> Data, std::vector<Vector2> Centroids, std::vector<int> Assignment)
+float KMeansCalculator::calculateCost(const std::vector<Vector2> &Data, const std::vector<Vector2> &Centroids, const std::vector<int> &Assignment)
 {
     float Cost = 0;
     for (int i = 0; i < Data.size(); ++i) {
         Cost += calculateSquareDistance(Data[i], Centroids[Assignment[i]]);
     }
     return Cost;
+}
+std::vector<int> KMeansCalculator::getAssignment()
+{
+    return m_Assignment;
 }

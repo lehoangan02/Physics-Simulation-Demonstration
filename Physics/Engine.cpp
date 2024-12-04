@@ -496,11 +496,14 @@ Color DiscreteEulerianEngine::ColorSquare::chooseColor(vector<EulerianRoundBall*
             ++Count;
         }
     }
-    if (Count > 8)
+    int RedThreshold = 17;
+    int YellowThreshold = 10;
+
+    if (Count > RedThreshold)
     {
         return m_RED;
     }
-    else if (Count > 5)
+    else if (Count > YellowThreshold)
     {
         return m_YELLOW;
     }
@@ -813,4 +816,116 @@ void UniformGridEngine::update(float DeltaTime) {
 void UniformGridEngine::reset() {
     DiscreteEulerianEngine::reset();
     m_Grid.reset();
+}
+KMeansEngine::KMeansEngine(int Width, int Height, int NumRow, int NumColumn) : UniformGridEngine(Width, Height, NumRow, NumColumn) {
+    m_KMeansCalculator = KMeansCalculator::getKMeansCalculator();
+    reset();
+}
+void KMeansEngine::update(float DeltaTime) {
+    for (auto &ball: m_RoundBallList) {
+        ball->update(DeltaTime);
+    }
+    accelerateMutally();
+    m_Grid.update(DeltaTime);
+}
+void KMeansEngine::draw() {
+//    std::cout << "Drawing" << std::endl;
+    DrawTexture(m_Background, 0, 0, WHITE);
+    for (auto& ball : m_RoundBallList) {
+        ball -> m_Color = calculateColor(ball);
+    }
+    for (auto &ball: m_RoundBallList) {
+        ball->draw();
+    }
+    for (int i = 0; i < m_NumCentroids; ++i) {
+        DrawCircle(m_Centroids[i].x, m_Centroids[i].y, 10, m_CentroidColorList[i]);
+    }
+}
+void KMeansEngine::reset() {
+    UniformGridEngine::reset();
+    m_Centroids.clear();
+    m_CentroidColorList.clear();
+    m_Data.clear();
+
+    m_Centroids.reserve(m_NumCentroids);
+    m_CentroidColorList.reserve(m_NumCentroids);
+    m_CentroidColorList.push_back(Color1);
+    m_CentroidColorList.push_back(Color2);
+    m_CentroidColorList.push_back(Color3);
+}
+void KMeansEngine::accelerateMutally() {
+    m_Data.clear();
+    for (auto &ball: m_RoundBallList) {
+        m_Data.push_back(ball->m_CurrentPosition);
+    }
+    static int FrameSkipped = 100;
+    if (FrameSkipped == 100) {
+        m_Centroids = (*m_KMeansCalculator)(m_Data, m_NumCentroids);
+        m_Assignment = m_KMeansCalculator->getAssignment();
+//        sortColors();
+        FrameSkipped = 0;
+    }
+    ++FrameSkipped;
+
+
+    for (int i = 0; i < m_RoundBallList.size(); ++i) {
+        int Centroid = m_Assignment[i];
+//        m_RoundBallList[i]->m_Color = m_CentroidColorList[Centroid];
+    }
+
+    std::vector<float> Weight(m_NumCentroids, 0);
+    for (int i = 0; i < m_Assignment.size(); ++i) {
+        ++Weight[m_Assignment[i]];
+    }
+    for (int i = 0; i < m_RoundBallList.size(); ++i) {
+        for (int j = 0; j < m_NumCentroids; ++j) {
+            Vector2 DirectVector = Vector2Subtract(m_Centroids[j], m_RoundBallList[i]->m_CurrentPosition);
+            float Distance = Vector2Length(DirectVector);
+            if (Distance == 0) continue;
+            float Acceleration = 6.67f * 10000000 / (Distance * Distance);
+            if (Acceleration > 10e1) {
+                Acceleration = 10e1;
+            }
+            Vector2 AccelerationVector = Vector2Scale(Vector2Normalize(DirectVector), Acceleration);
+            m_RoundBallList[i]->accelerate(AccelerationVector);
+        }
+    }
+
+}
+void KMeansEngine::sortColors() {
+    std::vector<std::pair<Vector2, Color>> ColorData;
+    for (int i = 0; i < m_NumCentroids; ++i) {
+        ColorData.push_back({m_Centroids[i], m_CentroidColorList[i]});
+    }
+    // find the centroid with the smallest x coordinate
+    int MinIndex = 0;
+    for (int i = 0; i < m_NumCentroids; ++i)
+    {
+        if (ColorData[i].first.x < ColorData[MinIndex].first.x)
+        {
+            MinIndex = i;
+        }
+    }
+    // find the centroid with the largest x coordinate
+    int MaxIndex = 0;
+    for (int i = 0; i < m_NumCentroids; ++i)
+    {
+        if (ColorData[i].first.x > ColorData[MaxIndex].first.x)
+        {
+            MaxIndex = i;
+        }
+    }
+    // find the remaining centroid
+    int RemainingIndex = 0;
+    for (int i = 0; i < m_NumCentroids; ++i)
+    {
+        if (i != MinIndex && i != MaxIndex)
+        {
+            RemainingIndex = i;
+        }
+    }
+    m_CentroidColorList[MinIndex] = Color1;
+    m_CentroidColorList[RemainingIndex] = Color2;
+    m_CentroidColorList[MaxIndex] = Color3;
+
 }

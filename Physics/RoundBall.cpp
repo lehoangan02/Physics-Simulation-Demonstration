@@ -61,5 +61,7 @@ VelocityVisualizer::VelocityVisualizer(Vector2 Position, Color Color, float Mass
 }
 void VelocityVisualizer::draw() {
     DrawCircle(m_CurrentPosition.x, m_CurrentPosition.y, m_Radius, m_Color);
-    DrawLineEx(m_CurrentPosition, Vector2Add(m_CurrentPosition, m_Velocity), 5, BLACK);
+    float Length = Vector2Length(m_Velocity) / 3000;
+//    DrawLineEx(m_CurrentPosition, Vector2Add(m_CurrentPosition, m_Velocity), 5, BLACK);
+    DrawLineEx(m_CurrentPosition, Vector2Add(m_CurrentPosition, Vector2Scale(m_Velocity, Length)), 5, GRAY);
 }

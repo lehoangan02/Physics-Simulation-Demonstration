@@ -35,6 +35,8 @@ SimulationState *StateFactory::getState(int StateNumber) {
             return PlayableSpringSoftBodyState::getPlayableSpringSoftBodyState();
         case StateNumber::KMEANS_GROUPING_STATE:
             return KmeansGroupingState::getKmeansGroupingState();
+        case StateNumber::KMEANS_OPTIMIZED_STATE:
+            return KMeansOptimizedState::getKMeansOptimizedState();
         default:
             return nullptr;
     }
@@ -1436,3 +1438,61 @@ SimulationState *KmeansGroupingState::getKmeansGroupingState() {
     static KmeansGroupingState MyKmeansGroupingState;
     return &MyKmeansGroupingState;
 }
+SimulationState *KMeansOptimizedState::getKMeansOptimizedState() {
+    static KMeansOptimizedState MyKMeansOptimizedState;
+    return &MyKMeansOptimizedState;
+}
+KMeansOptimizedState::KMeansOptimizedState() : m_Engine(1800, 1000, 75, 50) {
+    m_StateNumber = StateNumber::KMEANS_OPTIMIZED_STATE;
+    reset();
+}
+KMeansOptimizedState::~KMeansOptimizedState() {
+    m_IsActive = true;
+    for (auto& ball : m_RoundBallList)
+    {
+        delete ball;
+        ball = nullptr;
+    }
+    m_RoundBallList.clear();
+    m_Engine.reset();
+}
+void KMeansOptimizedState::reset() {
+    m_IsActive = true;
+    for (auto& ball : m_RoundBallList)
+    {
+        delete ball;
+    }
+    m_RoundBallList.clear();
+    m_Engine.reset();
+    m_Engine.turnOffGravity();
+    m_Engine.turnOffProximityColoring();
+    Vector2 StartingPosition = Vector2{100, 100};
+    Vector2 PositionDifference = Vector2{50, 50};
+    for (int i = 0; i < 25; ++i)
+    {
+        float StartX = StartingPosition.x + PositionDifference.x * i;
+        for (int j = 0; j < 20; ++j)
+        {
+            EulerianRoundBall* RoundBall = new VelocityVisualizer(Vector2{StartX, StartingPosition.y + PositionDifference.y * j}, MY_ORANGE, 1.0f);
+            RoundBall -> m_Velocity = Vector2{00, 0};
+            RoundBall -> m_Radius = 7.0f;
+            RoundBall -> m_Color = BLACK;
+            m_RoundBallList.push_back(RoundBall);
+            m_Engine.attachRoundBall(RoundBall);
+        }
+    }
+}
+void KMeansOptimizedState::onNotify() {
+    exitState();
+}
+void KMeansOptimizedState::draw() {
+    m_Engine.draw();
+}
+SimulationState *KMeansOptimizedState::update() {
+    if (!m_IsActive) {
+        return HomeState::getHomeState();
+    }
+    m_Engine.update(m_FrameTime);
+    return nullptr;
+}
+

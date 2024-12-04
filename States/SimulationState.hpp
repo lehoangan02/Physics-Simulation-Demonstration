@@ -29,6 +29,7 @@ enum StateNumber {
     SPRING_SOFT_BODY_STATE,
     PLAYABLE_SPRING_SOFT_BODY_STATE,
     KMEANS_GROUPING_STATE,
+    KMEANS_OPTIMIZED_STATE
 };
 class SimulationState;
 class StateFactory
@@ -297,6 +298,20 @@ private:
 private:
     KmeansGroupingState();
     ~KmeansGroupingState() override;
+    void reset() override;
+};
+class KMeansOptimizedState : public SimulationState {
+public:
+    static SimulationState* getKMeansOptimizedState();
+    SimulationState* update() override;
+    void draw() override;
+    void onNotify() override;
+private:
+    KMeansEngine m_Engine;
+    vector<EulerianRoundBall*> m_RoundBallList;
+private:
+    KMeansOptimizedState();
+    ~KMeansOptimizedState() override;
     void reset() override;
 };
 

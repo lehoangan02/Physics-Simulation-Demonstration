@@ -15,6 +15,7 @@
 #include <vector>
 #include <cmath>
 #include <algorithm>
+#include "../Machine Learning/KMeansCalculator.h"
 
 using namespace std;
 void calculateFinalVelocity(const float &Mass1, const float &Mass2, Vector2 &Velocity1,
@@ -171,21 +172,36 @@ private:
 };
 class UniformGridEngine: public DiscreteEulerianEngine
 {
-private:
+protected:
     Grid m_Grid;
 public:
     UniformGridEngine(int Width, int Height, int NumRow, int NumColumn);
-    void attachRoundBall(EulerianRoundBall* NewRoundBall) override;
-    void draw() override;
-    void update(float DeltaTime) override;
-    void reset() override;
+    virtual void attachRoundBall(EulerianRoundBall* NewRoundBall) override;
+    virtual void draw() override;
+    virtual void update(float DeltaTime) override;
+    virtual void reset() override;
 };
-class KMeansEngine : public DiscreteEulerianEngine
+class KMeansEngine : public UniformGridEngine
 {
 private:
     vector<Vector2> m_Centroids;
-    vector<Color> m_ColorList;
     vector<Color> m_CentroidColorList;
-    vector<Color> m_AssignmentColorList;
+    vector<int> m_Assignment;
+//    vector<Color> m_AssignmentColorList;
+    KMeansCalculator* m_KMeansCalculator = nullptr;
+    int m_NumCentroids = 3;
+    vector<Vector2> m_Data;
+    Color Color1 = RED;
+    Color Color2 = BLUE;
+    Color Color3 = GREEN;
+public:
+    KMeansEngine(int Width, int Height, int NumRow, int NumColumn);
+//    void attachRoundBall(EulerianRoundBall* NewRoundBall) override;
+    void update(float DeltaTime) override;
+    void draw() override;
+    void reset() override;
+private:
+    void accelerateMutally();
+    void sortColors();
 };
 #endif //PHYSICS_SIMULATION_DEMONSTRATION_ENGINE_HPP
