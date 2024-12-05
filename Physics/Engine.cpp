@@ -825,20 +825,39 @@ void KMeansEngine::update(float DeltaTime) {
     for (auto &ball: m_RoundBallList) {
         ball->update(DeltaTime);
     }
+    changeViewMode();
     accelerateMutally();
     m_Grid.update(DeltaTime);
 }
 void KMeansEngine::draw() {
 //    std::cout << "Drawing" << std::endl;
     DrawTexture(m_Background, 0, 0, WHITE);
-    for (auto& ball : m_RoundBallList) {
-        ball -> m_Color = calculateColor(ball);
+    if (m_ViewMode == PLANETARY)
+    {
+        for (auto& ball : m_RoundBallList) {
+            ball -> m_Color = calculateColor(ball);
+            VelocityVisualizer *NewBall = static_cast<VelocityVisualizer*>(ball);
+            NewBall -> turnOffVelocityVisualizer();
+        }
+    }
+    else if (m_ViewMode == NORMAL)
+    {
+        for (auto& ball : m_RoundBallList) {
+            ball -> m_Color = BLACK;
+            VelocityVisualizer *NewBall = static_cast<VelocityVisualizer*>(ball);
+            NewBall -> turnOnVelocityVisualizer();
+        }
+        drawCetroids();
+    }
+    else if (m_ViewMode == CENTROID) {
+        for (auto& ball : m_RoundBallList) {
+            VelocityVisualizer *NewBall = static_cast<VelocityVisualizer*>(ball);
+            NewBall -> turnOffVelocityVisualizer();
+        }
+        drawCetroids();
     }
     for (auto &ball: m_RoundBallList) {
         ball->draw();
-    }
-    for (int i = 0; i < m_NumCentroids; ++i) {
-        DrawCircle(m_Centroids[i].x, m_Centroids[i].y, 10, m_CentroidColorList[i]);
     }
 }
 void KMeansEngine::reset() {
@@ -862,15 +881,17 @@ void KMeansEngine::accelerateMutally() {
     if (FrameSkipped == 100) {
         m_Centroids = (*m_KMeansCalculator)(m_Data, m_NumCentroids);
         m_Assignment = m_KMeansCalculator->getAssignment();
-//        sortColors();
+        if (m_ViewMode == CENTROID) {
+            sortColors();
+        }
         FrameSkipped = 0;
     }
     ++FrameSkipped;
-
-
-    for (int i = 0; i < m_RoundBallList.size(); ++i) {
-        int Centroid = m_Assignment[i];
-//        m_RoundBallList[i]->m_Color = m_CentroidColorList[Centroid];
+    if (m_ViewMode == CENTROID) {
+        for (int i = 0; i < m_RoundBallList.size(); ++i) {
+            int Centroid = m_Assignment[i];
+            m_RoundBallList[i]->m_Color = m_CentroidColorList[Centroid];
+        }
     }
 
     std::vector<float> Weight(m_NumCentroids, 0);
@@ -927,5 +948,24 @@ void KMeansEngine::sortColors() {
     m_CentroidColorList[MinIndex] = Color1;
     m_CentroidColorList[RemainingIndex] = Color2;
     m_CentroidColorList[MaxIndex] = Color3;
-
 }
+void KMeansEngine::changeViewMode() {
+    if (IsKeyPressed(KEY_ONE))
+    {
+        m_ViewMode = NORMAL;
+    }
+    else if (IsKeyPressed(KEY_TWO))
+    {
+        m_ViewMode = PLANETARY;
+    }
+    else if (IsKeyPressed(KEY_THREE))
+    {
+        m_ViewMode = CENTROID;
+    }
+}
+void KMeansEngine::drawCetroids() {
+    for (int i = 0; i < m_NumCentroids; ++i) {
+        DrawTexture(m_XTexture, m_Centroids[i].x - m_XTextureOffset.x, m_Centroids[i].y - m_XTextureOffset.y, WHITE);
+    }
+}
+

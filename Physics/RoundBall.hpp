@@ -73,7 +73,11 @@ public:
 };
 class VelocityVisualizer : public EulerianRoundBall {
 public:
+    void turnOffVelocityVisualizer();
+    void turnOnVelocityVisualizer();
     VelocityVisualizer(Vector2 Position, Color Color, float Mass);
     void draw() override;
+private:
+    bool m_VelocityVisualizerOn = true;
 };
 #endif //PHYSICS_SIMULATION_DEMONSTRATION_ROUNDBALL_HPP

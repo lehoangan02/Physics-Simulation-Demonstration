@@ -160,6 +160,7 @@ void HomeState::reset() {
 }
 SimulationState* VerletChainState::getVerletChainState()
 {
+    VerletRoundBall::m_Radius = 10.0f;
     static VerletChainState MyVerletChainState;
     return &MyVerletChainState;
 }
@@ -474,6 +475,7 @@ EulerianDropState::~EulerianDropState() {
 }
 
 SimulationState *TunnellingComparisonState::getComparisonState() {
+    VerletRoundBall::m_Radius = 100.0f;
     static TunnellingComparisonState MyComparisonState;
     return &MyComparisonState;
 }

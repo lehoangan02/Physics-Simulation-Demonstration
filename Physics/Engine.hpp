@@ -184,16 +184,25 @@ public:
 class KMeansEngine : public UniformGridEngine
 {
 private:
+    enum VIEW_MODE
+    {
+        NORMAL,
+        PLANETARY,
+        CENTROID
+    };
+private:
     vector<Vector2> m_Centroids;
     vector<Color> m_CentroidColorList;
     vector<int> m_Assignment;
-//    vector<Color> m_AssignmentColorList;
     KMeansCalculator* m_KMeansCalculator = nullptr;
     int m_NumCentroids = 3;
     vector<Vector2> m_Data;
     Color Color1 = RED;
     Color Color2 = BLUE;
     Color Color3 = GREEN;
+    VIEW_MODE m_ViewMode = CENTROID;
+    Texture2D m_XTexture = LoadTexture("Assets/Textures/X.png");
+    Vector2 m_XTextureOffset = {64, 64};
 public:
     KMeansEngine(int Width, int Height, int NumRow, int NumColumn);
 //    void attachRoundBall(EulerianRoundBall* NewRoundBall) override;
@@ -203,5 +212,7 @@ public:
 private:
     void accelerateMutally();
     void sortColors();
+    void changeViewMode();
+    void drawCetroids();
 };
 #endif //PHYSICS_SIMULATION_DEMONSTRATION_ENGINE_HPP
