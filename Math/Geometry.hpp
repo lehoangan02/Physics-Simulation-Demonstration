@@ -51,11 +51,11 @@ public:
     void print();
     float findX(float y);
     float findY(float x);
-    Line flipHorizontally(Vector2 Point);
-    Line flipVertically(Vector2 Point);
+    Line flipHorizontally(const Vector2 &Point);
+    Line flipVertically(const Vector2 &Point);
     bool isVertical();
     bool isHorizontal();
-    bool isParallel(Line Other);
+    bool isParallel(const Line &Other);
     float distanceToLine(const Line& Other);
 };
 class Ray2D {
@@ -66,12 +66,12 @@ public:
     Ray2D(Vector2 Origin, Vector2 Direction);
     bool haveProjection(const Vector2& Point);
     Vector2 projection(const Vector2& Point);
-    Ray2D bisector(Ray2D Ray1, Ray2D Ray2);
+    Ray2D bisector(const Ray2D &Ray1, const Ray2D &Ray2);
     Line getLine();
 };
 bool isInsidePolygon(const Vector2& Point, const vector<LineSegment>& LineSegmentList);
 bool isInsideTriangle(const Vector2& Point, const PlatformTriangle& Triangle);
-float dotProduct(Vector2 First, Vector2 Second);
-float angle(Vector2 A, Vector2 B);
-Vector2 flipVector(Vector2 Initial, Vector2 Mirror);
+float dotProduct(const Vector2 &First, const Vector2 &Second);
+float angle(const Vector2 &A, const Vector2 &B);
+Vector2 flipVector(const Vector2 &Initial, const Vector2 &Mirror);
 #endif //PHYSICS_SIMULATION_DEMONSTRATION_GEOMETRY_HPP

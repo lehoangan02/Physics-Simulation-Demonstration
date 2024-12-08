@@ -198,13 +198,13 @@ float Line::findY(float x) {
     if (!m_b) return 0;
     return (-m_a * x - m_c) / m_b;
 }
-Line Line::flipHorizontally(Vector2 Point) {
+Line Line::flipHorizontally(const Vector2 &Point) {
     float a = m_a;
     float b = - m_b;
     float c = -(a * Point.x + b * Point.y);
     return Line(a, b, c);
 }
-Line Line::flipVertically(Vector2 Point) {
+Line Line::flipVertically(const Vector2 &Point) {
     float a = - m_a;
     float b = m_b;
     float c = -(a * Point.x + b * Point.y);
@@ -218,7 +218,7 @@ bool Line::isHorizontal() {
     if (!m_a) return true;
     return false;
 }
-bool Line::isParallel(Line Other) {
+bool Line::isParallel(const Line &Other) {
     if (m_a == 0 && Other.m_b == 0) return false;
     if (m_b == 0 && Other.m_a == 0) return false;
     if (m_a * Other.m_b == m_b * Other.m_a) return true;
@@ -231,7 +231,7 @@ float Line::distanceToLine(const Line &Other) {
 }
 Ray2D::Ray2D(Vector2 Origin, Vector2 Direction) : m_Origin(Origin), m_Direction(Direction) {
 }
-Ray2D Ray2D::bisector(Ray2D Ray1, Ray2D Ray2) {
+Ray2D Ray2D::bisector(const Ray2D &Ray1, const Ray2D &Ray2) {
     Vector2 Direction1 = Vector2Normalize(Ray1.m_Direction);
     Vector2 Direction2 = Vector2Normalize(Ray2.m_Direction);
     Vector2 Direction = Vector2Normalize(Vector2Add(Direction1, Direction2));
@@ -241,13 +241,13 @@ Line Ray2D::getLine() {
     std::pair<Vector2, Vector2> DirectionVectorAndPoint(m_Direction, m_Origin);
     return Line(DirectionVectorAndPoint);
 }
-float dotProduct(Vector2 A, Vector2 B) {
-    return A.x * B.x + A.y * B.y;
+float dotProduct(const Vector2 &First, const Vector2 &Second) {
+    return First.x * Second.x + First.y * Second.y;
 }
-float angle(Vector2 A, Vector2 B) {
+float angle(const Vector2 &A, const Vector2 &B) {
     return acos(dotProduct(A, B) / (Vector2Length(A) * Vector2Length(B)));
 }
-Vector2 flipVector(Vector2 Initial, Vector2 Mirror) {
+Vector2 flipVector(const Vector2 &Initial, const Vector2 &Mirror) {
     Vector2 Normalized = Vector2Normalize(Mirror);
     float DotProduct = dotProduct(Initial, Normalized);
     Normalized = Vector2Scale(Normalized, DotProduct * 2);

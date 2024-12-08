@@ -160,6 +160,7 @@ void HomeState::reset() {
 }
 SimulationState* VerletChainState::getVerletChainState()
 {
+    VerletRoundBall::m_Radius = 10.0f;
     static VerletChainState MyVerletChainState;
     return &MyVerletChainState;
 }
@@ -474,6 +475,7 @@ EulerianDropState::~EulerianDropState() {
 }
 
 SimulationState *TunnellingComparisonState::getComparisonState() {
+    VerletRoundBall::m_Radius = 100.0f;
     static TunnellingComparisonState MyComparisonState;
     return &MyComparisonState;
 }
@@ -1487,6 +1489,8 @@ void KMeansOptimizedState::onNotify() {
 }
 void KMeansOptimizedState::draw() {
     m_Engine.draw();
+    DrawText("KMeans Optimized State", 100, 10, 20, RED);
+    DrawText("Press '1', '2', '3' to change viewing mode", 100, 30, 20, RED);
 }
 SimulationState *KMeansOptimizedState::update() {
     if (!m_IsActive) {
