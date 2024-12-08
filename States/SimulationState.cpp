@@ -1489,6 +1489,8 @@ void KMeansOptimizedState::onNotify() {
 }
 void KMeansOptimizedState::draw() {
     m_Engine.draw();
+    DrawText("KMeans Optimized State", 100, 10, 20, RED);
+    DrawText("Press '1', '2', '3' to change viewing mode", 100, 30, 20, RED);
 }
 SimulationState *KMeansOptimizedState::update() {
     if (!m_IsActive) {

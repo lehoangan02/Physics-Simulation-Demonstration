@@ -71,7 +71,7 @@ public:
 };
 bool isInsidePolygon(const Vector2& Point, const vector<LineSegment>& LineSegmentList);
 bool isInsideTriangle(const Vector2& Point, const PlatformTriangle& Triangle);
-float dotProduct(Vector2 First, Vector2 Second);
+float dotProduct(const Vector2 &First, const Vector2 &Second);
 float angle(Vector2 A, Vector2 B);
 Vector2 flipVector(Vector2 Initial, Vector2 Mirror);
 #endif //PHYSICS_SIMULATION_DEMONSTRATION_GEOMETRY_HPP

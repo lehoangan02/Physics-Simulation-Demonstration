@@ -241,8 +241,8 @@ Line Ray2D::getLine() {
     std::pair<Vector2, Vector2> DirectionVectorAndPoint(m_Direction, m_Origin);
     return Line(DirectionVectorAndPoint);
 }
-float dotProduct(Vector2 A, Vector2 B) {
-    return A.x * B.x + A.y * B.y;
+float dotProduct(const Vector2 &First, const Vector2 &Second) {
+    return First.x * Second.x + First.y * Second.y;
 }
 float angle(Vector2 A, Vector2 B) {
     return acos(dotProduct(A, B) / (Vector2Length(A) * Vector2Length(B)));
