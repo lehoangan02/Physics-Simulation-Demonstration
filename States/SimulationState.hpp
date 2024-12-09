@@ -9,6 +9,7 @@
 #include "../Physics/PlatformTriangle.hpp"
 #include "../Physics/PlatformRectangle.h"
 #include <vector>
+#include <fstream>
 #include "Observer.hpp"
 #include "../Buttons/Buttons.hpp"
 #include "../Physics/Chains.hpp"
@@ -29,7 +30,9 @@ enum StateNumber {
     SPRING_SOFT_BODY_STATE,
     PLAYABLE_SPRING_SOFT_BODY_STATE,
     KMEANS_GROUPING_STATE,
-    KMEANS_OPTIMIZED_STATE
+    KMEANS_OPTIMIZED_STATE,
+    CANVAS_STATE,
+    PRESSURE_SOFT_BODY_STATE,
 };
 class SimulationState;
 class StateFactory
@@ -312,6 +315,34 @@ private:
 private:
     KMeansOptimizedState();
     ~KMeansOptimizedState() override;
+    void reset() override;
+};
+class CanvasState : public SimulationState {
+public:
+    static SimulationState* getCanvasState();
+    SimulationState* update() override;
+    void draw() override;
+    void onNotify() override;
+private:
+    CanvasState();
+    ~CanvasState() override;
+    void reset() override;
+private:
+    vector<Vector2> m_Points;
+};
+class PressureSoftBodyState : public SimulationState {
+public:
+    static SimulationState* getPressureSoftBodyState();
+    SimulationState* update() override;
+    void draw() override;
+    void onNotify() override;
+private:
+    DiscreteEulerianEngine m_Engine;
+    vector<EulerianRoundBall*> m_RoundBallList;
+    vector<Spring*> m_SpringList;
+private:
+    PressureSoftBodyState();
+    ~PressureSoftBodyState() override;
     void reset() override;
 };
 

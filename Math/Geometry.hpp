@@ -74,4 +74,6 @@ bool isInsideTriangle(const Vector2& Point, const PlatformTriangle& Triangle);
 float dotProduct(const Vector2 &First, const Vector2 &Second);
 float angle(Vector2 A, Vector2 B);
 Vector2 flipVector(Vector2 Initial, Vector2 Mirror);
+float calculateAreaTriangle(const Vector2& A, const Vector2& B, const Vector2& C);
+float calculateAreaPolygon(const vector<Vector2>& Polygon);
 #endif //PHYSICS_SIMULATION_DEMONSTRATION_GEOMETRY_HPP

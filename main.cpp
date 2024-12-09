@@ -12,21 +12,9 @@ int main() {
     SetTargetFPS(60);
     Mediator* MyMediator = new Mediator();
     int frameCount = 0;
-//    RenderTexture2D screen = LoadRenderTexture(1800, 1000);
     while(!WindowShouldClose())
     {
         MyMediator -> update();
-
-//        BeginTextureMode(screen);
-////        BeginDrawing();
-//        ClearBackground(BLACK);
-//        MyMediator -> draw();
-//        DrawFPS(10, 10);
-////        EndDrawing();
-//        EndTextureMode();
-//        frameCount++;
-//        Image frame = LoadImageFromTexture(screen.texture);
-//        ExportImage(frame, TextFormat("frame_%05i.png", frameCount));
         BeginDrawing();
         ClearBackground(BLACK);
         MyMediator -> draw();
@@ -34,8 +22,4 @@ int main() {
         EndDrawing();
 
     }
-//    UnloadRenderTexture(screen);
-//    CloseWindow();
-//    system("ffmpeg -framerate 60 -i frame_%05d.png -c:v libx264 -pix_fmt yuv420p output.mp4");
-
 }

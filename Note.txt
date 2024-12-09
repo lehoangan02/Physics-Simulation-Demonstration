@@ -156,3 +156,4 @@ std::cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << std::endl;
                     Vector2Distance(Ball1->m_CurrentPosition, Ball2->m_CurrentPosition)) {
                     std::cout << "Error: Collision not resolved" << std::endl;
                 }
+

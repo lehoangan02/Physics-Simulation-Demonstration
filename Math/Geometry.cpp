@@ -257,3 +257,18 @@ Vector2 flipVector(Vector2 Initial, Vector2 Mirror) {
 //    std::cout << "Result: " << Result.x << " " << Result.y << std::endl;
     return Vector2Negate(Result);
 }
+float calculateAreaTriangle(const Vector2& A, const Vector2& B, const Vector2& C) {
+    return fabs((A.x * (B.y - C.y) + B.x * (C.y - A.y) + C.x * (A.y - B.y)) / 2);
+}
+float calculateAreaPolygon(const vector<Vector2>& Polygon) {
+    float Area = 0;
+    Vector2 Center = {0, 0};
+    for (int i = 0; i < Polygon.size(); ++i) {
+        Center = Vector2Add(Center, Polygon[i]);
+    }
+    Center = Vector2Scale(Center, 1.0f / Polygon.size());
+    for (int i = 0; i < Polygon.size(); ++i) {
+        Area += calculateAreaTriangle(Center, Polygon[i], Polygon[(i + 1) % Polygon.size()]);
+    }
+    return Area;
+}

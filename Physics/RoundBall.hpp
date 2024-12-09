@@ -64,6 +64,9 @@ public:
     friend class KmeansGroupingState;
     friend class KMeansEngine;
     friend class KMeansOptimizedState;
+    friend class CanvasState;
+    friend class PressureSoftBodyState;
+    friend class RubberBand;
 };
 class ClickableEulerianRoundBall : public EulerianRoundBall {
 public:

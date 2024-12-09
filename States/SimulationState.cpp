@@ -37,6 +37,14 @@ SimulationState *StateFactory::getState(int StateNumber) {
             return KmeansGroupingState::getKmeansGroupingState();
         case StateNumber::KMEANS_OPTIMIZED_STATE:
             return KMeansOptimizedState::getKMeansOptimizedState();
+        case StateNumber::CANVAS_STATE:
+            return CanvasState::getCanvasState();
+        case StateNumber::PRESSURE_SOFT_BODY_STATE:
+        {
+            cout << "Pressure Soft Body State\n";
+            return PressureSoftBodyState::getPressureSoftBodyState();
+        }
+
         default:
             return nullptr;
     }
@@ -1155,7 +1163,7 @@ void SpringSoftBodyState::reset() {
     }
     for (auto& spring : m_SpringList)
     {
-        spring -> m_Damping = true;
+        spring ->setDamping(true);
 
 
     }
@@ -1499,4 +1507,192 @@ SimulationState *KMeansOptimizedState::update() {
     m_Engine.update(m_FrameTime);
     return nullptr;
 }
+SimulationState* CanvasState::getCanvasState() {
+    static CanvasState MyCanvasState;
+    return &MyCanvasState;
+}
+CanvasState::CanvasState() {
+    m_StateNumber = StateNumber::CANVAS_STATE;
+    reset();
+}
+CanvasState::~CanvasState() {
+    m_IsActive = true;
+}
+void CanvasState::reset() {
+    m_IsActive = true;
+    m_Points.clear();
+}
+void CanvasState::onNotify() {
+    exitState();
+}
+SimulationState* CanvasState::update() {
+    if (!m_IsActive) {
+        return HomeState::getHomeState();
+    }
+    if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
+    {
+        m_Points.push_back(GetMousePosition());
+    }
+    if (IsMouseButtonPressed(MOUSE_RIGHT_BUTTON))
+    {
+        for (auto &point: m_Points) {
+            std::cout << point.x << " " << point.y << std::endl;
+        }
+    }
+    return nullptr;
+}
+void CanvasState::draw() {
+    for (auto &point: m_Points) {
+        DrawCircleV(point, 5, RED);
+    }
+}
+SimulationState* PressureSoftBodyState::getPressureSoftBodyState() {
+    static PressureSoftBodyState MyPressureSoftBodyState;
+    return &MyPressureSoftBodyState;
+}
+PressureSoftBodyState::PressureSoftBodyState() : m_Engine(1800, 1000) {
+    m_StateNumber = StateNumber::PRESSURE_SOFT_BODY_STATE;
+    reset();
+}
+PressureSoftBodyState::~PressureSoftBodyState() {
+    m_IsActive = true;
+    for (auto& ball : m_RoundBallList)
+    {
+        delete ball;
+        ball = nullptr;
+    }
+    for (auto& spring : m_SpringList)
+    {
+        delete spring;
+        spring = nullptr;
+    }
+    m_RoundBallList.clear();
+    m_SpringList.clear();
+    m_Engine.reset();
+}
+void PressureSoftBodyState::reset()
+{
+    m_IsActive = true;
+    for (auto& ball : m_RoundBallList)
+    {
+        delete ball;
+        ball = nullptr;
+    }
+    for (auto& spring : m_SpringList)
+    {
+        delete spring;
+        spring = nullptr;
+    }
+    m_RoundBallList.clear();
+    m_SpringList.clear();
+    m_Engine.reset();
+    m_Engine.turnOffProximityColoring();
+    m_Engine.turnOffMutualAcceleration();
+
+    Vector2 Offset = {0, 300};
+
+//    EulerianRoundBall* RoundBall1 = new EulerianRoundBall(Vector2{861.5, 235 + Offset.y}, RED, 1.0f);
+//    EulerianRoundBall* RoundBall2 = new EulerianRoundBall(Vector2{813.5, 265 + Offset.y}, RED, 1.0f);
+//    EulerianRoundBall* RoundBall3 = new EulerianRoundBall(Vector2{794, 316 + Offset.y}, RED, 1.0f);
+//    EulerianRoundBall* RoundBall4 = new EulerianRoundBall(Vector2{806, float(368.5) + Offset.y}, RED, 1.0f);
+//    EulerianRoundBall* RoundBall5 = new EulerianRoundBall(Vector2{845, float(398.5) + Offset.y}, RED, 1.0f);
+//    EulerianRoundBall* RoundBall6 = new EulerianRoundBall(Vector2{899, float(416.5) + Offset.y}, RED, 1.0f);
+//    EulerianRoundBall* RoundBall7 = new EulerianRoundBall(Vector2{954.5, 391 + Offset.y}, RED, 1.0f);
+//    EulerianRoundBall* RoundBall8 = new EulerianRoundBall(Vector2{975.5, float(344.5) + Offset.y}, RED, 1.0f);
+//    EulerianRoundBall* RoundBall9 = new EulerianRoundBall(Vector2{965, 280 + Offset.y}, RED, 1.0f);
+//    EulerianRoundBall* RoundBall10 = new EulerianRoundBall(Vector2{917, float(239.5) +Offset.y}, RED, 1.0f);
+//
+//    m_RoundBallList.push_back(RoundBall1);
+//    m_RoundBallList.push_back(RoundBall2);
+//    m_RoundBallList.push_back(RoundBall3);
+//    m_RoundBallList.push_back(RoundBall4);
+//    m_RoundBallList.push_back(RoundBall5);
+//    m_RoundBallList.push_back(RoundBall6);
+//    m_RoundBallList.push_back(RoundBall7);
+//    m_RoundBallList.push_back(RoundBall8);
+//    m_RoundBallList.push_back(RoundBall9);
+//    m_RoundBallList.push_back(RoundBall10);
+    ifstream fin("PressureSoftBodyCordinate.txt");
+    int NumberOfBall;
+    fin >> NumberOfBall;
+    for (int i = 0; i < NumberOfBall; ++i) {
+        float x, y;
+        fin >> x >> y;
+        EulerianRoundBall* RoundBall = new EulerianRoundBall(Vector2{x, y + Offset.y}, RED, 1.0f);
+        m_RoundBallList.push_back(RoundBall);
+    }
+    fin.close();
+
+
+
+    for (auto &ball: m_RoundBallList) {
+        m_Engine.attachRoundBall(ball);
+        ball -> m_Radius = 5.0f;
+    }
+    for (int i = 0; i < m_RoundBallList.size(); ++i) {
+        int NextBallIndex = (i + 1) % m_RoundBallList.size();
+        float Distance = Vector2Distance(m_RoundBallList[i] -> m_CurrentPosition, m_RoundBallList[NextBallIndex] -> m_CurrentPosition);
+        Spring* Spring1 = new Spring(m_RoundBallList[i], m_RoundBallList[NextBallIndex], Distance, 5000.0f, RED);
+        Spring1 ->setDamping(true, 100);
+        m_SpringList.push_back(Spring1);
+        m_Engine.attachSpring(Spring1);
+
+    }
+
+}
+void PressureSoftBodyState::onNotify() {
+    exitState();
+}
+void PressureSoftBodyState::draw() {
+    m_Engine.draw();
+}
+SimulationState* PressureSoftBodyState::update() {
+    if (!m_IsActive) {
+        return HomeState::getHomeState();
+    }
+    int SubStep = 10;
+    for (int i = 0; i < SubStep; ++i) {
+        static float NRT = 0.0821 * 300 * 100000;
+
+        vector<Vector2> Polygon;
+        for (auto& ball : m_RoundBallList)
+        {
+            Polygon.push_back(ball -> m_CurrentPosition);
+        }
+        float Area = calculateAreaPolygon(Polygon);
+        float Pressure = NRT / Area;
+        Vector2 Center = {0, 0};
+        for (auto &ball: m_RoundBallList) {
+            Center = Vector2Add(Center, ball -> m_CurrentPosition);
+        }
+        Center = Vector2Scale(Center, 1.0f / m_RoundBallList.size());
+        for (auto& spring : m_SpringList)
+        {
+            LineSegment SpringLine = spring -> getLineSegment();
+            Vector2 Projection = Line(SpringLine).projection(Center);
+            Vector2 Normal = Vector2Normalize(Vector2Subtract(Projection, Center));
+            Normal = Vector2Normalize(Normal);
+            float Length = SpringLine.getLength();
+            float Force = Pressure * Length;
+            Vector2 ForceVector = Vector2Scale(Normal, Force);
+            spring -> getBalls().first ->applyForce(ForceVector);
+            spring -> getBalls().second ->applyForce(ForceVector);
+        }
+        if (IsMouseButtonDown(MOUSE_LEFT_BUTTON))
+        {
+            Vector2 MousePosition = GetMousePosition();
+            for (auto& ball : m_RoundBallList)
+            {
+                Vector2 Direction = Vector2Subtract(MousePosition, ball -> m_CurrentPosition);
+                Direction = Vector2Normalize(Direction);
+                Vector2 Force = Vector2Scale(Direction, 800);
+                ball -> applyForce(Force);
+            }
+        }
+        m_Engine.update(m_FrameTime / SubStep);
+    }
+    return nullptr;
+}
+
+
 
