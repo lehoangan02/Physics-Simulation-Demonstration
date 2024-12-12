@@ -374,8 +374,9 @@ void DiscreteEulerianEngine::update(float DeltaTime) {
     {
         string -> update();
     }
-    applyConstraints();
     if (m_GravityOn) applyGravity();
+    applyConstraints();
+
 }
 void DiscreteEulerianEngine::applyConstraints() {
     for (auto &Ball : m_RoundBallList) {
@@ -560,6 +561,9 @@ void DiscreteEulerianEngine::turnOffMutualAcceleration() {
 }
 void DiscreteEulerianEngine::turnOnMutualAcceleration() {
     m_MuttualyAccelerate = true;
+}
+void DiscreteEulerianEngine::setGravity(const Vector2 &Gravity) {
+    m_Gravity = Gravity;
 }
 
 int Grid::m_Width = 0.0f;

@@ -33,6 +33,8 @@ enum StateNumber {
     KMEANS_OPTIMIZED_STATE,
     CANVAS_STATE,
     PRESSURE_SOFT_BODY_STATE,
+    SHAPE_MATCHING_SOFT_BODY_STATE,
+
 };
 class SimulationState;
 class StateFactory
@@ -340,10 +342,61 @@ private:
     DiscreteEulerianEngine m_Engine;
     vector<EulerianRoundBall*> m_RoundBallList;
     vector<Spring*> m_SpringList;
+    Vector2 Center = {0, 0};
+    Vector2 m_SmileySize;
+    Texture2D m_Smiley = LoadTexture("Assets/Textures/Smile.png");
 private:
     PressureSoftBodyState();
     ~PressureSoftBodyState() override;
     void reset() override;
+};
+class ShapeMatchingSoftBodyState : public SimulationState {
+public:
+    static SimulationState* getShapeMatchingSoftBodyState();
+    SimulationState* update() override;
+    void draw() override;
+    void onNotify() override;
+private:
+    ShapeMatchingSoftBodyState();
+    ~ShapeMatchingSoftBodyState() override;
+    void reset() override;
+    void readShapeFiles();
+    void attachShapeToEngine();
+private:
+    class Shape
+    {
+    private:
+        vector<EulerianRoundBall*> m_FrameVertices;
+        vector<EulerianRoundBall*> m_ShapeVertices;
+        vector<Vector2> m_OriginalFrame;
+        vector<Spring*> m_Springs;
+        vector<Spring*> m_RubberBands;
+        vector<Vector2> m_UnRotatedFrame;
+        vector<Vector2> m_RotatedFrame;
+        Vector2 m_OriginalCenter;
+        Vector2 m_PreviousCenter = {0, 0};
+        Vector2 m_Center;
+        double Angle = 0;
+    public:
+        Shape() = default;
+        void init(vector<Vector2> FrameVertices, Vector2 Position);
+        void draw();
+        void update();
+        void rotate(float Degree);
+        void attachToEngine(DiscreteEulerianEngine* Engine);
+        ~Shape();
+    private:
+        void calculateShapeCenter();
+        void calculateOriginalCenter();
+        void selfRotate();
+        void rotateFromZero(float Radian);
+    };
+private:
+    Shape m_ShapeA;
+    Shape m_ShapeH;
+    Shape m_ShapeL;
+    Shape m_ShapeN;
+    DiscreteEulerianEngine m_Engine;
 };
 
 #endif //PHYSICS_SIMULATION_DEMONSTRATION_SIMULATIONSTATE_HPP

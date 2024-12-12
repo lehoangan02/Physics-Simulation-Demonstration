@@ -119,6 +119,7 @@ public:
     void turnOnProximityColoring();
     void turnOffMutualAcceleration();
     void turnOnMutualAcceleration();
+    void setGravity(const Vector2& Gravity);
 protected:
     void applyConstraints();
     void collideRoundBalls();

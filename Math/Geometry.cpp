@@ -244,8 +244,30 @@ Line Ray2D::getLine() {
 float dotProduct(const Vector2 &First, const Vector2 &Second) {
     return First.x * Second.x + First.y * Second.y;
 }
+
+float crossProduct(const Vector2 &First, const Vector2 &Second) {
+    return First.x * Second.y - First.y * Second.x;
+}
+
 float angle(Vector2 A, Vector2 B) {
-    return acos(dotProduct(A, B) / (Vector2Length(A) * Vector2Length(B)));
+    float dot = dotProduct(A, B) / (Vector2Length(A) * Vector2Length(B));
+    dot = fmax(-1.0f, fmin(1.0f, dot));
+    return acos(dot);
+}
+
+float angle360InRadian(Vector2 A, Vector2 B) {
+    float Angle = angle(A, B);
+    float cross = A.x * B.y - A.y * B.x;
+    if (cross < 0) {
+        Angle = 2 * M_PI - Angle;
+    }
+    return fmod(Angle, 2 * M_PI); // Wrap angle between 0 and 2π
+}
+
+
+float radianToDegree(float Radian)
+{
+    return Radian * 180 / PI;
 }
 Vector2 flipVector(Vector2 Initial, Vector2 Mirror) {
     Vector2 Normalized = Vector2Normalize(Mirror);
@@ -256,6 +278,9 @@ Vector2 flipVector(Vector2 Initial, Vector2 Mirror) {
 //    std::cout << "Mirror: " << Mirror.x << " " << Mirror.y << std::endl;
 //    std::cout << "Result: " << Result.x << " " << Result.y << std::endl;
     return Vector2Negate(Result);
+}
+float degreeToRadian(float Degree) {
+    return Degree * PI / 180;
 }
 float calculateAreaTriangle(const Vector2& A, const Vector2& B, const Vector2& C) {
     return fabs((A.x * (B.y - C.y) + B.x * (C.y - A.y) + C.x * (A.y - B.y)) / 2);

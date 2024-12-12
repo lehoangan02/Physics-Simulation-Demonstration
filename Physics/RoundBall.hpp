@@ -67,6 +67,7 @@ public:
     friend class CanvasState;
     friend class PressureSoftBodyState;
     friend class RubberBand;
+    friend class ShapeMatchingSoftBodyState;
 };
 class ClickableEulerianRoundBall : public EulerianRoundBall {
 public:

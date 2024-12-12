@@ -64,8 +64,9 @@ RubberBand::RubberBand(EulerianRoundBall* Ball1, EulerianRoundBall* Ball2, float
 void RubberBand::update() {
     Vector2 Direction = Vector2Subtract(m_Ball2->m_CurrentPosition, m_Ball1->m_CurrentPosition);
     float Distance = Vector2Length(Direction);
-    if (Distance > m_Length)
+    if (true)
     {
+//        std::cout << "Applying Force\n";
         float Delta = Distance - m_Length;
         Vector2 Normalized = Vector2Normalize(Direction);
         Vector2 Force = Vector2Scale(Normalized, m_k * Delta);

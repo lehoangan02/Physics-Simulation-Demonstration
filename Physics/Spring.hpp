@@ -26,6 +26,7 @@ public:
     void setDamping(bool Damping, float DampingFactor) {m_Damping = Damping; m_DampingFactor = DampingFactor;}
     virtual void update();
     void draw();
+    void setColor(Color Color) {m_Color = Color;}
 private:
     friend class SpringSoftBodyState;
     friend class PlayableSpringSoftBodyState;

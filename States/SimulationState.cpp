@@ -40,10 +40,9 @@ SimulationState *StateFactory::getState(int StateNumber) {
         case StateNumber::CANVAS_STATE:
             return CanvasState::getCanvasState();
         case StateNumber::PRESSURE_SOFT_BODY_STATE:
-        {
-            cout << "Pressure Soft Body State\n";
             return PressureSoftBodyState::getPressureSoftBodyState();
-        }
+        case StateNumber::SHAPE_MATCHING_SOFT_BODY_STATE:
+            return ShapeMatchingSoftBodyState::getShapeMatchingSoftBodyState();
 
         default:
             return nullptr;
@@ -1572,6 +1571,8 @@ PressureSoftBodyState::~PressureSoftBodyState() {
 }
 void PressureSoftBodyState::reset()
 {
+    m_SmileySize = {float(m_Smiley.width * 0.03), float(m_Smiley.height * 0.03)};
+    cout << "Smiley size: " << m_SmileySize.x << " " << m_SmileySize.y << endl;
     m_IsActive = true;
     for (auto& ball : m_RoundBallList)
     {
@@ -1589,29 +1590,9 @@ void PressureSoftBodyState::reset()
     m_Engine.turnOffProximityColoring();
     m_Engine.turnOffMutualAcceleration();
 
+    Color SpringColor = Color(252, 199, 55, 255);
+    Color BallColor = Color(126, 24, 145, 255);
     Vector2 Offset = {0, 300};
-
-//    EulerianRoundBall* RoundBall1 = new EulerianRoundBall(Vector2{861.5, 235 + Offset.y}, RED, 1.0f);
-//    EulerianRoundBall* RoundBall2 = new EulerianRoundBall(Vector2{813.5, 265 + Offset.y}, RED, 1.0f);
-//    EulerianRoundBall* RoundBall3 = new EulerianRoundBall(Vector2{794, 316 + Offset.y}, RED, 1.0f);
-//    EulerianRoundBall* RoundBall4 = new EulerianRoundBall(Vector2{806, float(368.5) + Offset.y}, RED, 1.0f);
-//    EulerianRoundBall* RoundBall5 = new EulerianRoundBall(Vector2{845, float(398.5) + Offset.y}, RED, 1.0f);
-//    EulerianRoundBall* RoundBall6 = new EulerianRoundBall(Vector2{899, float(416.5) + Offset.y}, RED, 1.0f);
-//    EulerianRoundBall* RoundBall7 = new EulerianRoundBall(Vector2{954.5, 391 + Offset.y}, RED, 1.0f);
-//    EulerianRoundBall* RoundBall8 = new EulerianRoundBall(Vector2{975.5, float(344.5) + Offset.y}, RED, 1.0f);
-//    EulerianRoundBall* RoundBall9 = new EulerianRoundBall(Vector2{965, 280 + Offset.y}, RED, 1.0f);
-//    EulerianRoundBall* RoundBall10 = new EulerianRoundBall(Vector2{917, float(239.5) +Offset.y}, RED, 1.0f);
-//
-//    m_RoundBallList.push_back(RoundBall1);
-//    m_RoundBallList.push_back(RoundBall2);
-//    m_RoundBallList.push_back(RoundBall3);
-//    m_RoundBallList.push_back(RoundBall4);
-//    m_RoundBallList.push_back(RoundBall5);
-//    m_RoundBallList.push_back(RoundBall6);
-//    m_RoundBallList.push_back(RoundBall7);
-//    m_RoundBallList.push_back(RoundBall8);
-//    m_RoundBallList.push_back(RoundBall9);
-//    m_RoundBallList.push_back(RoundBall10);
     ifstream fin("PressureSoftBodyCordinate.txt");
     int NumberOfBall;
     fin >> NumberOfBall;
@@ -1619,12 +1600,10 @@ void PressureSoftBodyState::reset()
         float x, y;
         fin >> x >> y;
         EulerianRoundBall* RoundBall = new EulerianRoundBall(Vector2{x, y + Offset.y}, RED, 1.0f);
+        RoundBall -> m_Color = BallColor;
         m_RoundBallList.push_back(RoundBall);
     }
     fin.close();
-
-
-
     for (auto &ball: m_RoundBallList) {
         m_Engine.attachRoundBall(ball);
         ball -> m_Radius = 5.0f;
@@ -1633,7 +1612,8 @@ void PressureSoftBodyState::reset()
         int NextBallIndex = (i + 1) % m_RoundBallList.size();
         float Distance = Vector2Distance(m_RoundBallList[i] -> m_CurrentPosition, m_RoundBallList[NextBallIndex] -> m_CurrentPosition);
         Spring* Spring1 = new Spring(m_RoundBallList[i], m_RoundBallList[NextBallIndex], Distance, 5000.0f, RED);
-        Spring1 ->setDamping(true, 100);
+        Spring1 -> setDamping(true, 20);
+        Spring1 ->setColor(SpringColor);
         m_SpringList.push_back(Spring1);
         m_Engine.attachSpring(Spring1);
 
@@ -1645,6 +1625,31 @@ void PressureSoftBodyState::onNotify() {
 }
 void PressureSoftBodyState::draw() {
     m_Engine.draw();
+    Vector2& DrawPosition = Center;
+//    DrawCircle(Center.x, Center.y, 5, RED);
+    Vector2 Direction = Vector2Normalize(Vector2Subtract(m_RoundBallList[0]->m_CurrentPosition, Center));
+    Vector2 XVector = {1, 0};
+    float Angle = angle360InRadian(XVector, Direction);
+    Angle = radianToDegree(Angle);
+    Rectangle SourceRec = {0, 0, float(m_Smiley.width), float(m_Smiley.height)};
+    Rectangle DestRec = {DrawPosition.x, DrawPosition.y, m_SmileySize.x, m_SmileySize.y};
+    DrawTexturePro(m_Smiley, SourceRec, DestRec, Vector2{float(m_SmileySize.x /2 ), float(m_SmileySize.y / 2)}, Angle, WHITE);
+    if (IsMouseButtonDown(MOUSE_BUTTON_LEFT))
+    {
+        Vector2 MousePosition = GetMousePosition();
+        Vector2 ClosestPoint = m_RoundBallList[0] -> m_CurrentPosition;
+        for (auto& ball : m_RoundBallList)
+        {
+            if (Vector2Distance(ball -> m_CurrentPosition, MousePosition) < Vector2Distance(ClosestPoint, MousePosition))
+            {
+                ClosestPoint = ball -> m_CurrentPosition;
+            }
+        }
+        DrawLineEx(MousePosition, ClosestPoint, 5, ColorAlpha(RED, 0.2));
+        DrawCircle(MousePosition.x, MousePosition.y, 7, RED);
+    }
+    DrawText("Pressure Soft Body State", 100, 10, 20, RED);
+    DrawText("Click and hold to pull smiley around", 100, 30, 20, RED);
 }
 SimulationState* PressureSoftBodyState::update() {
     if (!m_IsActive) {
@@ -1661,7 +1666,7 @@ SimulationState* PressureSoftBodyState::update() {
         }
         float Area = calculateAreaPolygon(Polygon);
         float Pressure = NRT / Area;
-        Vector2 Center = {0, 0};
+        Center = {0, 0};
         for (auto &ball: m_RoundBallList) {
             Center = Vector2Add(Center, ball -> m_CurrentPosition);
         }
@@ -1693,6 +1698,310 @@ SimulationState* PressureSoftBodyState::update() {
     }
     return nullptr;
 }
+SimulationState* ShapeMatchingSoftBodyState::getShapeMatchingSoftBodyState() {
+    static ShapeMatchingSoftBodyState MyShapeMatchingSoftBodyState;
+    return &MyShapeMatchingSoftBodyState;
+}
+ShapeMatchingSoftBodyState::ShapeMatchingSoftBodyState() : m_Engine(1800, 1000) {
+    m_StateNumber = StateNumber::SHAPE_MATCHING_SOFT_BODY_STATE;
+    readShapeFiles();
+    reset();
+}
+ShapeMatchingSoftBodyState::~ShapeMatchingSoftBodyState() {
+    m_IsActive = true;
 
+}
+void ShapeMatchingSoftBodyState::reset() {
+    m_IsActive = true;
+    m_Engine.reset();
+    m_Engine.turnOffProximityColoring();
+    m_Engine.turnOffMutualAcceleration();
+    m_Engine.setGravity({0, 300});
+    attachShapeToEngine();
+    m_ShapeA.rotate(0);
+    m_ShapeH.rotate(-5);
+    m_ShapeL.rotate(5);
+    m_ShapeN.rotate(25);
+}
+void ShapeMatchingSoftBodyState::readShapeFiles() {
+    ifstream fin;
+    fin.open("TextData/A_processed.txt");
+    if (!fin.is_open())
+    {
+        cerr << "Error opening file\n";
+        return;
+    }
+    vector<Vector2> A;
+    for (int i = 0; i < 13; ++i)
+    {
+        float x, y;
+        fin >> x >> y;
+        A.push_back(Vector2{x, y});
+    }
+    Vector2 Position_A = {900, 100};
+    m_ShapeA.init(A, Position_A);
+    fin.close();
+    fin.open("TextData/H_processed.txt");
+    if (!fin.is_open())
+    {
+        cerr << "Error opening file\n";
+        return;
+    }
+    vector<Vector2> H;
+    for (int i = 0; i < 20; ++i)
+    {
+        float x, y;
+        fin >> x >> y;
+        H.push_back(Vector2{x, y});
+    }
+    Vector2 Position_H = {700, 100};
+    m_ShapeH.init(H, Position_H);
+    fin.close();
+    fin.open("TextData/L_processed.txt");
+    if (!fin.is_open())
+    {
+        cerr << "Error opening file\n";
+        return;
+    }
+    vector<Vector2> L;
+    for (int i = 0; i < 10; ++i)
+    {
+        float x, y;
+        fin >> x >> y;
+        L.push_back(Vector2{x, y});
+    }
+    Vector2 Position_L = {400, 100};
+    m_ShapeL.init(L, Position_L);
+    fin.close();
+    fin.open("TextData/N_processed.txt");
+    if (!fin.is_open())
+    {
+        cerr << "Error opening file\n";
+        return;
+    }
+    vector<Vector2> N;
+    for (int i = 0; i < 22; ++i)
+    {
+        float x, y;
+        fin >> x >> y;
+        N.push_back(Vector2{x, y});
+    }
+    Vector2 Position_N = {1200, 100};
+    m_ShapeN.init(N, Position_N);
+    fin.close();
+}
+SimulationState* ShapeMatchingSoftBodyState::update() {
+    if (!m_IsActive) {
+        return HomeState::getHomeState();
+    }
+    m_Engine.update(m_FrameTime);
+    m_ShapeA.update();
+    m_ShapeH.update();
+    m_ShapeL.update();
+    m_ShapeN.update();
 
+    return nullptr;
+}
+void ShapeMatchingSoftBodyState::draw() {
+    m_Engine.draw();
+    m_ShapeA.draw();
+    m_ShapeH.draw();
+    m_ShapeL.draw();
+    m_ShapeN.draw();
+}
+void ShapeMatchingSoftBodyState::onNotify() {
+    exitState();
+}
+void ShapeMatchingSoftBodyState::Shape::draw() {
+//    for (int i = 0; i < m_FrameVertices.size(); ++i)
+//    {
+//        m_FrameVertices[i]->draw();
+//        DrawLineV( m_FrameVertices[i] -> m_CurrentPosition, m_FrameVertices[(i + 1) % m_FrameVertices.size()] -> m_CurrentPosition, GREEN);
+//    }
+//    for (int i = 0; i < m_FrameVertices.size(); ++i)
+//    {
+//        DrawCircleV(m_RotatedFrame[i], 5,  PURPLE);
+//    }
+//    DrawCircle(m_Center.x, m_Center.y, 5, BLUE);
+//    DrawCircle(m_OriginalCenter.x, m_OriginalCenter.y, 5, PURPLE);
+//    for (auto& position : m_UnRotatedFrame)
+//    {
+//        DrawCircleV(position, 5, BLACK);
+//    }
+//    for (auto& band : m_RubberBands)
+//    {
+//        band -> draw();
+//    }
+//    for (int i = 0; i < m_FrameVertices.size(); ++i)
+//    {
+//        DrawLineEx(m_Center, m_UnRotatedFrame[i], 5, BLUE);
+//        DrawLineEx(m_Center, m_ShapeVertices[i] -> m_CurrentPosition, 5, BLUE);
+//    }
+    for (auto& spring : m_Springs)
+    {
+        spring -> draw();
+    }
+}
+void ShapeMatchingSoftBodyState::Shape::init(vector<Vector2> FrameVertices, Vector2 Position) {
+    for (int i = 0; i < FrameVertices.size(); ++i)
+    {
+        Vector2 RealPosition = Vector2Add(FrameVertices[i], Position);
+        EulerianRoundBall* NewBall = new EulerianRoundBall(RealPosition, GREEN, 1.0f);
+        NewBall -> m_Radius = 7.0f;
+        NewBall ->m_Fixed = true;
+        NewBall -> m_Radius = 5.0f;
+        m_FrameVertices.push_back(NewBall);
+        m_OriginalFrame.push_back(NewBall -> m_CurrentPosition);
+        m_RotatedFrame.push_back(NewBall -> m_CurrentPosition);
+        m_UnRotatedFrame.push_back(NewBall -> m_CurrentPosition);
+        EulerianRoundBall* NewBall2 = new EulerianRoundBall(RealPosition, RED, 1.0f);
+        NewBall2 -> m_Radius = 10.0f;
+        NewBall2 -> m_Mass = 1.5f;
+        m_ShapeVertices.push_back(NewBall2);
+        Spring *RubberBand1 = new Spring(NewBall, NewBall2, 5, 500, RED);
+        RubberBand1->setDamping(true, 25);
+        RubberBand1->setColor(YELLOW);
 
+        m_RubberBands.push_back(RubberBand1);
+    }
+    for (int i = 0; i < m_FrameVertices.size(); ++i)
+    {
+        int NextIndex = (i + 1) % m_FrameVertices.size();
+        Spring *ShapeSpring = new Spring(m_ShapeVertices[i], m_ShapeVertices[NextIndex], Vector2Distance(m_ShapeVertices[i] -> m_CurrentPosition, m_ShapeVertices[NextIndex] -> m_CurrentPosition), 1000, RED);
+        ShapeSpring -> setDamping(true, 30);
+        m_Springs.push_back(ShapeSpring);
+    }
+    calculateOriginalCenter();
+    calculateShapeCenter();
+
+}
+void ShapeMatchingSoftBodyState::Shape::attachToEngine(DiscreteEulerianEngine *Engine) {
+    for (auto& ball : m_ShapeVertices)
+    {
+        Engine -> attachRoundBall(ball);
+    }
+
+}
+ShapeMatchingSoftBodyState::Shape::~Shape()
+{
+    for (auto& ball : m_FrameVertices)
+    {
+        delete ball;
+        ball = nullptr;
+    }
+    m_FrameVertices.clear();
+    for (auto& ball : m_ShapeVertices)
+    {
+        delete ball;
+        ball = nullptr;
+    }
+    m_ShapeVertices.clear();
+    for (auto& spring : m_Springs)
+    {
+        delete spring;
+        spring = nullptr;
+    }
+    m_Springs.clear();
+    for (auto& band : m_RubberBands)
+    {
+        delete band;
+        band = nullptr;
+    }
+    m_RubberBands.clear();
+}
+void ShapeMatchingSoftBodyState::attachShapeToEngine() {
+    m_ShapeA.attachToEngine(&m_Engine);
+    m_ShapeH.attachToEngine(&m_Engine);
+    m_ShapeL.attachToEngine(&m_Engine);
+    m_ShapeN.attachToEngine(&m_Engine);
+}
+void ShapeMatchingSoftBodyState::Shape::calculateShapeCenter() {
+    static bool FirstTime = true;
+    m_PreviousCenter = m_Center;
+    m_Center = {0, 0};
+    for (auto& ball : m_ShapeVertices)
+    {
+        m_Center = Vector2Add(m_Center, ball -> m_CurrentPosition);
+    }
+    m_Center = Vector2Scale(m_Center, 1.0f / m_ShapeVertices.size());
+    if (FirstTime)
+    {
+        m_PreviousCenter = m_Center;
+        FirstTime = false;
+    }
+}
+void ShapeMatchingSoftBodyState::Shape::calculateOriginalCenter() {
+    m_OriginalCenter = {0, 0};
+    for (auto& ball : m_OriginalFrame)
+    {
+        m_OriginalCenter = Vector2Add(m_OriginalCenter, ball);
+    }
+    m_OriginalCenter = Vector2Scale(m_OriginalCenter, 1.0f / m_OriginalFrame.size());
+}
+void ShapeMatchingSoftBodyState::Shape::update() {
+    for (auto& spring : m_Springs)
+    {
+        spring -> update();
+    }
+    for (auto& band : m_RubberBands)
+    {
+        band -> update();
+    }
+    calculateShapeCenter();
+    selfRotate();
+}
+void ShapeMatchingSoftBodyState::Shape::rotate(float Degree)
+{
+    calculateShapeCenter();
+    for (int i = 0; i < m_FrameVertices.size(); ++i)
+    {
+        Vector2 Direction = Vector2Subtract(m_FrameVertices[i] -> m_CurrentPosition, m_Center);
+        float Radian = degreeToRadian(Degree);
+        Direction = Vector2Rotate(Direction, Radian);
+        m_FrameVertices[i] -> m_CurrentPosition = Vector2Add(m_Center, Direction);
+    }
+}
+void ShapeMatchingSoftBodyState::Shape::selfRotate() {
+    // calculate unrotated frame
+    Vector2 Displacement = Vector2Subtract(m_Center, m_OriginalCenter);
+    for (int i = 0; i < m_FrameVertices.size(); ++i)
+    {
+        m_FrameVertices[i] -> m_CurrentPosition = Vector2Add(m_RotatedFrame[i], Displacement);
+        m_UnRotatedFrame[i] = Vector2Add(m_OriginalFrame[i], Displacement);
+    }
+    // calculate average angle between shape and unrotated frame
+    Vector2 Sum = {0, 0};
+    Vector2 Sum2 = {0, 0};
+    for (int i = 0; i < m_FrameVertices.size(); ++i)
+    {
+        Vector2 ShapeVertexDirection = Vector2Subtract(m_ShapeVertices[i] -> m_CurrentPosition, m_Center);
+        Vector2 UnRotatedDirection = Vector2Subtract(m_UnRotatedFrame[i], m_Center);
+        if (m_ShapeVertices[i] -> m_CurrentPosition.x > m_Center.x)
+        {
+            Sum = Vector2Add(Sum, ShapeVertexDirection);
+            Sum2 = Vector2Add(Sum2, UnRotatedDirection);
+        }
+    }
+    Angle = angle360InRadian(Sum2, Sum);
+    rotateFromZero(Angle);
+//    std::cout << "Angle:" << radianToDegree(Angle) <<std::endl;
+//    static float TotalDegree = 0;
+//    if (IsKeyDown(KEY_LEFT))
+//    {
+//        TotalDegree -= 0.1;
+//    }
+//    if (IsKeyDown(KEY_RIGHT))
+//    {
+//        TotalDegree += 0.1;
+//    }
+//    rotateFromZero(TotalDegree);
+}
+void ShapeMatchingSoftBodyState::Shape::rotateFromZero(float Radian) {
+    calculateShapeCenter();
+    for (int i = 0; i < m_FrameVertices.size(); ++i)
+    {
+        Vector2 Direction = Vector2Subtract(m_UnRotatedFrame[i], m_Center);
+        Direction = Vector2Rotate(Direction, Radian);
+        m_FrameVertices[i] -> m_CurrentPosition = Vector2Add(m_Center, Direction);
+    }
+}
