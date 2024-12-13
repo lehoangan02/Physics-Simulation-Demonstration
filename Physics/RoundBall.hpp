@@ -40,6 +40,7 @@ protected:
     Color m_Color;
     bool m_Fixed = false;
     float m_Mass = 1.0f;
+    bool m_Visible = true;
 public:
     EulerianRoundBall(Vector2 Position, Color Color, float Mass);
 //    void giveSpeed(Vector2 Speed);
@@ -47,6 +48,9 @@ public:
     void applyForce(Vector2 Force);
     void update(float DeltaTime);
     virtual void draw();
+    void setVisibility(bool Visible);
+    bool isVisble();
+    virtual void drawCustomRadius(float Radius);
     friend class ContinuousEulerianEngine;
     friend class DiscreteEulerianEngine;
     friend class Grid;

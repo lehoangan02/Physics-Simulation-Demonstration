@@ -365,7 +365,7 @@ private:
 private:
     class Shape
     {
-    private:
+    protected:
         vector<EulerianRoundBall*> m_FrameVertices;
         vector<EulerianRoundBall*> m_ShapeVertices;
         vector<Vector2> m_OriginalFrame;
@@ -377,13 +377,17 @@ private:
         Vector2 m_PreviousCenter = {0, 0};
         Vector2 m_Center;
         double Angle = 0;
+        Color m_Color = GREEN;
+        float m_CircleRadius = 10.0f;
+        float m_CircleDrawingRadius = 6.0f;
     public:
         Shape() = default;
         void init(vector<Vector2> FrameVertices, Vector2 Position);
-        void draw();
+        virtual void draw();
         void update();
         void rotate(float Degree);
         void attachToEngine(DiscreteEulerianEngine* Engine);
+        void setColor(Color Color) {m_Color = Color;}
         ~Shape();
     private:
         void calculateShapeCenter();
@@ -391,11 +395,35 @@ private:
         void selfRotate();
         void rotateFromZero(float Radian);
     };
+    class ShapeA : public Shape {
+    public:
+        ShapeA() = default;
+        ~ShapeA() = default;
+        void draw() override;
+    };
+    class ShapeH : public Shape {
+    public:
+        ShapeH() = default;
+        ~ShapeH() = default;
+        void draw() override;
+    };
+    class ShapeL : public Shape {
+    public:
+        ShapeL() = default;
+        ~ShapeL() = default;
+        void draw() override;
+    };
+    class ShapeN : public Shape {
+    public:
+        ShapeN() = default;
+        ~ShapeN() = default;
+        void draw() override;
+    };
 private:
-    Shape m_ShapeA;
-    Shape m_ShapeH;
-    Shape m_ShapeL;
-    Shape m_ShapeN;
+    Shape* m_ShapeA;
+    Shape* m_ShapeH;
+    Shape* m_ShapeL;
+    Shape* m_ShapeN;
     DiscreteEulerianEngine m_Engine;
 };
 

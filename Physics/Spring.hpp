@@ -16,6 +16,7 @@ protected:
     Color m_Color;
     float m_DampingFactor = 1.0f;
     bool m_Damping = false;
+    float m_Thickness = 4;
 protected:
     Vector2 calculateDampingForce();
 public:
@@ -27,6 +28,7 @@ public:
     virtual void update();
     void draw();
     void setColor(Color Color) {m_Color = Color;}
+    void setThickness(float Thickness);
 private:
     friend class SpringSoftBodyState;
     friend class PlayableSpringSoftBodyState;

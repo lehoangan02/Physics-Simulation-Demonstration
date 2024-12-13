@@ -47,6 +47,15 @@ void EulerianRoundBall::update(float DeltaTime) {
 void EulerianRoundBall::draw() {
     DrawCircle(m_CurrentPosition.x, m_CurrentPosition.y, m_Radius, m_Color);
 }
+void EulerianRoundBall::drawCustomRadius(float Radius) {
+    DrawCircle(m_CurrentPosition.x, m_CurrentPosition.y, Radius, m_Color);
+}
+void EulerianRoundBall::setVisibility(bool Visible) {
+    m_Visible = Visible;
+}
+bool EulerianRoundBall::isVisble() {
+    return m_Visible;
+}
 bool ClickableEulerianRoundBall::isInside(Vector2 Point) {
     return Vector2Distance(Point, m_CurrentPosition) < m_Radius;
 }

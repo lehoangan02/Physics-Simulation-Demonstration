@@ -467,7 +467,7 @@ void DiscreteEulerianEngine::draw() {
     }
     for (auto& ball : m_RoundBallList) {
         if (m_ProximityColoring) ball -> m_Color = calculateColor(ball);
-        ball->draw();
+        if (ball -> isVisble()) ball->draw();
     }
 
 }

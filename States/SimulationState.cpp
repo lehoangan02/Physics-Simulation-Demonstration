@@ -1704,12 +1704,14 @@ SimulationState* ShapeMatchingSoftBodyState::getShapeMatchingSoftBodyState() {
 }
 ShapeMatchingSoftBodyState::ShapeMatchingSoftBodyState() : m_Engine(1800, 1000) {
     m_StateNumber = StateNumber::SHAPE_MATCHING_SOFT_BODY_STATE;
-    readShapeFiles();
     reset();
 }
 ShapeMatchingSoftBodyState::~ShapeMatchingSoftBodyState() {
     m_IsActive = true;
-
+    delete m_ShapeA;
+    delete m_ShapeH;
+    delete m_ShapeL;
+    delete m_ShapeN;
 }
 void ShapeMatchingSoftBodyState::reset() {
     m_IsActive = true;
@@ -1717,13 +1719,18 @@ void ShapeMatchingSoftBodyState::reset() {
     m_Engine.turnOffProximityColoring();
     m_Engine.turnOffMutualAcceleration();
     m_Engine.setGravity({0, 300});
+    readShapeFiles();
     attachShapeToEngine();
-    m_ShapeA.rotate(0);
-    m_ShapeH.rotate(-5);
-    m_ShapeL.rotate(5);
-    m_ShapeN.rotate(25);
+    m_ShapeA -> rotate(0);
+    m_ShapeH -> rotate(-5);
+    m_ShapeL -> rotate(5);
+    m_ShapeN -> rotate(25);
 }
 void ShapeMatchingSoftBodyState::readShapeFiles() {
+    Color ColorA = Color(239, 221, 178, 255);
+    Color ColorH = Color(29, 85, 111, 255);
+    Color ColorL = Color(40, 143, 180, 255);
+    Color ColorN = Color(250, 54, 10, 255);
     ifstream fin;
     fin.open("TextData/A_processed.txt");
     if (!fin.is_open())
@@ -1739,7 +1746,9 @@ void ShapeMatchingSoftBodyState::readShapeFiles() {
         A.push_back(Vector2{x, y});
     }
     Vector2 Position_A = {900, 100};
-    m_ShapeA.init(A, Position_A);
+    m_ShapeA = new ShapeA();
+    m_ShapeA -> init(A, Position_A);
+    m_ShapeA ->setColor(ColorA);
     fin.close();
     fin.open("TextData/H_processed.txt");
     if (!fin.is_open())
@@ -1755,7 +1764,9 @@ void ShapeMatchingSoftBodyState::readShapeFiles() {
         H.push_back(Vector2{x, y});
     }
     Vector2 Position_H = {700, 100};
-    m_ShapeH.init(H, Position_H);
+    m_ShapeH = new ShapeH();
+    m_ShapeH -> init(H, Position_H);
+    m_ShapeH -> setColor(ColorH);
     fin.close();
     fin.open("TextData/L_processed.txt");
     if (!fin.is_open())
@@ -1771,7 +1782,9 @@ void ShapeMatchingSoftBodyState::readShapeFiles() {
         L.push_back(Vector2{x, y});
     }
     Vector2 Position_L = {400, 100};
-    m_ShapeL.init(L, Position_L);
+    m_ShapeL = new ShapeL();
+    m_ShapeL -> init(L, Position_L);
+    m_ShapeL ->setColor(ColorL);
     fin.close();
     fin.open("TextData/N_processed.txt");
     if (!fin.is_open())
@@ -1787,7 +1800,9 @@ void ShapeMatchingSoftBodyState::readShapeFiles() {
         N.push_back(Vector2{x, y});
     }
     Vector2 Position_N = {1200, 100};
-    m_ShapeN.init(N, Position_N);
+    m_ShapeN = new ShapeN();
+    m_ShapeN -> init(N, Position_N);
+    m_ShapeN ->setColor(ColorN);
     fin.close();
 }
 SimulationState* ShapeMatchingSoftBodyState::update() {
@@ -1795,19 +1810,20 @@ SimulationState* ShapeMatchingSoftBodyState::update() {
         return HomeState::getHomeState();
     }
     m_Engine.update(m_FrameTime);
-    m_ShapeA.update();
-    m_ShapeH.update();
-    m_ShapeL.update();
-    m_ShapeN.update();
+    m_ShapeA -> update();
+    m_ShapeH -> update();
+    m_ShapeL -> update();
+    m_ShapeN -> update();
 
     return nullptr;
 }
 void ShapeMatchingSoftBodyState::draw() {
     m_Engine.draw();
-    m_ShapeA.draw();
-    m_ShapeH.draw();
-    m_ShapeL.draw();
-    m_ShapeN.draw();
+    m_ShapeA -> draw();
+    m_ShapeH -> draw();
+    m_ShapeL -> draw();
+    m_ShapeN -> draw();
+
 }
 void ShapeMatchingSoftBodyState::onNotify() {
     exitState();
@@ -1837,6 +1853,10 @@ void ShapeMatchingSoftBodyState::Shape::draw() {
 //        DrawLineEx(m_Center, m_UnRotatedFrame[i], 5, BLUE);
 //        DrawLineEx(m_Center, m_ShapeVertices[i] -> m_CurrentPosition, 5, BLUE);
 //    }
+    for (auto& ball : m_ShapeVertices)
+    {
+        ball -> drawCustomRadius(m_CircleDrawingRadius);
+    }
     for (auto& spring : m_Springs)
     {
         spring -> draw();
@@ -1854,14 +1874,14 @@ void ShapeMatchingSoftBodyState::Shape::init(vector<Vector2> FrameVertices, Vect
         m_OriginalFrame.push_back(NewBall -> m_CurrentPosition);
         m_RotatedFrame.push_back(NewBall -> m_CurrentPosition);
         m_UnRotatedFrame.push_back(NewBall -> m_CurrentPosition);
-        EulerianRoundBall* NewBall2 = new EulerianRoundBall(RealPosition, RED, 1.0f);
-        NewBall2 -> m_Radius = 10.0f;
+        EulerianRoundBall* NewBall2 = new EulerianRoundBall(RealPosition, BLACK, 1.0f);
+        NewBall2 -> m_Radius = m_CircleRadius;
         NewBall2 -> m_Mass = 1.5f;
+        NewBall2 ->setVisibility(false);
         m_ShapeVertices.push_back(NewBall2);
         Spring *RubberBand1 = new Spring(NewBall, NewBall2, 5, 500, RED);
         RubberBand1->setDamping(true, 25);
         RubberBand1->setColor(YELLOW);
-
         m_RubberBands.push_back(RubberBand1);
     }
     for (int i = 0; i < m_FrameVertices.size(); ++i)
@@ -1869,6 +1889,9 @@ void ShapeMatchingSoftBodyState::Shape::init(vector<Vector2> FrameVertices, Vect
         int NextIndex = (i + 1) % m_FrameVertices.size();
         Spring *ShapeSpring = new Spring(m_ShapeVertices[i], m_ShapeVertices[NextIndex], Vector2Distance(m_ShapeVertices[i] -> m_CurrentPosition, m_ShapeVertices[NextIndex] -> m_CurrentPosition), 1000, RED);
         ShapeSpring -> setDamping(true, 30);
+        ShapeSpring ->setThickness(12);
+        ShapeSpring ->setColor(BLACK);
+
         m_Springs.push_back(ShapeSpring);
     }
     calculateOriginalCenter();
@@ -1910,10 +1933,10 @@ ShapeMatchingSoftBodyState::Shape::~Shape()
     m_RubberBands.clear();
 }
 void ShapeMatchingSoftBodyState::attachShapeToEngine() {
-    m_ShapeA.attachToEngine(&m_Engine);
-    m_ShapeH.attachToEngine(&m_Engine);
-    m_ShapeL.attachToEngine(&m_Engine);
-    m_ShapeN.attachToEngine(&m_Engine);
+    m_ShapeA -> attachToEngine(&m_Engine);
+    m_ShapeH -> attachToEngine(&m_Engine);
+    m_ShapeL -> attachToEngine(&m_Engine);
+    m_ShapeN -> attachToEngine(&m_Engine);
 }
 void ShapeMatchingSoftBodyState::Shape::calculateShapeCenter() {
     static bool FirstTime = true;
@@ -2004,4 +2027,74 @@ void ShapeMatchingSoftBodyState::Shape::rotateFromZero(float Radian) {
         Direction = Vector2Rotate(Direction, Radian);
         m_FrameVertices[i] -> m_CurrentPosition = Vector2Add(m_Center, Direction);
     }
+}
+void ShapeMatchingSoftBodyState::ShapeA::draw() {
+    DrawTriangle(m_ShapeVertices[0] -> m_CurrentPosition, m_ShapeVertices[1] -> m_CurrentPosition, m_ShapeVertices[6] -> m_CurrentPosition, m_Color);
+    DrawTriangle(m_ShapeVertices[0] -> m_CurrentPosition, m_ShapeVertices[6] -> m_CurrentPosition, m_ShapeVertices[12] -> m_CurrentPosition, m_Color);
+    DrawTriangle(m_ShapeVertices[12] -> m_CurrentPosition, m_ShapeVertices[6] -> m_CurrentPosition, m_ShapeVertices[11] -> m_CurrentPosition, m_Color);
+    DrawTriangle(m_ShapeVertices[1] -> m_CurrentPosition, m_ShapeVertices[2] -> m_CurrentPosition, m_ShapeVertices[6] -> m_CurrentPosition, m_Color);
+    DrawTriangle(m_ShapeVertices[2] -> m_CurrentPosition, m_ShapeVertices[5] -> m_CurrentPosition, m_ShapeVertices[6] -> m_CurrentPosition, m_Color);
+    DrawTriangle(m_ShapeVertices[2] -> m_CurrentPosition, m_ShapeVertices[3] -> m_CurrentPosition, m_ShapeVertices[5] -> m_CurrentPosition, m_Color);
+    DrawTriangle(m_ShapeVertices[3] -> m_CurrentPosition, m_ShapeVertices[4] -> m_CurrentPosition, m_ShapeVertices[5] -> m_CurrentPosition, m_Color);
+    DrawTriangle(m_ShapeVertices[6] -> m_CurrentPosition, m_ShapeVertices[7] -> m_CurrentPosition, m_ShapeVertices[11] -> m_CurrentPosition, m_Color);
+    DrawTriangle(m_ShapeVertices[7] -> m_CurrentPosition, m_ShapeVertices[10] -> m_CurrentPosition, m_ShapeVertices[11] -> m_CurrentPosition, m_Color);
+    DrawTriangle(m_ShapeVertices[7] -> m_CurrentPosition, m_ShapeVertices[8] -> m_CurrentPosition, m_ShapeVertices[10] -> m_CurrentPosition, m_Color);
+    DrawTriangle(m_ShapeVertices[8] -> m_CurrentPosition, m_ShapeVertices[9] -> m_CurrentPosition, m_ShapeVertices[10] -> m_CurrentPosition, m_Color);
+    Shape::draw();
+}
+void ShapeMatchingSoftBodyState::ShapeH::draw() {
+    DrawTriangle(m_ShapeVertices[0] -> m_CurrentPosition, m_ShapeVertices[1] -> m_CurrentPosition, m_ShapeVertices[19] -> m_CurrentPosition, m_Color);
+    DrawTriangle(m_ShapeVertices[1] -> m_CurrentPosition, m_ShapeVertices[18] -> m_CurrentPosition, m_ShapeVertices[19] -> m_CurrentPosition, m_Color);
+    DrawTriangle(m_ShapeVertices[1] -> m_CurrentPosition, m_ShapeVertices[2] -> m_CurrentPosition, m_ShapeVertices[18] -> m_CurrentPosition, m_Color);
+    DrawTriangle(m_ShapeVertices[2] -> m_CurrentPosition, m_ShapeVertices[17] -> m_CurrentPosition, m_ShapeVertices[18] -> m_CurrentPosition, m_Color);
+    DrawTriangle(m_ShapeVertices[2] -> m_CurrentPosition, m_ShapeVertices[3] -> m_CurrentPosition, m_ShapeVertices[17] -> m_CurrentPosition, m_Color);
+    DrawTriangle(m_ShapeVertices[3] -> m_CurrentPosition, m_ShapeVertices[6] -> m_CurrentPosition, m_ShapeVertices[17] -> m_CurrentPosition, m_Color);
+    DrawTriangle(m_ShapeVertices[3] -> m_CurrentPosition, m_ShapeVertices[4] -> m_CurrentPosition, m_ShapeVertices[6] -> m_CurrentPosition, m_Color);
+    DrawTriangle(m_ShapeVertices[4] -> m_CurrentPosition, m_ShapeVertices[5] -> m_CurrentPosition, m_ShapeVertices[6] -> m_CurrentPosition, m_Color);
+    DrawTriangle(m_ShapeVertices[6] -> m_CurrentPosition, m_ShapeVertices[16] -> m_CurrentPosition, m_ShapeVertices[17] -> m_CurrentPosition, m_Color);
+    DrawTriangle(m_ShapeVertices[6] -> m_CurrentPosition, m_ShapeVertices[7] -> m_CurrentPosition, m_ShapeVertices[16] -> m_CurrentPosition, m_Color);
+    DrawTriangle(m_ShapeVertices[7] -> m_CurrentPosition, m_ShapeVertices[8] -> m_CurrentPosition, m_ShapeVertices[9] -> m_CurrentPosition, m_Color);
+    DrawTriangle(m_ShapeVertices[7] -> m_CurrentPosition, m_ShapeVertices[9] -> m_CurrentPosition, m_ShapeVertices[10] -> m_CurrentPosition, m_Color);
+    DrawTriangle(m_ShapeVertices[16] -> m_CurrentPosition, m_ShapeVertices[7] -> m_CurrentPosition, m_ShapeVertices[10] -> m_CurrentPosition, m_Color);
+    DrawTriangle(m_ShapeVertices[16] -> m_CurrentPosition, m_ShapeVertices[10] -> m_CurrentPosition, m_ShapeVertices[11] -> m_CurrentPosition, m_Color);
+    DrawTriangle(m_ShapeVertices[15] -> m_CurrentPosition, m_ShapeVertices[16] -> m_CurrentPosition, m_ShapeVertices[11] -> m_CurrentPosition, m_Color);
+    DrawTriangle(m_ShapeVertices[15] -> m_CurrentPosition, m_ShapeVertices[11] -> m_CurrentPosition, m_ShapeVertices[12] -> m_CurrentPosition, m_Color);
+    DrawTriangle(m_ShapeVertices[14] -> m_CurrentPosition, m_ShapeVertices[15] -> m_CurrentPosition, m_ShapeVertices[12] -> m_CurrentPosition, m_Color);
+    DrawTriangle(m_ShapeVertices[14] -> m_CurrentPosition, m_ShapeVertices[12] -> m_CurrentPosition, m_ShapeVertices[13] -> m_CurrentPosition, m_Color);
+    Shape::draw();
+
+}
+void ShapeMatchingSoftBodyState::ShapeL::draw() {
+    DrawTriangle(m_ShapeVertices[0] -> m_CurrentPosition, m_ShapeVertices[1] -> m_CurrentPosition, m_ShapeVertices[9] -> m_CurrentPosition, m_Color);
+    DrawTriangle(m_ShapeVertices[1] -> m_CurrentPosition, m_ShapeVertices[8] -> m_CurrentPosition, m_ShapeVertices[9] -> m_CurrentPosition, m_Color);
+    DrawTriangle(m_ShapeVertices[1] -> m_CurrentPosition, m_ShapeVertices[2] -> m_CurrentPosition, m_ShapeVertices[7] -> m_CurrentPosition, m_Color);
+    DrawTriangle(m_ShapeVertices[1] -> m_CurrentPosition, m_ShapeVertices[7] -> m_CurrentPosition, m_ShapeVertices[8] -> m_CurrentPosition, m_Color);
+    DrawTriangle(m_ShapeVertices[2] -> m_CurrentPosition, m_ShapeVertices[3] -> m_CurrentPosition, m_ShapeVertices[7] -> m_CurrentPosition, m_Color);
+    DrawTriangle(m_ShapeVertices[3] -> m_CurrentPosition, m_ShapeVertices[4] -> m_CurrentPosition, m_ShapeVertices[7] -> m_CurrentPosition, m_Color);
+    DrawTriangle(m_ShapeVertices[4] -> m_CurrentPosition, m_ShapeVertices[5] -> m_CurrentPosition, m_ShapeVertices[6] -> m_CurrentPosition, m_Color);
+    DrawTriangle(m_ShapeVertices[4] -> m_CurrentPosition, m_ShapeVertices[6] -> m_CurrentPosition, m_ShapeVertices[7] -> m_CurrentPosition, m_Color);
+    Shape::draw();
+}
+void ShapeMatchingSoftBodyState::ShapeN::draw() {
+    DrawTriangle(m_ShapeVertices[0] -> m_CurrentPosition, m_ShapeVertices[1] -> m_CurrentPosition, m_ShapeVertices[21] -> m_CurrentPosition, m_Color);
+    DrawTriangle(m_ShapeVertices[1] -> m_CurrentPosition, m_ShapeVertices[8] -> m_CurrentPosition, m_ShapeVertices[21] -> m_CurrentPosition, m_Color);
+    DrawTriangle(m_ShapeVertices[1] -> m_CurrentPosition, m_ShapeVertices[2] -> m_CurrentPosition, m_ShapeVertices[7] -> m_CurrentPosition, m_Color);
+    DrawTriangle(m_ShapeVertices[1] -> m_CurrentPosition, m_ShapeVertices[7] -> m_CurrentPosition, m_ShapeVertices[8] -> m_CurrentPosition, m_Color);
+    DrawTriangle(m_ShapeVertices[2] -> m_CurrentPosition, m_ShapeVertices[3] -> m_CurrentPosition, m_ShapeVertices[6] -> m_CurrentPosition, m_Color);
+    DrawTriangle(m_ShapeVertices[2] -> m_CurrentPosition, m_ShapeVertices[6] -> m_CurrentPosition, m_ShapeVertices[7] -> m_CurrentPosition, m_Color);
+    DrawTriangle(m_ShapeVertices[3] -> m_CurrentPosition, m_ShapeVertices[4] -> m_CurrentPosition, m_ShapeVertices[5] -> m_CurrentPosition, m_Color);
+    DrawTriangle(m_ShapeVertices[3] -> m_CurrentPosition, m_ShapeVertices[5] -> m_CurrentPosition, m_ShapeVertices[6] -> m_CurrentPosition, m_Color);
+    DrawTriangle(m_ShapeVertices[8] -> m_CurrentPosition, m_ShapeVertices[20] -> m_CurrentPosition, m_ShapeVertices[21] -> m_CurrentPosition, m_Color);
+    DrawTriangle(m_ShapeVertices[8] -> m_CurrentPosition, m_ShapeVertices[9] -> m_CurrentPosition, m_ShapeVertices[20] -> m_CurrentPosition, m_Color);
+    DrawTriangle(m_ShapeVertices[9] -> m_CurrentPosition, m_ShapeVertices[19] -> m_CurrentPosition, m_ShapeVertices[20] -> m_CurrentPosition, m_Color);
+    DrawTriangle(m_ShapeVertices[9] -> m_CurrentPosition, m_ShapeVertices[10] -> m_CurrentPosition, m_ShapeVertices[19] -> m_CurrentPosition, m_Color);
+    DrawTriangle(m_ShapeVertices[10] -> m_CurrentPosition, m_ShapeVertices[11] -> m_CurrentPosition, m_ShapeVertices[12] -> m_CurrentPosition, m_Color);
+    DrawTriangle(m_ShapeVertices[10] -> m_CurrentPosition, m_ShapeVertices[12] -> m_CurrentPosition, m_ShapeVertices[13] -> m_CurrentPosition, m_Color);
+    DrawTriangle(m_ShapeVertices[10] -> m_CurrentPosition, m_ShapeVertices[13] -> m_CurrentPosition, m_ShapeVertices[19] -> m_CurrentPosition, m_Color);
+    DrawTriangle(m_ShapeVertices[13] -> m_CurrentPosition, m_ShapeVertices[14] -> m_CurrentPosition, m_ShapeVertices[19] -> m_CurrentPosition, m_Color);
+    DrawTriangle(m_ShapeVertices[18] -> m_CurrentPosition, m_ShapeVertices[19] -> m_CurrentPosition, m_ShapeVertices[14] -> m_CurrentPosition, m_Color);
+    DrawTriangle(m_ShapeVertices[18] -> m_CurrentPosition, m_ShapeVertices[14] -> m_CurrentPosition, m_ShapeVertices[15] -> m_CurrentPosition, m_Color);
+    DrawTriangle(m_ShapeVertices[17] -> m_CurrentPosition, m_ShapeVertices[18] -> m_CurrentPosition, m_ShapeVertices[15] -> m_CurrentPosition, m_Color);
+    DrawTriangle(m_ShapeVertices[17] -> m_CurrentPosition, m_ShapeVertices[15] -> m_CurrentPosition, m_ShapeVertices[16] -> m_CurrentPosition, m_Color);
+    Shape::draw();
 }

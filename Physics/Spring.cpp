@@ -32,15 +32,18 @@ Vector2 Spring::calculateDampingForce() {
     return Vector2Scale(Direction, DotProduct * m_DampingFactor);
 }
 void Spring::draw() {
-    int Width = 4;
 //    int Height = Vector2Distance(m_Ball1->m_CurrentPosition, m_Ball2->m_CurrentPosition);
-    DrawLineAsRectangle(m_Ball1->m_CurrentPosition, m_Ball2->m_CurrentPosition, Width, m_Color);
+    DrawLineAsRectangle(m_Ball1->m_CurrentPosition, m_Ball2->m_CurrentPosition, m_Thickness, m_Color);
 }
 LineSegment Spring::getLineSegment() {
     return {m_Ball1->m_CurrentPosition, m_Ball2->m_CurrentPosition};
 }
 pair<EulerianRoundBall*, EulerianRoundBall*> Spring::getBalls() {
     return {m_Ball1, m_Ball2};
+}
+void Spring::setThickness(float Thickness) {
+    if (Thickness < 1) Thickness = 1;
+    m_Thickness = Thickness;
 }
 void DrawLineAsRectangle(Vector2 A, Vector2 B, float thickness, Color color) {
     Vector2 Direction = Vector2Subtract(B, A);           // Vector from A to B
