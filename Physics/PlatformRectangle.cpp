@@ -3,6 +3,7 @@
 //
 
 #include "PlatformRectangle.h"
+#include "raymath.h"
 PlatformRectangle::PlatformRectangle(Vector2 TopLeft, float Width, float Height, float Rotation, Color Color) : m_TopLeft(TopLeft), m_Width(Width), m_Height(Height), m_Rotation(Rotation),
                                                                                                                                 m_Color(Color) {
     float X;

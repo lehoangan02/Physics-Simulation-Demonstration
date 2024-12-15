@@ -3,6 +3,7 @@
 //
 
 #include "Chains.hpp"
+#include "raymath.h"
 void VerletChain::Link::update() {
     Vector2 Direction = Vector2Subtract(m_Ball2->m_CurrentPosition, m_Ball1->m_CurrentPosition);
     float Distance = Vector2Length(Direction);

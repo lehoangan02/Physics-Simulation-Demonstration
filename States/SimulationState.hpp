@@ -15,6 +15,7 @@
 #include "../Physics/Chains.hpp"
 #include "../Physics/Spring.hpp"
 #include "../Machine Learning/KMeansCalculator.h"
+#include "../Physics/Collider.h"
 enum StateNumber {
     HOME_STATE,
     VERLET_DROP_STATE,
@@ -34,6 +35,7 @@ enum StateNumber {
     CANVAS_STATE,
     PRESSURE_SOFT_BODY_STATE,
     SHAPE_MATCHING_SOFT_BODY_STATE,
+    SAT_TRIANGLE_STATE
 
 };
 class SimulationState;
@@ -425,6 +427,20 @@ private:
     Shape* m_ShapeL;
     Shape* m_ShapeN;
     DiscreteEulerianEngine m_Engine;
+};
+class SATTriangleState : public SimulationState {
+public:
+    static SimulationState* getSATTriangleState();
+    SimulationState* update() override;
+    void draw() override;
+    void onNotify() override;
+private:
+    vector<SATPlatformTriangle*> m_TriangleList;
+private:
+    SATTriangleState();
+    ~SATTriangleState() override;
+    void reset() override;
+    void readCordinates();
 };
 
 #endif //PHYSICS_SIMULATION_DEMONSTRATION_SIMULATIONSTATE_HPP

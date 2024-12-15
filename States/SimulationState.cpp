@@ -2,6 +2,7 @@
 // Created by Le Hoang An on 17/10/24.
 //
 #include "SimulationState.hpp"
+#include "raymath.h"
 #define MY_ORANGE Color(235, 131, 23, 255)
 #define MY_YELLOW Color(243, 198, 35, 255)
 
@@ -43,7 +44,8 @@ SimulationState *StateFactory::getState(int StateNumber) {
             return PressureSoftBodyState::getPressureSoftBodyState();
         case StateNumber::SHAPE_MATCHING_SOFT_BODY_STATE:
             return ShapeMatchingSoftBodyState::getShapeMatchingSoftBodyState();
-
+        case StateNumber::SAT_TRIANGLE_STATE:
+            return SATTriangleState::getSATTriangleState();
         default:
             return nullptr;
     }
@@ -2097,4 +2099,75 @@ void ShapeMatchingSoftBodyState::ShapeN::draw() {
     DrawTriangle(m_ShapeVertices[17] -> m_CurrentPosition, m_ShapeVertices[18] -> m_CurrentPosition, m_ShapeVertices[15] -> m_CurrentPosition, m_Color);
     DrawTriangle(m_ShapeVertices[17] -> m_CurrentPosition, m_ShapeVertices[15] -> m_CurrentPosition, m_ShapeVertices[16] -> m_CurrentPosition, m_Color);
     Shape::draw();
+}
+SimulationState* SATTriangleState::getSATTriangleState() {
+    static SATTriangleState MySATTriangleState;
+    return &MySATTriangleState;
+}
+SATTriangleState::SATTriangleState() {
+    m_StateNumber = StateNumber::SAT_TRIANGLE_STATE;
+    reset();
+}
+SATTriangleState::~SATTriangleState() {
+    m_IsActive = true;
+    for (auto& triangle : m_TriangleList)
+    {
+        delete triangle;
+        triangle = nullptr;
+    }
+    m_TriangleList.clear();
+}
+void SATTriangleState::reset() {
+    m_IsActive = true;
+    for (auto& triangle : m_TriangleList)
+    {
+        delete triangle;
+        triangle = nullptr;
+    }
+    m_TriangleList.clear();
+    readCordinates();
+}
+void SATTriangleState::onNotify() {
+    exitState();
+}
+void SATTriangleState::draw() {
+    DrawText("SAT Triangle State", 100, 10, 20, RED);
+    for (auto& triangle : m_TriangleList)
+    {
+        triangle -> draw();
+    }
+    SATCollider* Collider = TriangleSATCollider::getTriangleSATCollider();
+    TriangleSATCollider* TriangleCollider = dynamic_cast<TriangleSATCollider*>(Collider);
+    TriangleCollider->drawProjectionY(m_TriangleList[0]->getVertices(), m_TriangleList[1]->getVertices());
+}
+SimulationState* SATTriangleState::update() {
+    if (!m_IsActive) {
+        return HomeState::getHomeState();
+    }
+
+    return nullptr;
+}
+void SATTriangleState::readCordinates() {
+    ifstream fin;
+    fin.open("TriangleCordinates.txt");
+    if (!fin.is_open())
+    {
+        cerr << "Error opening file\n";
+        return;
+    }
+    Vector2 Temp[3];
+    for (int i = 0; i < 3; ++i)
+    {
+        float x, y;
+        fin >> x >> y;
+        Temp[i] = Vector2{x, y};
+    }
+    SATPlatformTriangle* NewTriangle = new SATPlatformTriangle(Temp[0], Temp[1], Temp[2], BLACK);
+    for (int i = 0; i < 3; ++i)
+    {
+        fin >> Temp[i].x >> Temp[i].y;
+    }
+    SATPlatformTriangle* NewTriangle2 = new SATPlatformTriangle(Temp[0], Temp[1], Temp[2], BLACK);
+    m_TriangleList.push_back(NewTriangle);
+    m_TriangleList.push_back(NewTriangle2);
 }

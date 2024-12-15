@@ -4,8 +4,6 @@
 
 #ifndef PHYSICS_SIMULATION_DEMONSTRATION_ENGINE_HPP
 #define PHYSICS_SIMULATION_DEMONSTRATION_ENGINE_HPP
-#include "raylib.h"
-#include "raymath.h"
 #include "RoundBall.hpp"
 #include "PlatformRectangle.h"
 #include "PlatformTriangle.hpp"

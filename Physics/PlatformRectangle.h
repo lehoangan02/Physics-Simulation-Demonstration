@@ -6,7 +6,6 @@
 #define PHYSICS_SIMULATION_DEMONSTRATION_PLATFORMRECTANGLE_H
 
 #include "../Math/Geometry.hpp"
-#include "raylib.h"
 #include <vector>
 #include <cmath>
 class PlatformRectangle {

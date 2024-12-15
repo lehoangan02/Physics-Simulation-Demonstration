@@ -3,6 +3,7 @@
 //
 
 #include "Engine.hpp"
+#include "raymath.h"
 VerletEngine::VerletEngine(int Width, int Height) : m_Width(Width), m_Height(Height), m_TotalEngery(0) {
     m_Background = LoadTexture("Assets/Textures/GridBackground.png");
 }

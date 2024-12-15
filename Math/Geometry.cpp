@@ -3,6 +3,8 @@
 //
 
 #include "Geometry.hpp"
+#include "../Physics/PlatformTriangle.hpp"
+#include "raymath.h"
 LineSegment::LineSegment(const Vector2& A, const Vector2& B) {
     this->A = A;
     this->B = B;
@@ -78,7 +80,7 @@ Line::Line(std::pair<Vector2, Vector2> DirectionVectorAndPoint) {
     m_a = DirectionVectorAndPoint.first.y;
     m_b = - DirectionVectorAndPoint.first.x;
     m_c = - (m_a * DirectionVectorAndPoint.second.x + m_b * DirectionVectorAndPoint.second.y);
-    Normalized();
+//    Normalized();
 }
 void Line::Normalized() {
     if (m_a < 0)
@@ -228,6 +230,9 @@ float Line::distanceToLine(const Line &Other) {
     float x = 1;
 //    float y =
 
+}
+Vector2 Line::getNormalDirection() {
+    return Vector2{m_a, m_b};
 }
 Ray2D::Ray2D(Vector2 Origin, Vector2 Direction) : m_Origin(Origin), m_Direction(Direction) {
 }

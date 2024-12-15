@@ -2,6 +2,7 @@
 // Created by Le Hoang An on 17/10/24.
 //
 #include "RoundBall.hpp"
+#include "raymath.h"
 #include <random>
 VerletRoundBall::VerletRoundBall(Vector2 Position, Color Color) : m_CurrentPosition(Position), m_PreviousPosition(Position), m_Acceleration(Vector2{0, 0})
 {

@@ -3,6 +3,7 @@
 //
 
 #include "Spring.hpp"
+#include "raymath.h"
 Spring::Spring(EulerianRoundBall* Ball1, EulerianRoundBall* Ball2, float Length, float k, Color Color) : m_Ball1(Ball1), m_Ball2(Ball2), m_Length(Length), m_k(k),
                                                                                                          m_Color(Color) {
 

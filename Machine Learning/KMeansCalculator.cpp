@@ -3,6 +3,7 @@
 //
 
 #include "KMeansCalculator.h"
+#include "raymath.h"
 KMeansCalculator* KMeansCalculator::getKMeansCalculator() {
     static KMeansCalculator MyKMeansCalculator;
     return &MyKMeansCalculator;

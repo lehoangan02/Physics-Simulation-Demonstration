@@ -4,14 +4,12 @@
 
 #ifndef PHYSICS_SIMULATION_DEMONSTRATION_GEOMETRY_HPP
 #define PHYSICS_SIMULATION_DEMONSTRATION_GEOMETRY_HPP
-#include "raylib.h"
-#include "raymath.h"
 #include "EquationsSolver.hpp"
-#include "../Physics/PlatformTriangle.hpp"
 #include <vector>
 #include <iostream>
 #include <utility>
 #include <cmath>
+#include "raylib.h"
 using namespace std;
 class PlatformTriangle;
 class LineSegment
@@ -24,6 +22,7 @@ public:
     void print();
     float getLength();
     Vector2 getMidPoint();
+    void draw(Color color) { DrawLineEx(A, B, 2, color); }
 private:
     bool haveProjection(const Vector2& Point);
     Vector2 projection(const Vector2& Point);
@@ -57,6 +56,8 @@ public:
     bool isHorizontal();
     bool isParallel(Line Other);
     float distanceToLine(const Line& Other);
+    void draw(Color color) { DrawLineEx(Vector2{findX(0), 0}, Vector2{findX(1000), 1000}, 2, color); }
+    Vector2 getNormalDirection();
 };
 class Ray2D {
 private:

@@ -10,7 +10,6 @@
 #include <algorithm>
 #include <random>
 #include "raylib.h"
-#include "raymath.h"
 class KMeansCalculator { // singleton
 public:
     static KMeansCalculator* getKMeansCalculator();

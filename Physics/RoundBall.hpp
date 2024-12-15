@@ -6,7 +6,7 @@
 #define PHYSICS_SIMULATION_DEMONSTRATION_ROUNDBALL_HPP
 
 #include "raylib.h"
-#include "raymath.h"
+
 class VerletRoundBall {
 private:
     Vector2 m_CurrentPosition;
