@@ -2104,7 +2104,7 @@ SimulationState* SATTriangleState::getSATTriangleState() {
     static SATTriangleState MySATTriangleState;
     return &MySATTriangleState;
 }
-SATTriangleState::SATTriangleState() {
+SATTriangleState::SATTriangleState() : m_Engine(1800, 1000) {
     m_StateNumber = StateNumber::SAT_TRIANGLE_STATE;
     reset();
 }
@@ -2132,19 +2132,48 @@ void SATTriangleState::onNotify() {
 }
 void SATTriangleState::draw() {
     DrawText("SAT Triangle State", 100, 10, 20, RED);
+    m_Engine.draw();
     for (auto& triangle : m_TriangleList)
     {
         triangle -> draw();
     }
-    SATCollider* Collider = TriangleSATCollider::getTriangleSATCollider();
-    TriangleSATCollider* TriangleCollider = dynamic_cast<TriangleSATCollider*>(Collider);
-    TriangleCollider->drawProjectionY(m_TriangleList[0]->getVertices(), m_TriangleList[1]->getVertices());
+    DrawText("Use arrow keys to move the triangle", 100, 10, 20, RED);
+
 }
 SimulationState* SATTriangleState::update() {
     if (!m_IsActive) {
         return HomeState::getHomeState();
     }
-
+    m_TriangleList[0] ->rotate(0.01);
+    if (IsKeyDown(KEY_LEFT))
+    {
+        m_TriangleList[0] -> move(Vector2{-1, 0});
+    }
+    if (IsKeyDown(KEY_RIGHT))
+    {
+        m_TriangleList[0] -> move(Vector2{1, 0});
+    }
+    if (IsKeyDown(KEY_UP))
+    {
+        m_TriangleList[0] -> move(Vector2{0, -1});
+    }
+    if (IsKeyDown(KEY_DOWN))
+    {
+        m_TriangleList[0] -> move(Vector2{0, 1});
+    }
+    SATCollider* Collider = TriangleSATCollider::getTriangleSATCollider();
+    TriangleSATCollider* TriangleCollider = dynamic_cast<TriangleSATCollider*>(Collider);
+    for (int i = 1; i < m_TriangleList.size(); ++i)
+    {
+        if (TriangleCollider -> isColliding(m_TriangleList[0]->getVertices(), m_TriangleList[i]->getVertices()))
+        {
+            m_TriangleList[i]->setActive(true);
+        }
+        else
+        {
+            m_TriangleList[i]->setActive(false);
+        }
+    }
     return nullptr;
 }
 void SATTriangleState::readCordinates() {
@@ -2155,19 +2184,18 @@ void SATTriangleState::readCordinates() {
         cerr << "Error opening file\n";
         return;
     }
+    int NumberOfTriangles;
+    fin >> NumberOfTriangles;
     Vector2 Temp[3];
-    for (int i = 0; i < 3; ++i)
+    for (int i = 0; i < NumberOfTriangles; ++i)
     {
-        float x, y;
-        fin >> x >> y;
-        Temp[i] = Vector2{x, y};
+        for (int j = 0; j < 3; ++j)
+        {
+            float x, y;
+            fin >> x >> y;
+            Temp[j] = Vector2{x, y};
+        }
+        SATPlatformTriangle* NewTriangle = new SATPlatformTriangle(Temp[0], Temp[1], Temp[2], RED);
+        m_TriangleList.push_back(NewTriangle);
     }
-    SATPlatformTriangle* NewTriangle = new SATPlatformTriangle(Temp[0], Temp[1], Temp[2], BLACK);
-    for (int i = 0; i < 3; ++i)
-    {
-        fin >> Temp[i].x >> Temp[i].y;
-    }
-    SATPlatformTriangle* NewTriangle2 = new SATPlatformTriangle(Temp[0], Temp[1], Temp[2], BLACK);
-    m_TriangleList.push_back(NewTriangle);
-    m_TriangleList.push_back(NewTriangle2);
 }

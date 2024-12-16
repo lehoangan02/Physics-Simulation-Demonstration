@@ -34,9 +34,9 @@ PlatformTriangle PlatformTriangle::createDilation(float Distance) const {
 //    std::cout << "NewC: " << NewC.x << " " << NewC.y << std::endl;
     return PlatformTriangle(NewA, NewB, NewC, YELLOW);
 }
-const Color SATPlatformTriangle::Color1 = Color(227, 240, 175, 255);
-const Color SATPlatformTriangle::Color2 = Color(93, 185, 150, 255);
-const Color SATPlatformTriangle::Color3 = Color(17, 139, 80, 255);
+const Color SATPlatformTriangle::Color1 = Color(100, 13, 95, 255);
+const Color SATPlatformTriangle::Color2 = Color(217, 22, 86, 255);
+const Color SATPlatformTriangle::Color3 = Color(231, 91, 0, 255);
 SATPlatformTriangle::SATPlatformTriangle(Vector2 A, Vector2 B, Vector2 C, Color Color) : PlatformTriangle(A, B, C, Color) {
     m_A1.Position = A;
     m_B1.Position = B;
@@ -64,9 +64,15 @@ void SATPlatformTriangle::sortVerticesCounterClockWise() {
 }
 void SATPlatformTriangle::draw() {
 //    std::cout << "Drawing\n";
-    DrawCircle((int)m_A1.Position.x, (int)m_A1.Position.y, 5, Color1);
-    DrawCircle((int)m_B1.Position.x, (int)m_B1.Position.y, 5, Color2);
-    DrawCircle((int)m_C1.Position.x, (int)m_C1.Position.y, 5, Color3);
+    if (m_DrawInternal) {
+        DrawTriangle(m_A1.Position, m_B1.Position, m_C1.Position, Color{255, 178, 0, 255});
+    }
+    DrawLineEx(m_A1.Position, m_B1.Position, 5, Color1);
+    DrawLineEx(m_B1.Position, m_C1.Position, 5, Color2);
+    DrawLineEx(m_C1.Position, m_A1.Position, 5, Color3);
+    DrawCircle((int)m_A1.Position.x, (int)m_A1.Position.y, 10, Color1);
+    DrawCircle((int)m_B1.Position.x, (int)m_B1.Position.y, 10, Color2);
+    DrawCircle((int)m_C1.Position.x, (int)m_C1.Position.y, 10, Color3);
 }
 std::vector<Vector2> SATPlatformTriangle::getVertices() const {
     std::vector<Vector2> Vertices;
@@ -74,4 +80,21 @@ std::vector<Vector2> SATPlatformTriangle::getVertices() const {
     Vertices.push_back(m_B1.Position);
     Vertices.push_back(m_C1.Position);
     return Vertices;
+}
+void SATPlatformTriangle::move(Vector2 Direction) {
+    m_A1.Position = Vector2Add(m_A1.Position, Direction);
+    m_B1.Position = Vector2Add(m_B1.Position, Direction);
+    m_C1.Position = Vector2Add(m_C1.Position, Direction);
+}
+void SATPlatformTriangle::rotate(float Angle) {
+    Vector2 Center = getCenter();
+    Vector2 DirectionA = Vector2Subtract(m_A1.Position, Center);
+    Vector2 DirectionB = Vector2Subtract(m_B1.Position, Center);
+    Vector2 DirectionC = Vector2Subtract(m_C1.Position, Center);
+    DirectionA = Vector2Rotate(DirectionA, Angle);
+    DirectionB = Vector2Rotate(DirectionB, Angle);
+    DirectionC = Vector2Rotate(DirectionC, Angle);
+    m_A1.Position = Vector2Add(Center, DirectionA);
+    m_B1.Position = Vector2Add(Center, DirectionB);
+    m_C1.Position = Vector2Add(Center, DirectionC);
 }
