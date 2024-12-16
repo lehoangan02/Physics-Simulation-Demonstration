@@ -470,6 +470,7 @@ private:
     vector<SATPlatformCircle*> m_CircleList;
     vector<SATPlatformPolygon*> m_PolygonList;
     DiscreteSATEulerianEngine m_Engine;
+    vector<Color> m_ColorList;
 private:
     SATCirclePolygonState();
     ~SATCirclePolygonState() override;

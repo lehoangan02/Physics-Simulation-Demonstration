@@ -2286,6 +2286,16 @@ SimulationState* SATCirclePolygonState::getSATCirclePolygonState() {
 }
 SATCirclePolygonState::SATCirclePolygonState() : m_Engine(1800, 1000) {
     m_StateNumber = StateNumber::SAT_CIRCLE_POLYGON_STATE;
+    m_ColorList.push_back(Color{22, 114, 136, 255});
+    m_ColorList.push_back(Color{140, 218, 236, 255});
+    m_ColorList.push_back(Color{180, 82, 72, 255});
+    m_ColorList.push_back(Color{212, 140, 132, 255});
+    m_ColorList.push_back(Color{168, 154, 73, 255});
+    m_ColorList.push_back(Color{214, 207, 162, 255});
+    m_ColorList.push_back(Color{60, 180, 100, 255});
+    m_ColorList.push_back(Color{155, 221, 177, 255});
+    m_ColorList.push_back(Color{100, 60, 106, 255});
+    m_ColorList.push_back(Color{131, 99, 148, 255});
     reset();
 }
 SATCirclePolygonState::~SATCirclePolygonState() {
@@ -2356,6 +2366,7 @@ void SATCirclePolygonState::readCordinates() {
             Vertices.push_back(Vector2{x, y});
         }
         SATPlatformPolygon* NewPolygon = new SATPlatformPolygon(Vertices, RED);
+        NewPolygon->setCustomColor(m_ColorList[i + 6]);
         m_PolygonList.push_back(NewPolygon);
     }
     fin.close();
@@ -2365,12 +2376,38 @@ void SATCirclePolygonState::readCordinates() {
         cerr << "Error opening file\n";
         return;
     }
-    float X, Y;
-    fin >> X >> Y;
-    Vector2 Position = {X, Y};
-    SATPlatformCircle* NewCircle = new SATPlatformCircle(Position, GREEN, 1.0f);
-    NewCircle ->setRadius(80);
-    m_CircleList.push_back(NewCircle);
+    int NumberOfCircles;
+    fin >> NumberOfCircles;
+    for (int i = 0; i < NumberOfCircles; ++i) {
+        float x, y;
+        fin >> x >> y;
+        SATPlatformCircle *NewCircle = new SATPlatformCircle(Vector2{x, y}, m_ColorList[i], 1.0f);
+        switch (i) {
+            case 0:
+                NewCircle->setRadius(80);
+                break;
+            case 1:
+                NewCircle->setRadius(50);
+                break;
+            case 2:
+                NewCircle->setRadius(60);
+                break;
+            case 3:
+                NewCircle->setRadius(70);
+                break;
+            case 4:
+                NewCircle->setRadius(40);
+                break;
+            case 5:
+                NewCircle->setRadius(90);
+                break;
+            case 6:
+                NewCircle->setRadius(100);
+                break;
+        }
+
+        m_CircleList.push_back(NewCircle);
+    }
 }
 void SATCirclePolygonState::draw() {
     m_Engine.draw();

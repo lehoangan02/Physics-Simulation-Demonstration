@@ -1011,6 +1011,28 @@ void DiscreteSATEulerianEngine::applyConstraints() {
             }
         }
     }
+    for (auto &SATCircle : m_SATCircleList)
+    {
+        if (SATCircle->getCenter().x - SATCircle->getRadius() < 0)
+        {
+            Vector2 Move = Vector2{-SATCircle->getCenter().x + SATCircle->getRadius(), 0};
+            SATCircle->move(Move);
+        }
+        if (SATCircle->getCenter().x + SATCircle->getRadius() > m_Width)
+        {
+            Vector2 Move = Vector2{m_Width - SATCircle->getCenter().x - SATCircle->getRadius(), 0};
+            SATCircle->move(Move);
+        }
+        if (SATCircle->getCenter().y - SATCircle->getRadius() < 0)
+        {
+            Vector2 Move = Vector2{0, -SATCircle->getCenter().y + SATCircle->getRadius()};
+            SATCircle->move(Move);
+        }
+        if (SATCircle->getCenter().y + SATCircle->getRadius() > m_Height) {
+            Vector2 Move = Vector2{0, m_Height - SATCircle->getCenter().y - SATCircle->getRadius()};
+            SATCircle->move(Move);
+        }
+    }
 }
 void DiscreteSATEulerianEngine::checkCollision() {
     for (auto& SATPolygon : m_SATPolygonList)
@@ -1044,7 +1066,7 @@ void DiscreteSATEulerianEngine::checkCollision() {
             SATCirclePolygonCollider* Collider = SATCirclePolygonCollider::getSATCirclePolygonCollider();
             if (Collider->isColliding(*SATCircle, SATPolygon->getVertices()))
             {
-                std::cout << "Checking Collision" << std::endl;
+//                std::cout << "Checking Collision" << std::endl;
                 SATPolygon->setActive(true);
                 SATCircle->setActive(true);
             }
@@ -1059,22 +1081,8 @@ void DiscreteSATEulerianEngine::turnOnOffPlayerControl(bool PlayerControlOn) {
 }
 void DiscreteSATEulerianEngine::update(float DeltaTime) {
     handlePlayerControl();
-    checkCollision();
-    if (m_CollisionOn)
-    {
-        SATCollider* Collider = SATPolygonCollider::getSATPolygonCollider();
-        for (auto& SATPolygon1 : m_SATPolygonList)
-        {
-            for (auto& SATPolygon2 : m_SATPolygonList)
-            {
-                if (SATPolygon1 != SATPolygon2)
-                {
-                    SATPolygon1->move(Collider->getCollisionResolution(SATPolygon1->getVertices(), SATPolygon2->getVertices()).FirstResolution);
-                    SATPolygon2->move(Collider->getCollisionResolution(SATPolygon1->getVertices(), SATPolygon2->getVertices()).SecondResolution);
-                }
-            }
-        }
-    }
+    collideSATPolygons();
+    collideSATCircle();
     applyConstraints();
 }
 void DiscreteSATEulerianEngine::draw() {
@@ -1087,7 +1095,6 @@ void DiscreteSATEulerianEngine::draw() {
     {
         SATCircle->draw();
     }
-    checkCollision();
 }
 void DiscreteSATEulerianEngine::reset() {
     m_SATPolygonList.clear();
@@ -1129,21 +1136,74 @@ void DiscreteSATEulerianEngine::handlePlayerControl() {
     {
         if (IsKeyDown(KEY_LEFT))
         {
-            m_SATCircleList[0]->move(Vector2{-2, 0});
+            m_SATCircleList[0]->move(Vector2{-4, 0});
         }
         if (IsKeyDown(KEY_RIGHT))
         {
-            m_SATCircleList[0]->move(Vector2{2, 0});
+            m_SATCircleList[0]->move(Vector2{4, 0});
         }
         if (IsKeyDown(KEY_UP))
         {
-            m_SATCircleList[0]->move(Vector2{0, -2});
+            m_SATCircleList[0]->move(Vector2{0, -4});
         }
         if (IsKeyDown(KEY_DOWN)) {
-            m_SATCircleList[0]->move(Vector2{0, 2});
+            m_SATCircleList[0]->move(Vector2{0, 4});
         }
     }
 
+}
+void DiscreteSATEulerianEngine::collideSATPolygons() {
+    checkCollision();
+    if (m_CollisionOn)
+    {
+        SATCollider* Collider = SATPolygonCollider::getSATPolygonCollider();
+        for (auto& SATPolygon1 : m_SATPolygonList)
+        {
+            for (auto& SATPolygon2 : m_SATPolygonList)
+            {
+                if (SATPolygon1 != SATPolygon2)
+                {
+                    SATPolygon1->move(Collider->getCollisionResolution(SATPolygon1->getVertices(), SATPolygon2->getVertices()).FirstResolution);
+                    SATPolygon2->move(Collider->getCollisionResolution(SATPolygon1->getVertices(), SATPolygon2->getVertices()).SecondResolution);
+                }
+            }
+        }
+    }
+
+    for (auto& SATPolygon : m_SATPolygonList)
+    {
+        for (auto& SATCircle : m_SATCircleList)
+        {
+
+            SATCirclePolygonCollider* Collider = SATCirclePolygonCollider::getSATCirclePolygonCollider();
+            if (Collider->isColliding(*SATCircle, SATPolygon->getVertices()))
+            {
+
+                SATCircle->move(Collider->getCollisionResolution(*SATCircle, SATPolygon->getVertices()).FirstResolution);
+                SATPolygon->move(Collider->getCollisionResolution(*SATCircle, SATPolygon->getVertices()).SecondResolution);
+            }
+        }
+    }
+}
+void DiscreteSATEulerianEngine::collideSATCircle() {
+    if (m_CollisionOn)
+    {
+        for (auto& SATCircle1 : m_SATCircleList)
+        {
+            for (auto& SATCircle2 : m_SATCircleList)
+            {
+                if (SATCircle1 != SATCircle2)
+                {
+                    if (Vector2Distance(SATCircle1->getCenter(), SATCircle2->getCenter()) < SATCircle1->getRadius() + SATCircle2->getRadius())
+                    {
+                        Vector2 NormalizedDirectVector = Vector2Normalize(Vector2Subtract(SATCircle2->getCenter(), SATCircle1->getCenter()));
+                        SATCircle2->move(Vector2Scale(NormalizedDirectVector, 0.5 * (SATCircle1->getRadius() + SATCircle2->getRadius() - Vector2Distance(SATCircle1->getCenter(), SATCircle2->getCenter()))));
+                        SATCircle1->move(Vector2Scale(NormalizedDirectVector, -0.5 * (SATCircle1->getRadius() + SATCircle2->getRadius() - Vector2Distance(SATCircle1->getCenter(), SATCircle2->getCenter()))));
+                    }
+                }
+            }
+        }
+    }
 }
 void DiscreteSATEulerianEngine::setObjectTypeToControl(int ObjectTypeToControl) {
     m_ObjectTypeToControl = ObjectTypeToControl;

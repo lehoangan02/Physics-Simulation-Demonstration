@@ -233,6 +233,7 @@ private:
     void applyConstraints();
     void checkCollision();
     void collideSATPolygons();
+    void collideSATCircle();
 public:
     enum CONTROL_OBJECT
     {

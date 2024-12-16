@@ -15,7 +15,7 @@ void TriangleSATCollider::drawProjectionY(const std::vector<Vector2> &Shape1, co
     Vector2 Direction = {0, -1};
     std::pair<Vector2, Vector2> DirectionVectorAndPoint(Direction, Origin);
     Line Axis(DirectionVectorAndPoint);
-    Axis.draw(RED);
+//    Axis.draw(RED);
     // find the point with largest Y coordinate
     int MaxYIndex1 = 0;
     for (int i = 1; i < Shape1.size(); ++i) {
@@ -54,10 +54,10 @@ void TriangleSATCollider::drawProjectionY(const std::vector<Vector2> &Shape1, co
     Vector2 ProjectionMin2 = Axis.projection(MinYPoint2);
 
 
-    DrawCircle(ProjectionMax1.x, ProjectionMax1.y, 10, RED);
-    DrawCircle(Shape1[MaxYIndex1].x, Shape1[MaxYIndex1].y, 10, RED);
-    DrawLineEx(ProjectionMax1, ProjectionMin1, 10, RED);
-    DrawLineEx(ProjectionMax2, ProjectionMin2, 10, RED);
+//    DrawCircle(ProjectionMax1.x, ProjectionMax1.y, 10, RED);
+//    DrawCircle(Shape1[MaxYIndex1].x, Shape1[MaxYIndex1].y, 10, RED);
+//    DrawLineEx(ProjectionMax1, ProjectionMin1, 10, RED);
+//    DrawLineEx(ProjectionMax2, ProjectionMin2, 10, RED);
 
 
 }
@@ -425,8 +425,11 @@ bool SATCirclePolygonCollider::isColliding(const SATPlatformCircle &Circle, cons
         }
     }
     AxisDirectionList.push_back(Vector2Normalize(Vector2Subtract(Circle.getCenter(), CircleClosestVertexDirection)));
-    Vector2 MinTranslationVectorMinCircleMaxShape = {INT_MAX, INT_MAX};
-    Vector2 MinTranslationVectorMinShapeMaxCircle = {INT_MAX, INT_MAX};
+//    DrawLineEx(Circle.getCenter(), CircleClosestVertexDirection, 5, RED);
+    Vector2 Min1;
+    Vector2 Max2;
+    Vector2 Min2;
+    Vector2 Max1;
     for (auto& AxisDirection : AxisDirectionList) {
         if (AxisDirection.x == 0 && AxisDirection.y == 0)
         {
@@ -435,59 +438,7 @@ bool SATCirclePolygonCollider::isColliding(const SATPlatformCircle &Circle, cons
         }
         if (AxisDirection.x == 0)
         {
-            Vector2 Origin = {600, 600};
-            std::pair<Vector2, Vector2> DirectionVectorAndPoint(AxisDirection, Origin);
-            Line Axis(DirectionVectorAndPoint);
-            std::vector<Vector2> ProjectionList1;
-            std::vector<Vector2> ProjectionList2;
-            Vector2 Point1OnCircleForProjection = Vector2Scale(Vector2Normalize(AxisDirection), Circle.getRadius());
-            Point1OnCircleForProjection = Vector2Add(Point1OnCircleForProjection, Circle.getCenter());
-            Vector2 Point2OnCircleForProjection = Vector2Scale(Vector2Normalize(AxisDirection), -Circle.getRadius());
-            Point2OnCircleForProjection = Vector2Add(Point2OnCircleForProjection, Circle.getCenter());
-            if (Point1OnCircleForProjection.y > Point2OnCircleForProjection.y)
-            {
-                std::swap(Point1OnCircleForProjection, Point2OnCircleForProjection);
-            }
-            ProjectionList1.push_back(Axis.projection(Point1OnCircleForProjection));
-            ProjectionList1.push_back(Axis.projection(Point2OnCircleForProjection));
-            for (auto& Point : Shape) {
-                ProjectionList2.push_back(Axis.projection(Point));
-            }
-            int MinIndexShape = 0;
-            int MaxIndexShape = 0;
-            for (int i = 0; i < Shape.size(); ++i)
-            {
-                if (ProjectionList2[i].y < ProjectionList2[MinIndexShape].y)
-                {
-                    MinIndexShape = i;
-                }
-                if (ProjectionList2[i].y > ProjectionList2[MaxIndexShape].y)
-                {
-                    MaxIndexShape = i;
-                }
-            }
-            if (ProjectionList1[1].y < ProjectionList2[MinIndexShape].y || ProjectionList2[MaxIndexShape].y < ProjectionList1[0].y)
-            {
-                Axis.draw(RED);
-                DrawCircle(Point1OnCircleForProjection.x, Point1OnCircleForProjection.y, 10, BLUE);
-                DrawCircle(Point2OnCircleForProjection.x, Point2OnCircleForProjection.y, 10, BLUE);
-                DrawCircle(ProjectionList2[MinIndexShape].x, ProjectionList2[MinIndexShape].y, 10, RED);
-                DrawCircle(ProjectionList2[MaxIndexShape].x, ProjectionList2[MaxIndexShape].y, 10, RED);
-                DrawCircle(ProjectionList1[0].x, ProjectionList1[0].y, 10, RED);
-                DrawCircle(ProjectionList1[1].x, ProjectionList1[1].y, 10, RED);
-                DrawCircle(Circle.getCenter().x, Circle.getCenter().y, 10, RED);
-                if (ProjectionList1[1].y < ProjectionList2[MinIndexShape].y)
-                {
-                    DrawCircle(ProjectionList1[1].x, ProjectionList1[1].y, 10, YELLOW);
-                    DrawCircle(ProjectionList2[MinIndexShape].x, ProjectionList2[MinIndexShape].y, 10, YELLOW);
-                }
-                else
-                {
-                    DrawCircle(ProjectionList1[0].x, ProjectionList1[0].y, 10, YELLOW);
-                    DrawCircle(ProjectionList2[MaxIndexShape].x, ProjectionList2[MaxIndexShape].y, 10, YELLOW);
-                }
-                return false;
-            }
+            std::cout << "There is a vertical line" << std::endl;
         }
         else
         {
@@ -496,57 +447,162 @@ bool SATCirclePolygonCollider::isColliding(const SATPlatformCircle &Circle, cons
             Line Axis(DirectionVectorAndPoint);
             std::vector<Vector2> ProjectionList1;
             std::vector<Vector2> ProjectionList2;
-            Vector2 Point1OnCircleForProjection = Vector2Scale(Vector2Normalize(AxisDirection), Circle.getRadius());
-            Point1OnCircleForProjection = Vector2Add(Point1OnCircleForProjection, Circle.getCenter());
-            Vector2 Point2OnCircleForProjection = Vector2Scale(Vector2Normalize(AxisDirection), -Circle.getRadius());
-            Point2OnCircleForProjection = Vector2Add(Point2OnCircleForProjection, Circle.getCenter());
-            if (Point1OnCircleForProjection.x > Point2OnCircleForProjection.x)
-            {
-                std::swap(Point1OnCircleForProjection, Point2OnCircleForProjection);
-            }
-            ProjectionList1.push_back(Axis.projection(Point1OnCircleForProjection));
-            ProjectionList1.push_back(Axis.projection(Point2OnCircleForProjection));
+            Vector2 Point1;
+            Vector2 Point2;
+            Point1 = Vector2Normalize(AxisDirection);
+            Point1 = Vector2Scale(Point1, Circle.getRadius());
+            Point1 = Vector2Add(Point1, Circle.getCenter());
+            Point2 = Vector2Normalize(AxisDirection);
+            Point2 = Vector2Scale(Point2, -Circle.getRadius());
+            Point2 = Vector2Add(Point2, Circle.getCenter());
+            ProjectionList1.push_back(Axis.projection(Point1));
+            ProjectionList1.push_back(Axis.projection(Point2));
             for (auto& Point : Shape) {
                 ProjectionList2.push_back(Axis.projection(Point));
             }
-            int MinIndexShape = 0;
-            int MaxIndexShape = 0;
-            for (int i = 0; i < Shape.size(); ++i)
-            {
-                if (ProjectionList2[i].x < ProjectionList2[MinIndexShape].x)
-                {
-                    MinIndexShape = i;
+            int MinIndex1 = 0;
+            int MaxIndex1 = 0;
+            for (int i = 1; i < ProjectionList1.size(); ++i) {
+                if (ProjectionList1[i].x < ProjectionList1[MinIndex1].x) {
+                    MinIndex1 = i;
                 }
-                if (ProjectionList2[i].x > ProjectionList2[MaxIndexShape].x)
-                {
-                    MaxIndexShape = i;
+                if (ProjectionList1[i].x > ProjectionList1[MaxIndex1].x) {
+                    MaxIndex1 = i;
                 }
             }
-            if (ProjectionList1[1].x < ProjectionList2[MinIndexShape].x || ProjectionList2[MaxIndexShape].x < ProjectionList1[0].x)
-            {
-                Axis.draw(RED);
-                DrawCircle(Point1OnCircleForProjection.x, Point1OnCircleForProjection.y, 10, BLUE);
-                DrawCircle(Point2OnCircleForProjection.x, Point2OnCircleForProjection.y, 10, BLUE);
-                DrawCircle(ProjectionList2[MinIndexShape].x, ProjectionList2[MinIndexShape].y, 10, RED);
-                DrawCircle(ProjectionList2[MaxIndexShape].x, ProjectionList2[MaxIndexShape].y, 10, RED);
-                DrawCircle(ProjectionList1[0].x, ProjectionList1[0].y, 10, RED);
-                DrawCircle(ProjectionList1[1].x, ProjectionList1[1].y, 10, RED);
-                DrawCircle(Circle.getCenter().x, Circle.getCenter().y, 10, RED);
-                if (ProjectionList1[1].x < ProjectionList2[MinIndexShape].x)
-                {
-                    DrawCircle(ProjectionList1[1].x, ProjectionList1[1].y, 10, YELLOW);
-                    DrawCircle(ProjectionList2[MinIndexShape].x, ProjectionList2[MinIndexShape].y, 10, YELLOW);
+            int MinIndex2 = 0;
+            int MaxIndex2 = 0;
+            for (int i = 1; i < ProjectionList2.size(); ++i) {
+                if (ProjectionList2[i].x < ProjectionList2[MinIndex2].x) {
+                    MinIndex2 = i;
                 }
-                else
-                {
-                    DrawCircle(ProjectionList1[0].x, ProjectionList1[0].y, 10, YELLOW);
-                    DrawCircle(ProjectionList2[MaxIndexShape].x, ProjectionList2[MaxIndexShape].y, 10, YELLOW);
+                if (ProjectionList2[i].x > ProjectionList2[MaxIndex2].x) {
+                    MaxIndex2 = i;
                 }
+            }
+            Min1 = ProjectionList1[MinIndex1];
+            Max1 = ProjectionList1[MaxIndex1];
+            Min2 = ProjectionList2[MinIndex2];
+            Max2 = ProjectionList2[MaxIndex2];
+            if (ProjectionList1[MaxIndex1].x < ProjectionList2[MinIndex2].x || ProjectionList2[MaxIndex2].x < ProjectionList1[MinIndex1].x) {
                 return false;
             }
+//            DrawLineEx(Min1, Max1, 5, RED);
+//            DrawLineEx(Min2, Max2, 3, BLUE);
+        }
+        if (Vector2Length(Vector2Subtract(Min1, Max2)) < Vector2Length(Vector2Subtract(Min2, Max1)))
+        {
+//            std::cout << "Case 1" << std::endl;
+        }
+        else
+        {
+//            std::cout << "Case 2" << std::endl;
         }
     }
-
-    std::cout << "Collision Detected" << std::endl;
     return true;
+}
+CollisionResolve SATCirclePolygonCollider::getCollisionResolution(const SATPlatformCircle &Circle,
+                                                                  const std::vector<Vector2> &Shape) {
+
+    std::vector<Vector2> AxisDirectionList;
+    Vector2 CircleClosestVertexDirection;
+    for (int i = 0; i < Shape.size(); ++i)
+    {
+        Line Line1(Shape[i], Shape[(i + 1) % Shape.size()]);
+        AxisDirectionList.push_back(Line1.getNormalDirection());
+    }
+    for (int i = 0; i < Shape.size(); ++i)
+    {
+        Vector2 Direction = Vector2Subtract(Shape[i], Circle.getCenter());
+        if (Vector2Length(Direction) < Vector2Length(Vector2Subtract(CircleClosestVertexDirection, Circle.getCenter())))
+        {
+            CircleClosestVertexDirection = Shape[i];
+        }
+    }
+    AxisDirectionList.push_back(Vector2Normalize(Vector2Subtract(Circle.getCenter(), CircleClosestVertexDirection)));
+    Vector2 MinTranslationVectorMin1Max2 = {INT_MAX, INT_MAX};
+    Vector2 MinTranslationVectorMin2Max1 = {INT_MAX, INT_MAX};
+    Vector2 Min1;
+    Vector2 Max2;
+    Vector2 Min2;
+    Vector2 Max1;
+    for (auto& AxisDirection : AxisDirectionList) {
+        if (AxisDirection.x == 0 && AxisDirection.y == 0) {
+            std::cout << "Not checking this axis" << std::endl;
+            continue;
+        }
+        if (AxisDirection.x == 0) {
+            std::cout << "There is a vertical line" << std::endl;
+        } else {
+            Vector2 Origin = {600, 600};
+            std::pair<Vector2, Vector2> DirectionVectorAndPoint(AxisDirection, Origin);
+            Line Axis(DirectionVectorAndPoint);
+            std::vector<Vector2> ProjectionList1;
+            std::vector<Vector2> ProjectionList2;
+            Vector2 Point1;
+            Vector2 Point2;
+            Point1 = Vector2Normalize(AxisDirection);
+            Point1 = Vector2Scale(Point1, Circle.getRadius());
+            Point1 = Vector2Add(Point1, Circle.getCenter());
+            Point2 = Vector2Normalize(AxisDirection);
+            Point2 = Vector2Scale(Point2, -Circle.getRadius());
+            Point2 = Vector2Add(Point2, Circle.getCenter());
+            ProjectionList1.push_back(Axis.projection(Point1));
+            ProjectionList1.push_back(Axis.projection(Point2));
+            for (auto& Point : Shape) {
+                ProjectionList2.push_back(Axis.projection(Point));
+            }
+            int MinIndex1 = 0;
+            int MaxIndex1 = 0;
+            for (int i = 1; i < ProjectionList1.size(); ++i) {
+                if (ProjectionList1[i].x < ProjectionList1[MinIndex1].x) {
+                    MinIndex1 = i;
+                }
+                if (ProjectionList1[i].x > ProjectionList1[MaxIndex1].x) {
+                    MaxIndex1 = i;
+                }
+            }
+            int MinIndex2 = 0;
+            int MaxIndex2 = 0;
+            for (int i = 1; i < ProjectionList2.size(); ++i) {
+                if (ProjectionList2[i].x < ProjectionList2[MinIndex2].x) {
+                    MinIndex2 = i;
+                }
+                if (ProjectionList2[i].x > ProjectionList2[MaxIndex2].x) {
+                    MaxIndex2 = i;
+                }
+            }
+            Min1 = ProjectionList1[MinIndex1];
+            Max1 = ProjectionList1[MaxIndex1];
+            Min2 = ProjectionList2[MinIndex2];
+            Max2 = ProjectionList2[MaxIndex2];
+            if (ProjectionList1[MaxIndex1].x < ProjectionList2[MinIndex2].x || ProjectionList2[MaxIndex2].x < ProjectionList1[MinIndex1].x) {
+                return {Vector2{0, 0}, Vector2{0, 0}};
+            }
+            Vector2 Min1Max2 = Vector2Subtract(ProjectionList2[MaxIndex2], ProjectionList1[MinIndex1]);
+            Vector2 Min2Max1 = Vector2Subtract(ProjectionList1[MaxIndex1], ProjectionList2[MinIndex2]);
+            if (Vector2Length(Min1Max2) < Vector2Length(MinTranslationVectorMin1Max2)) {
+                MinTranslationVectorMin1Max2 = Min1Max2;
+            }
+            if (Vector2Length(Min2Max1) < Vector2Length(MinTranslationVectorMin2Max1)) {
+                MinTranslationVectorMin2Max1 = Min2Max1;
+            }
+        }
+
+    }
+//    DrawLineEx(Min1, Max1, 5, RED);
+//    DrawLineEx(Min2, Max2, 3, BLUE);
+    if (Vector2Length(MinTranslationVectorMin1Max2) < Vector2Length(MinTranslationVectorMin2Max1)) {
+        std::cout << "Case 1" << std::endl;
+        Vector2 FirstResolution = Vector2Scale(MinTranslationVectorMin1Max2, 0.5);
+        Vector2 SecondResolution = Vector2Scale(MinTranslationVectorMin1Max2, -0.5);
+        return {FirstResolution, SecondResolution};
+    }
+    else {
+        std::cout << "Case 2" << std::endl;
+        Vector2 FirstResolution = Vector2Scale(MinTranslationVectorMin2Max1, -0.5);
+        Vector2 SecondResolution = Vector2Scale(MinTranslationVectorMin2Max1, 0.5);
+        return {FirstResolution, SecondResolution};
+    }
+    return {Vector2{0, 0}, Vector2{0, 0}};
 }
