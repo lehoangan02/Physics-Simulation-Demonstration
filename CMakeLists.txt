@@ -38,7 +38,9 @@ add_executable(Physics_Simulation_Demonstration main.cpp
         "Machine Learning/KMeansCalculator.cpp"
         "Machine Learning/KMeansCalculator.h"
         Physics/Collider.cpp
-        Physics/Collider.h)
+        Physics/Collider.h
+        Physics/SATPlatform.cpp
+        Physics/SATPlatform.hpp)
 include_directories(/opt/homebrew/Cellar/raylib/5.0/include)
 
 find_package(raylib 4.5 REQUIRED)

@@ -980,6 +980,9 @@ DiscreteSATEulerianEngine::DiscreteSATEulerianEngine(int Width, int Height) : m_
 void DiscreteSATEulerianEngine::attachSATPolygon(SATPlatformPolygon *NewSATPolygon) {
     m_SATPolygonList.push_back(NewSATPolygon);
 }
+void DiscreteSATEulerianEngine::attachSATCircle(SATPlatformCircle *NewSATCircle) {
+    m_SATCircleList.push_back(NewSATCircle);
+}
 void DiscreteSATEulerianEngine::applyConstraints() {
     for (auto& SATPolygon : m_SATPolygonList)
     {
@@ -1002,7 +1005,7 @@ void DiscreteSATEulerianEngine::applyConstraints() {
             }
             if (vertex.y > m_Height)
             {
-                
+
                 Vector2 Move = Vector2{0, m_Height - vertex.y};
                 SATPolygon->move(Move);
             }
@@ -1013,6 +1016,10 @@ void DiscreteSATEulerianEngine::checkCollision() {
     for (auto& SATPolygon : m_SATPolygonList)
     {
         SATPolygon->setActive(false);
+    }
+    for (auto& SATCircle : m_SATCircleList)
+    {
+        SATCircle->setActive(false);
     }
     for (auto& SATPolygon1 : m_SATPolygonList)
     {
@@ -1026,6 +1033,20 @@ void DiscreteSATEulerianEngine::checkCollision() {
                     SATPolygon1->setActive(true);
                     SATPolygon2->setActive(true);
                 }
+            }
+        }
+    }
+
+    for (auto& SATPolygon : m_SATPolygonList)
+    {
+        for (auto& SATCircle : m_SATCircleList)
+        {
+            SATCirclePolygonCollider* Collider = SATCirclePolygonCollider::getSATCirclePolygonCollider();
+            if (Collider->isColliding(*SATCircle, SATPolygon->getVertices()))
+            {
+                std::cout << "Checking Collision" << std::endl;
+                SATPolygon->setActive(true);
+                SATCircle->setActive(true);
             }
         }
     }
@@ -1062,6 +1083,11 @@ void DiscreteSATEulerianEngine::draw() {
     {
         SATPolygon->draw();
     }
+    for (auto& SATCircle : m_SATCircleList)
+    {
+        SATCircle->draw();
+    }
+    checkCollision();
 }
 void DiscreteSATEulerianEngine::reset() {
     m_SATPolygonList.clear();
@@ -1070,31 +1096,55 @@ void DiscreteSATEulerianEngine::reset() {
 }
 void DiscreteSATEulerianEngine::handlePlayerControl() {
     if (!m_PlayerControlOn)  return;
+    if (m_ObjectTypeToControl == CONTROL_OBJECT::NONE) return;
 //    std::cout << "Player Control" << std::endl;
-    if (IsKeyDown(KEY_LEFT))
+    if (m_ObjectTypeToControl == CONTROL_OBJECT::POLYGON)
     {
-        m_SATPolygonList[0]->move(Vector2{-2, 0});
+        if (IsKeyDown(KEY_LEFT))
+        {
+            m_SATPolygonList[0]->move(Vector2{-2, 0});
+        }
+        if (IsKeyDown(KEY_RIGHT))
+        {
+            m_SATPolygonList[0]->move(Vector2{2, 0});
+        }
+        if (IsKeyDown(KEY_UP))
+        {
+            m_SATPolygonList[0]->move(Vector2{0, -2});
+        }
+        if (IsKeyDown(KEY_DOWN))
+        {
+            m_SATPolygonList[0]->move(Vector2{0, 2});
+        }
+        if (IsKeyDown(KEY_ONE))
+        {
+            m_SATPolygonList[0]->rotate(-0.05f);
+        }
+        if (IsKeyDown(KEY_TWO))
+        {
+            m_SATPolygonList[0]->rotate(0.05f);
+        }
     }
-    if (IsKeyDown(KEY_RIGHT))
+    else if (m_ObjectTypeToControl == CONTROL_OBJECT::CIRCLE)
     {
-        m_SATPolygonList[0]->move(Vector2{2, 0});
-    }
-    if (IsKeyDown(KEY_UP))
-    {
-        m_SATPolygonList[0]->move(Vector2{0, -2});
-    }
-    if (IsKeyDown(KEY_DOWN))
-    {
-        m_SATPolygonList[0]->move(Vector2{0, 2});
-    }
-    if (IsKeyDown(KEY_ONE))
-    {
-        m_SATPolygonList[0]->rotate(-0.05f);
-    }
-    if (IsKeyDown(KEY_TWO))
-    {
-        m_SATPolygonList[0]->rotate(0.05f);
+        if (IsKeyDown(KEY_LEFT))
+        {
+            m_SATCircleList[0]->move(Vector2{-2, 0});
+        }
+        if (IsKeyDown(KEY_RIGHT))
+        {
+            m_SATCircleList[0]->move(Vector2{2, 0});
+        }
+        if (IsKeyDown(KEY_UP))
+        {
+            m_SATCircleList[0]->move(Vector2{0, -2});
+        }
+        if (IsKeyDown(KEY_DOWN)) {
+            m_SATCircleList[0]->move(Vector2{0, 2});
+        }
     }
 
 }
-
+void DiscreteSATEulerianEngine::setObjectTypeToControl(int ObjectTypeToControl) {
+    m_ObjectTypeToControl = ObjectTypeToControl;
+}

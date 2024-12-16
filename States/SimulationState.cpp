@@ -48,6 +48,8 @@ SimulationState *StateFactory::getState(int StateNumber) {
             return SATTriangleState::getSATTriangleState();
         case StateNumber::SAT_POLYGON_STATE:
             return SATPolygonState::getSATPolygonState();
+        case StateNumber::SAT_CIRCLE_POLYGON_STATE:
+            return SATCirclePolygonState::getSATCirclePolygonState();
         default:
             return nullptr;
     }
@@ -2233,6 +2235,8 @@ void SATPolygonState::reset() {
         m_Engine.attachSATPolygon(polygon);
     }
     m_Engine.turnOnOffPlayerControl(true);
+    int ObjectType = DiscreteSATEulerianEngine::CONTROL_OBJECT::POLYGON;
+    m_Engine.setObjectTypeToControl(ObjectType);
 }
 void SATPolygonState::onNotify() {
     exitState();
@@ -2274,4 +2278,108 @@ void SATPolygonState::readCordinates() {
         SATPlatformPolygon* NewPolygon = new SATPlatformPolygon(Vertices, RED);
         m_PolygonList.push_back(NewPolygon);
     }
+    fin.close();
 }
+SimulationState* SATCirclePolygonState::getSATCirclePolygonState() {
+    static SATCirclePolygonState MySATCirclePolygonState;
+    return &MySATCirclePolygonState;
+}
+SATCirclePolygonState::SATCirclePolygonState() : m_Engine(1800, 1000) {
+    m_StateNumber = StateNumber::SAT_CIRCLE_POLYGON_STATE;
+    reset();
+}
+SATCirclePolygonState::~SATCirclePolygonState() {
+    m_IsActive = true;
+    for (auto& polygon : m_PolygonList)
+    {
+        delete polygon;
+        polygon = nullptr;
+    }
+    m_PolygonList.clear();
+    for (auto& circle : m_CircleList)
+    {
+        delete circle;
+        circle = nullptr;
+    }
+    m_CircleList.clear();
+}
+void SATCirclePolygonState::reset() {
+    m_IsActive = true;
+    for (auto& polygon : m_PolygonList)
+    {
+        delete polygon;
+        polygon = nullptr;
+    }
+    m_PolygonList.clear();
+    for (auto& circle : m_CircleList)
+    {
+        delete circle;
+        circle = nullptr;
+    }
+    m_CircleList.clear();
+    m_Engine.reset();
+    readCordinates();
+    for (auto& polygon : m_PolygonList)
+    {
+        m_Engine.attachSATPolygon(polygon);
+    }
+    for (auto& circle : m_CircleList)
+    {
+        m_Engine.attachSATCircle(circle);
+    }
+    m_Engine.turnOnOffPlayerControl(true);
+    int ObjectType = DiscreteSATEulerianEngine::CONTROL_OBJECT::CIRCLE;
+    m_Engine.setObjectTypeToControl(ObjectType);
+}
+void SATCirclePolygonState::onNotify() {
+    exitState();
+}
+void SATCirclePolygonState::readCordinates() {
+    ifstream fin;
+    fin.open("PolygonCoordinates.txt");
+    if (!fin.is_open())
+    {
+        cerr << "Error opening file\n";
+        return;
+    }
+    int NumberOfPolygons;
+    fin >> NumberOfPolygons;
+    for (int i = 0; i < NumberOfPolygons; ++i)
+    {
+        int NumberOfVertices;
+        fin >> NumberOfVertices;
+        vector<Vector2> Vertices;
+        for (int j = 0; j < NumberOfVertices; ++j)
+        {
+            float x, y;
+            fin >> x >> y;
+            Vertices.push_back(Vector2{x, y});
+        }
+        SATPlatformPolygon* NewPolygon = new SATPlatformPolygon(Vertices, RED);
+        m_PolygonList.push_back(NewPolygon);
+    }
+    fin.close();
+    fin.open("CircleCoordinate.txt");
+    if (!fin.is_open())
+    {
+        cerr << "Error opening file\n";
+        return;
+    }
+    float X, Y;
+    fin >> X >> Y;
+    Vector2 Position = {X, Y};
+    SATPlatformCircle* NewCircle = new SATPlatformCircle(Position, GREEN, 1.0f);
+    NewCircle ->setRadius(80);
+    m_CircleList.push_back(NewCircle);
+}
+void SATCirclePolygonState::draw() {
+    m_Engine.draw();
+}
+SimulationState* SATCirclePolygonState::update() {
+    if (!m_IsActive) {
+        return HomeState::getHomeState();
+    }
+    m_Engine.update(m_FrameTime);
+    return nullptr;
+}
+

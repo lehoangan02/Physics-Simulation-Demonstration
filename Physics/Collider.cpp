@@ -403,3 +403,150 @@ CollisionResolve SATPolygonCollider::getCollisionResolution(const std::vector<Ve
         return {FirstResolution, SecondResolution};
     }
 }
+
+SATCirclePolygonCollider *SATCirclePolygonCollider::getSATCirclePolygonCollider() {
+    static SATCirclePolygonCollider m_SATCirclePolygonCollider;
+    return &m_SATCirclePolygonCollider;
+}
+bool SATCirclePolygonCollider::isColliding(const SATPlatformCircle &Circle, const std::vector<Vector2> &Shape) {
+    std::vector<Vector2> AxisDirectionList;
+    Vector2 CircleClosestVertexDirection;
+    for (int i = 0; i < Shape.size(); ++i)
+    {
+        Line Line1(Shape[i], Shape[(i + 1) % Shape.size()]);
+        AxisDirectionList.push_back(Line1.getNormalDirection());
+    }
+    for (int i = 0; i < Shape.size(); ++i)
+    {
+        Vector2 Direction = Vector2Subtract(Shape[i], Circle.getCenter());
+        if (Vector2Length(Direction) < Vector2Length(Vector2Subtract(CircleClosestVertexDirection, Circle.getCenter())))
+        {
+            CircleClosestVertexDirection = Shape[i];
+        }
+    }
+    AxisDirectionList.push_back(Vector2Normalize(Vector2Subtract(Circle.getCenter(), CircleClosestVertexDirection)));
+    Vector2 MinTranslationVectorMinCircleMaxShape = {INT_MAX, INT_MAX};
+    Vector2 MinTranslationVectorMinShapeMaxCircle = {INT_MAX, INT_MAX};
+    for (auto& AxisDirection : AxisDirectionList) {
+        if (AxisDirection.x == 0 && AxisDirection.y == 0)
+        {
+            std::cout << "Not checking this axis" << std::endl;
+            continue;
+        }
+        if (AxisDirection.x == 0)
+        {
+            Vector2 Origin = {600, 600};
+            std::pair<Vector2, Vector2> DirectionVectorAndPoint(AxisDirection, Origin);
+            Line Axis(DirectionVectorAndPoint);
+            std::vector<Vector2> ProjectionList1;
+            std::vector<Vector2> ProjectionList2;
+            Vector2 Point1OnCircleForProjection = Vector2Scale(Vector2Normalize(AxisDirection), Circle.getRadius());
+            Point1OnCircleForProjection = Vector2Add(Point1OnCircleForProjection, Circle.getCenter());
+            Vector2 Point2OnCircleForProjection = Vector2Scale(Vector2Normalize(AxisDirection), -Circle.getRadius());
+            Point2OnCircleForProjection = Vector2Add(Point2OnCircleForProjection, Circle.getCenter());
+            if (Point1OnCircleForProjection.y > Point2OnCircleForProjection.y)
+            {
+                std::swap(Point1OnCircleForProjection, Point2OnCircleForProjection);
+            }
+            ProjectionList1.push_back(Axis.projection(Point1OnCircleForProjection));
+            ProjectionList1.push_back(Axis.projection(Point2OnCircleForProjection));
+            for (auto& Point : Shape) {
+                ProjectionList2.push_back(Axis.projection(Point));
+            }
+            int MinIndexShape = 0;
+            int MaxIndexShape = 0;
+            for (int i = 0; i < Shape.size(); ++i)
+            {
+                if (ProjectionList2[i].y < ProjectionList2[MinIndexShape].y)
+                {
+                    MinIndexShape = i;
+                }
+                if (ProjectionList2[i].y > ProjectionList2[MaxIndexShape].y)
+                {
+                    MaxIndexShape = i;
+                }
+            }
+            if (ProjectionList1[1].y < ProjectionList2[MinIndexShape].y || ProjectionList2[MaxIndexShape].y < ProjectionList1[0].y)
+            {
+                Axis.draw(RED);
+                DrawCircle(Point1OnCircleForProjection.x, Point1OnCircleForProjection.y, 10, BLUE);
+                DrawCircle(Point2OnCircleForProjection.x, Point2OnCircleForProjection.y, 10, BLUE);
+                DrawCircle(ProjectionList2[MinIndexShape].x, ProjectionList2[MinIndexShape].y, 10, RED);
+                DrawCircle(ProjectionList2[MaxIndexShape].x, ProjectionList2[MaxIndexShape].y, 10, RED);
+                DrawCircle(ProjectionList1[0].x, ProjectionList1[0].y, 10, RED);
+                DrawCircle(ProjectionList1[1].x, ProjectionList1[1].y, 10, RED);
+                DrawCircle(Circle.getCenter().x, Circle.getCenter().y, 10, RED);
+                if (ProjectionList1[1].y < ProjectionList2[MinIndexShape].y)
+                {
+                    DrawCircle(ProjectionList1[1].x, ProjectionList1[1].y, 10, YELLOW);
+                    DrawCircle(ProjectionList2[MinIndexShape].x, ProjectionList2[MinIndexShape].y, 10, YELLOW);
+                }
+                else
+                {
+                    DrawCircle(ProjectionList1[0].x, ProjectionList1[0].y, 10, YELLOW);
+                    DrawCircle(ProjectionList2[MaxIndexShape].x, ProjectionList2[MaxIndexShape].y, 10, YELLOW);
+                }
+                return false;
+            }
+        }
+        else
+        {
+            Vector2 Origin = {600, 600};
+            std::pair<Vector2, Vector2> DirectionVectorAndPoint(AxisDirection, Origin);
+            Line Axis(DirectionVectorAndPoint);
+            std::vector<Vector2> ProjectionList1;
+            std::vector<Vector2> ProjectionList2;
+            Vector2 Point1OnCircleForProjection = Vector2Scale(Vector2Normalize(AxisDirection), Circle.getRadius());
+            Point1OnCircleForProjection = Vector2Add(Point1OnCircleForProjection, Circle.getCenter());
+            Vector2 Point2OnCircleForProjection = Vector2Scale(Vector2Normalize(AxisDirection), -Circle.getRadius());
+            Point2OnCircleForProjection = Vector2Add(Point2OnCircleForProjection, Circle.getCenter());
+            if (Point1OnCircleForProjection.x > Point2OnCircleForProjection.x)
+            {
+                std::swap(Point1OnCircleForProjection, Point2OnCircleForProjection);
+            }
+            ProjectionList1.push_back(Axis.projection(Point1OnCircleForProjection));
+            ProjectionList1.push_back(Axis.projection(Point2OnCircleForProjection));
+            for (auto& Point : Shape) {
+                ProjectionList2.push_back(Axis.projection(Point));
+            }
+            int MinIndexShape = 0;
+            int MaxIndexShape = 0;
+            for (int i = 0; i < Shape.size(); ++i)
+            {
+                if (ProjectionList2[i].x < ProjectionList2[MinIndexShape].x)
+                {
+                    MinIndexShape = i;
+                }
+                if (ProjectionList2[i].x > ProjectionList2[MaxIndexShape].x)
+                {
+                    MaxIndexShape = i;
+                }
+            }
+            if (ProjectionList1[1].x < ProjectionList2[MinIndexShape].x || ProjectionList2[MaxIndexShape].x < ProjectionList1[0].x)
+            {
+                Axis.draw(RED);
+                DrawCircle(Point1OnCircleForProjection.x, Point1OnCircleForProjection.y, 10, BLUE);
+                DrawCircle(Point2OnCircleForProjection.x, Point2OnCircleForProjection.y, 10, BLUE);
+                DrawCircle(ProjectionList2[MinIndexShape].x, ProjectionList2[MinIndexShape].y, 10, RED);
+                DrawCircle(ProjectionList2[MaxIndexShape].x, ProjectionList2[MaxIndexShape].y, 10, RED);
+                DrawCircle(ProjectionList1[0].x, ProjectionList1[0].y, 10, RED);
+                DrawCircle(ProjectionList1[1].x, ProjectionList1[1].y, 10, RED);
+                DrawCircle(Circle.getCenter().x, Circle.getCenter().y, 10, RED);
+                if (ProjectionList1[1].x < ProjectionList2[MinIndexShape].x)
+                {
+                    DrawCircle(ProjectionList1[1].x, ProjectionList1[1].y, 10, YELLOW);
+                    DrawCircle(ProjectionList2[MinIndexShape].x, ProjectionList2[MinIndexShape].y, 10, YELLOW);
+                }
+                else
+                {
+                    DrawCircle(ProjectionList1[0].x, ProjectionList1[0].y, 10, YELLOW);
+                    DrawCircle(ProjectionList2[MaxIndexShape].x, ProjectionList2[MaxIndexShape].y, 10, YELLOW);
+                }
+                return false;
+            }
+        }
+    }
+
+    std::cout << "Collision Detected" << std::endl;
+    return true;
+}

@@ -7,6 +7,7 @@
 
 #include <vector>
 #include "raylib.h"
+#include "SATPlatform.hpp"
 struct CollisionResolve
 {
     Vector2 FirstResolution;
@@ -36,6 +37,14 @@ public:
     bool isColliding(const std::vector<Vector2>& Shape1, const std::vector<Vector2>& Shape2) override;
     CollisionResolve getCollisionResolution(const std::vector<Vector2>& Shape1, const std::vector<Vector2>& Shape2) override;
 };
-
+class SATCirclePolygonCollider{
+private:
+    SATCirclePolygonCollider() = default;
+    ~SATCirclePolygonCollider() = default;
+public:
+    static SATCirclePolygonCollider* getSATCirclePolygonCollider();
+    bool isColliding(const SATPlatformCircle& Circle, const std::vector<Vector2>& Shape);
+    CollisionResolve getCollisionResolution(const std::vector<Vector2>& Shape1, const std::vector<Vector2>& Shape2);
+};
 
 #endif //PHYSICS_SIMULATION_DEMONSTRATION_COLLIDER_H

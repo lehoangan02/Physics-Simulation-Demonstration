@@ -16,6 +16,7 @@
 #include "../Physics/Spring.hpp"
 #include "../Machine Learning/KMeansCalculator.h"
 #include "../Physics/Collider.h"
+#include "../Physics/SATPlatform.hpp"
 enum StateNumber {
     HOME_STATE,
     VERLET_DROP_STATE,
@@ -37,7 +38,7 @@ enum StateNumber {
     SHAPE_MATCHING_SOFT_BODY_STATE,
     SAT_TRIANGLE_STATE,
     SAT_POLYGON_STATE,
-
+    SAT_CIRCLE_POLYGON_STATE,
 };
 class SimulationState;
 class StateFactory
@@ -456,6 +457,22 @@ private:
 private:
     SATPolygonState();
     ~SATPolygonState() override;
+    void reset() override;
+    void readCordinates();
+};
+class SATCirclePolygonState : public SimulationState {
+public:
+    static SimulationState* getSATCirclePolygonState();
+    SimulationState* update() override;
+    void draw() override;
+    void onNotify() override;
+private:
+    vector<SATPlatformCircle*> m_CircleList;
+    vector<SATPlatformPolygon*> m_PolygonList;
+    DiscreteSATEulerianEngine m_Engine;
+private:
+    SATCirclePolygonState();
+    ~SATCirclePolygonState() override;
     void reset() override;
     void readCordinates();
 };
