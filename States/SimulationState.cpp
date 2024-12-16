@@ -2146,22 +2146,22 @@ SimulationState* SATTriangleState::update() {
     if (!m_IsActive) {
         return HomeState::getHomeState();
     }
-    m_TriangleList[0] ->rotate(0.01);
+    m_TriangleList[0] ->rotate(0.05);
     if (IsKeyDown(KEY_LEFT))
     {
-        m_TriangleList[0] -> move(Vector2{-1, 0});
+        m_TriangleList[0] -> move(Vector2{-4, 0});
     }
     if (IsKeyDown(KEY_RIGHT))
     {
-        m_TriangleList[0] -> move(Vector2{1, 0});
+        m_TriangleList[0] -> move(Vector2{4, 0});
     }
     if (IsKeyDown(KEY_UP))
     {
-        m_TriangleList[0] -> move(Vector2{0, -1});
+        m_TriangleList[0] -> move(Vector2{0, -4});
     }
     if (IsKeyDown(KEY_DOWN))
     {
-        m_TriangleList[0] -> move(Vector2{0, 1});
+        m_TriangleList[0] -> move(Vector2{0, 4});
     }
     SATCollider* Collider = TriangleSATCollider::getTriangleSATCollider();
     TriangleSATCollider* TriangleCollider = dynamic_cast<TriangleSATCollider*>(Collider);

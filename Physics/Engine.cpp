@@ -1002,7 +1002,7 @@ void DiscreteSATEulerianEngine::applyConstraints() {
             }
             if (vertex.y > m_Height)
             {
-                std::cout << "Height" << std::endl;
+                
                 Vector2 Move = Vector2{0, m_Height - vertex.y};
                 SATPolygon->move(Move);
             }
@@ -1041,7 +1041,18 @@ void DiscreteSATEulerianEngine::update(float DeltaTime) {
     checkCollision();
     if (m_CollisionOn)
     {
-
+        SATCollider* Collider = SATPolygonCollider::getSATPolygonCollider();
+        for (auto& SATPolygon1 : m_SATPolygonList)
+        {
+            for (auto& SATPolygon2 : m_SATPolygonList)
+            {
+                if (SATPolygon1 != SATPolygon2)
+                {
+                    SATPolygon1->move(Collider->getCollisionResolution(SATPolygon1->getVertices(), SATPolygon2->getVertices()).FirstResolution);
+                    SATPolygon2->move(Collider->getCollisionResolution(SATPolygon1->getVertices(), SATPolygon2->getVertices()).SecondResolution);
+                }
+            }
+        }
     }
     applyConstraints();
 }

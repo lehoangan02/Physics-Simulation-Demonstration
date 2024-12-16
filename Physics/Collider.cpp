@@ -4,6 +4,7 @@
 
 #include "Collider.h"
 #include "../Math/Geometry.hpp"
+#include "raymath.h"
 SATCollider* TriangleSATCollider::getTriangleSATCollider() {
     static TriangleSATCollider m_TriangleSATCollider;
     return &m_TriangleSATCollider;
@@ -161,6 +162,11 @@ bool TriangleSATCollider::isColliding(const std::vector<Vector2> &Shape1, const 
     }
     return true;
 }
+CollisionResolve TriangleSATCollider::getCollisionResolution(const std::vector<Vector2> &Shape1,
+                                                             const std::vector<Vector2> &Shape2) {
+    SATCollider* Collider = SATPolygonCollider::getSATPolygonCollider();
+    return Collider->getCollisionResolution(Shape1, Shape2);
+}
 SATCollider* SATPolygonCollider::getSATPolygonCollider() {
     static SATPolygonCollider m_SATPolygonCollider;
     return &m_SATPolygonCollider;
@@ -266,4 +272,134 @@ bool SATPolygonCollider::isColliding(const std::vector<Vector2> &Shape1, const s
         }
     }
     return true;
+}
+CollisionResolve SATPolygonCollider::getCollisionResolution(const std::vector<Vector2> &Shape1,
+                                                                       const std::vector<Vector2> &Shape2) {
+//    std::cout << "Getting Collision Resolution" << std::endl;
+    std::vector<Vector2> AxisDirectionList1;
+    std::vector<Vector2> AxisDirectionList2;
+    for (int i = 0; i < Shape1.size(); ++i) {
+        Line Line1(Shape1[i], Shape1[(i + 1) % Shape1.size()]);
+        AxisDirectionList1.push_back(Line1.getNormalDirection());
+    }
+    for (int i = 0; i < Shape2.size(); ++i) {
+        Line Line2(Shape2[i], Shape2[(i + 1) % Shape2.size()]);
+        AxisDirectionList2.push_back(Line2.getNormalDirection());
+    }
+    std::vector<Vector2> AxisDirectionList;
+    for (auto& AxisDirection : AxisDirectionList1) {
+        AxisDirectionList.push_back(AxisDirection);
+    }
+    for (auto& AxisDirection : AxisDirectionList2) {
+        AxisDirectionList.push_back(AxisDirection);
+    }
+    Vector2 MinTranslationVectorMin1Max2 = {INT_MAX, INT_MAX};
+    Vector2 MinTranslationVectorMin2Max1 = {INT_MAX, INT_MAX};
+    for (auto& AxisDirection : AxisDirectionList) {
+        if (AxisDirection.x == 0 && AxisDirection.y == 0)
+        {
+            std::cout << "Not checking this axis" << std::endl;
+            continue;
+        }
+        if (AxisDirection.x == 0)
+        {
+            std::cout << "There is a vertical line" << std::endl;
+            Vector2 Origin = {600, 600};
+            std::pair<Vector2, Vector2> DirectionVectorAndPoint(AxisDirection, Origin);
+            Line Axis(DirectionVectorAndPoint);
+            std::vector<Vector2> ProjectionList1;
+            std::vector<Vector2> ProjectionList2;
+            for (auto& Point : Shape1) {
+                ProjectionList1.push_back(Axis.projection(Point));
+            }
+            for (auto& Point : Shape2) {
+                ProjectionList2.push_back(Axis.projection(Point));
+            }
+            int MinIndex1 = 0;
+            int MaxIndex1 = 0;
+            for (int i = 1; i < ProjectionList1.size(); ++i) {
+                if (ProjectionList1[i].y < ProjectionList1[MinIndex1].y) {
+                    MinIndex1 = i;
+                }
+                if (ProjectionList1[i].y > ProjectionList1[MaxIndex1].y) {
+                    MaxIndex1 = i;
+                }
+            }
+            int MinIndex2 = 0;
+            int MaxIndex2 = 0;
+            for (int i = 1; i < ProjectionList2.size(); ++i) {
+                if (ProjectionList2[i].y < ProjectionList2[MinIndex2].y) {
+                    MinIndex2 = i;
+                }
+                if (ProjectionList2[i].y > ProjectionList2[MaxIndex2].y) {
+                    MaxIndex2 = i;
+                }
+            }
+            if (ProjectionList1[MaxIndex1].y < ProjectionList2[MinIndex2].y || ProjectionList2[MaxIndex2].y < ProjectionList1[MinIndex1].y) {
+                return {Vector2{0, 0}, Vector2{0, 0}};
+            }
+            Vector2 Min1Max2 = Vector2Subtract(ProjectionList2[MaxIndex2], ProjectionList1[MinIndex1]);
+            Vector2 Min2Max1 = Vector2Subtract(ProjectionList1[MaxIndex1], ProjectionList2[MinIndex2]);
+            if (Vector2Length(Min1Max2) < Vector2Length(MinTranslationVectorMin1Max2)) {
+                MinTranslationVectorMin1Max2 = Min1Max2;
+            }
+            if (Vector2Length(Min2Max1) < Vector2Length(MinTranslationVectorMin2Max1)) {
+                MinTranslationVectorMin2Max1 = Min2Max1;
+            }
+        }
+        else {
+            Vector2 Origin = {600, 600};
+            std::pair<Vector2, Vector2> DirectionVectorAndPoint(AxisDirection, Origin);
+            Line Axis(DirectionVectorAndPoint);
+            std::vector<Vector2> ProjectionList1;
+            std::vector<Vector2> ProjectionList2;
+            for (auto& Point : Shape1) {
+                ProjectionList1.push_back(Axis.projection(Point));
+            }
+            for (auto& Point : Shape2) {
+                ProjectionList2.push_back(Axis.projection(Point));
+            }
+            int MinIndex1 = 0;
+            int MaxIndex1 = 0;
+            for (int i = 1; i < ProjectionList1.size(); ++i) {
+                if (ProjectionList1[i].x < ProjectionList1[MinIndex1].x) {
+                    MinIndex1 = i;
+                }
+                if (ProjectionList1[i].x > ProjectionList1[MaxIndex1].x) {
+                    MaxIndex1 = i;
+                }
+            }
+            int MinIndex2 = 0;
+            int MaxIndex2 = 0;
+            for (int i = 1; i < ProjectionList2.size(); ++i) {
+                if (ProjectionList2[i].x < ProjectionList2[MinIndex2].x) {
+                    MinIndex2 = i;
+                }
+                if (ProjectionList2[i].x > ProjectionList2[MaxIndex2].x) {
+                    MaxIndex2 = i;
+                }
+            }
+            if (ProjectionList1[MaxIndex1].x < ProjectionList2[MinIndex2].x || ProjectionList2[MaxIndex2].x < ProjectionList1[MinIndex1].x) {
+                return {Vector2{0, 0}, Vector2{0, 0}};
+            }
+            Vector2 Min1Max2 = Vector2Subtract(ProjectionList2[MaxIndex2], ProjectionList1[MinIndex1]);
+            Vector2 Min2Max1 = Vector2Subtract(ProjectionList1[MaxIndex1], ProjectionList2[MinIndex2]);
+            if (Vector2Length(Min1Max2) < Vector2Length(MinTranslationVectorMin1Max2)) {
+                MinTranslationVectorMin1Max2 = Min1Max2;
+            }
+            if (Vector2Length(Min2Max1) < Vector2Length(MinTranslationVectorMin2Max1)) {
+                MinTranslationVectorMin2Max1 = Min2Max1;
+            }
+        }
+    }
+    if (Vector2Length(MinTranslationVectorMin1Max2) < Vector2Length(MinTranslationVectorMin2Max1)) {
+        Vector2 FirstResolution = Vector2Scale(MinTranslationVectorMin1Max2, 0.5);
+        Vector2 SecondResolution = Vector2Scale(MinTranslationVectorMin1Max2, -0.5);
+        return {FirstResolution, SecondResolution};
+    }
+    else {
+        Vector2 FirstResolution = Vector2Scale(MinTranslationVectorMin2Max1, 0.5);
+        Vector2 SecondResolution = Vector2Scale(MinTranslationVectorMin2Max1, -0.5);
+        return {FirstResolution, SecondResolution};
+    }
 }
