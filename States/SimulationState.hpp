@@ -436,6 +436,7 @@ public:
     void onNotify() override;
 private:
     vector<SATPlatformTriangle*> m_TriangleList;
+    DiscreteEulerianEngine m_Engine;
 private:
     SATTriangleState();
     ~SATTriangleState() override;

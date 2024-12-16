@@ -10,7 +10,11 @@
 #include "../Math/Geometry.hpp"
 #include "raylib.h"
 using namespace std;
-
+struct Point
+{
+    Vector2 Position;
+    float Angle;
+};
 class PlatformTriangle
 {
 public:
@@ -28,11 +32,7 @@ public:
 class SATPlatformTriangle : public PlatformTriangle
 {
 private:
-    struct Point
-    {
-        Vector2 Position;
-        float Angle;
-    };
+
 private:
     Point m_A1;
     Point m_B1;
@@ -44,8 +44,27 @@ public:
     static const Color Color2;
     static const Color Color3;
     std::vector<Vector2> getVertices() const;
+    void move(Vector2 Direction);
+    void rotate(float Angle);
+    void setActive(bool Active) {m_DrawInternal = Active;}
+    bool isActive() const {return m_DrawInternal;}
 private:
     void sortVerticesCounterClockWise();
     Vector2 getCenter() const;
+    bool m_DrawInternal = false;
+};
+class SATPlatformPolygon
+{
+public:
+    SATPlatformPolygon(const std::vector<Vector2>& Vertices, Color Color);
+    void draw();
+    void move(Vector2 Direction);
+    void rotate(float Angle);
+    void setActive(bool Active) {m_DrawInternal = Active;}
+    bool isActive() const {return m_DrawInternal;}
+    std::vector<Vector2> getVertices() const;
+private:
+    bool m_DrawInternal = false;
+    std::vector<Point> m_Vertices;
 };
 #endif //PHYSICS_SIMULATION_DEMONSTRATION_PLATFORMTRIANGLE_HPP

@@ -49,13 +49,10 @@ void TriangleSATCollider::drawProjectionY(const std::vector<Vector2> &Shape1, co
     Vector2 ProjectionMax1 = Axis.projection(MaxYPoint1);
     Vector2 ProjectionMax2 = Axis.projection(MaxYPoint2);
 
-    std::cout << "ProjectionMax1: " << ProjectionMax1.x << " " << ProjectionMax1.y << std::endl;
-
     Vector2 ProjectionMin1 = Axis.projection(MinYPoint1);
     Vector2 ProjectionMin2 = Axis.projection(MinYPoint2);
 
 
-//    DrawCircle(Shape1[0].x, Shape1[0].y, 10, RED);
     DrawCircle(ProjectionMax1.x, ProjectionMax1.y, 10, RED);
     DrawCircle(Shape1[MaxYIndex1].x, Shape1[MaxYIndex1].y, 10, RED);
     DrawLineEx(ProjectionMax1, ProjectionMin1, 10, RED);
@@ -82,44 +79,51 @@ bool TriangleSATCollider::isColliding(const std::vector<Vector2> &Shape1, const 
         AxisDirectionList.push_back(AxisDirection);
     }
     for (auto& AxisDirection : AxisDirectionList) {
-        if (AxisDirection.x == 0 && AxisDirection.y == 0) continue;
+        if (AxisDirection.x == 0 && AxisDirection.y == 0)
+        {
+            std::cout << "Not checking this axis" << std::endl;
+            continue;
+        }
         if (AxisDirection.x == 0)
         {
-
+            std::cout << "There is a vertical line" << std::endl;
         }
         else {
-            Vector2 Orgin = {0, 0};
+            Vector2 Orgin = {600, 600};
             std::pair<Vector2, Vector2> DirectionVectorAndPoint(AxisDirection, Orgin);
             Line Axis(DirectionVectorAndPoint);
+            std::vector<Vector2> ProjectionList1;
+            std::vector<Vector2> ProjectionList2;
+            for (auto& Point : Shape1) {
+                ProjectionList1.push_back(Axis.projection(Point));
+            }
+            for (auto& Point : Shape2) {
+                ProjectionList2.push_back(Axis.projection(Point));
+            }
             int MinIndex1 = 0;
             int MaxIndex1 = 0;
-            for (int i = 0; i < Shape1.size(); ++i)
-            {
-                if (Shape1[i].x < Shape1[MinIndex1].x) MinIndex1 = i;
-                if (Shape1[i].x > Shape1[MaxIndex1].x) MaxIndex1 = i;
+            for (int i = 1; i < ProjectionList1.size(); ++i) {
+                if (ProjectionList1[i].x < ProjectionList1[MinIndex1].x) {
+                    MinIndex1 = i;
+                }
+                if (ProjectionList1[i].x > ProjectionList1[MaxIndex1].x) {
+                    MaxIndex1 = i;
+                }
             }
             int MinIndex2 = 0;
             int MaxIndex2 = 0;
-            for (int i = 0; i < Shape2.size(); ++i)
-            {
-                if (Shape2[i].x < Shape2[MinIndex2].x) MinIndex2 = i;
-                if (Shape2[i].x > Shape2[MaxIndex2].x) MaxIndex2 = i;
+            for (int i = 1; i < ProjectionList2.size(); ++i) {
+                if (ProjectionList2[i].x < ProjectionList2[MinIndex2].x) {
+                    MinIndex2 = i;
+                }
+                if (ProjectionList2[i].x > ProjectionList2[MaxIndex2].x) {
+                    MaxIndex2 = i;
+                }
             }
-            Vector2 MinPoint1 = Shape1[MinIndex1];
-            Vector2 MaxPoint1 = Shape1[MaxIndex1];
-
-            Vector2 MinPoint2 = Shape2[MinIndex2];
-            Vector2 MaxPoint2 = Shape2[MaxIndex2];
-
-            Vector2 ProjectionMin1 = Axis.projection(MinPoint1);
-            Vector2 ProjectionMax1 = Axis.projection(MaxPoint1);
-
-            Vector2 ProjectionMin2 = Axis.projection(MinPoint2);
-            Vector2 ProjectionMax2 = Axis.projection(MaxPoint2);
-
-            // check if 2 line segments overlap
-            if (ProjectionMax1.x < ProjectionMin2.x || ProjectionMax2.x < ProjectionMin1.x) return false;
-            else return true;
+            if (ProjectionList1[MaxIndex1].x < ProjectionList2[MinIndex2].x || ProjectionList2[MaxIndex2].x < ProjectionList1[MinIndex1].x) {
+                return false;
+            }
         }
     }
+    return true;
 }
