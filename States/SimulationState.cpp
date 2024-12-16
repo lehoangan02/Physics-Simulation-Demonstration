@@ -46,6 +46,8 @@ SimulationState *StateFactory::getState(int StateNumber) {
             return ShapeMatchingSoftBodyState::getShapeMatchingSoftBodyState();
         case StateNumber::SAT_TRIANGLE_STATE:
             return SATTriangleState::getSATTriangleState();
+        case StateNumber::SAT_POLYGON_STATE:
+            return SATPolygonState::getSATPolygonState();
         default:
             return nullptr;
     }
@@ -2197,5 +2199,79 @@ void SATTriangleState::readCordinates() {
         }
         SATPlatformTriangle* NewTriangle = new SATPlatformTriangle(Temp[0], Temp[1], Temp[2], RED);
         m_TriangleList.push_back(NewTriangle);
+    }
+}
+SimulationState* SATPolygonState::getSATPolygonState() {
+    static SATPolygonState MySATPolygonState;
+    return &MySATPolygonState;
+}
+SATPolygonState::SATPolygonState() : m_Engine(1800, 1000) {
+    m_StateNumber = StateNumber::SAT_POLYGON_STATE;
+    reset();
+}
+SATPolygonState::~SATPolygonState() {
+    m_IsActive = true;
+    for (auto& polygon : m_PolygonList)
+    {
+        delete polygon;
+        polygon = nullptr;
+    }
+    m_PolygonList.clear();
+}
+void SATPolygonState::reset() {
+    m_IsActive = true;
+    for (auto& polygon : m_PolygonList)
+    {
+        delete polygon;
+        polygon = nullptr;
+    }
+    m_PolygonList.clear();
+    m_Engine.reset();
+    readCordinates();
+    for (auto& polygon : m_PolygonList)
+    {
+        m_Engine.attachSATPolygon(polygon);
+    }
+    m_Engine.turnOnOffPlayerControl(true);
+}
+void SATPolygonState::onNotify() {
+    exitState();
+}
+void SATPolygonState::draw() {
+    m_Engine.draw();
+    DrawText("SAT Polygon State", 100, 10, 20, RED);
+    DrawText("Use arrow keys to move the polygon", 100, 30, 20, RED);
+    DrawText("Use 1 and 2 to rotate the polygon", 100, 50, 20, RED);
+}
+SimulationState* SATPolygonState::update() {
+    if (!m_IsActive) {
+        return HomeState::getHomeState();
+    }
+    m_Engine.update(m_FrameTime);
+    return nullptr;
+}
+void SATPolygonState::readCordinates() {
+    ifstream fin;
+    fin.open("PolygonCoordinates.txt");
+    if (!fin.is_open())
+    {
+        cerr << "Error opening file\n";
+        return;
+    }
+    int NumberOfPolygons;
+    fin >> NumberOfPolygons;
+    for (int i = 0; i < NumberOfPolygons; ++i)
+    {
+        int NumberOfVertices;
+        fin >> NumberOfVertices;
+        vector<Vector2> Vertices;
+        for (int j = 0; j < NumberOfVertices; ++j)
+        {
+            float x, y;
+            fin >> x >> y;
+            Vertices.push_back(Vector2{x, y});
+        }
+        SATPlatformPolygon* NewPolygon = new SATPlatformPolygon(Vertices, RED);
+        m_PolygonList.push_back(NewPolygon);
     }
 }

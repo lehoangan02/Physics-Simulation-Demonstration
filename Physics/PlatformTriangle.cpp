@@ -98,3 +98,77 @@ void SATPlatformTriangle::rotate(float Angle) {
     m_B1.Position = Vector2Add(Center, DirectionB);
     m_C1.Position = Vector2Add(Center, DirectionC);
 }
+SATPlatformPolygon::SATPlatformPolygon(const std::vector<Vector2>& Vertices, Color Color) : m_NumberOfVertices(Vertices.size()), m_DrawInternal(false) {
+    for (int i = 0; i < m_NumberOfVertices; ++i) {
+        Point NewPoint;
+        NewPoint.Position = Vertices[i];
+        NewPoint.Angle = 0;
+        m_Vertices.push_back(NewPoint);
+    }
+    sortVerticesCounterClockWise();
+}
+Vector2 SATPlatformPolygon::getCenter() const {
+    Vector2 Center;
+    Center.x = 0;
+    Center.y = 0;
+    for (int i = 0; i < m_NumberOfVertices; ++i) {
+        Center = Vector2Add(Center, m_Vertices[i].Position);
+    }
+    Center.x /= m_NumberOfVertices;
+    Center.y /= m_NumberOfVertices;
+    return Center;
+}
+void SATPlatformPolygon::sortVerticesCounterClockWise() {
+    Vector2 Center = getCenter();
+    Vector2 Reference = Vector2Subtract(m_Vertices[0].Position, Center);
+    m_Vertices[0].Angle = angle360InRadian(Reference, Reference);
+    for (int i = 1; i < m_NumberOfVertices; ++i) {
+        m_Vertices[i].Angle = angle360InRadian(Vector2Subtract(m_Vertices[i].Position, Center), Reference);
+    }
+    for (int i = 1; i < m_NumberOfVertices; ++i) {
+        for (int j = i + 1; j < m_NumberOfVertices; ++j) {
+            if (m_Vertices[i].Angle > m_Vertices[j].Angle) {
+                std::swap(m_Vertices[i], m_Vertices[j]);
+            }
+        }
+    }
+}
+void SATPlatformPolygon::rotate(float Angle) {
+    Vector2 Center = getCenter();
+    for (int i = 0; i < m_NumberOfVertices; ++i) {
+        Vector2 Direction = Vector2Subtract(m_Vertices[i].Position, Center);
+        Direction = Vector2Rotate(Direction, Angle);
+        m_Vertices[i].Position = Vector2Add(Center, Direction);
+    }
+}
+void SATPlatformPolygon::move(Vector2 Direction) {
+    for (int i = 0; i < m_NumberOfVertices; ++i) {
+        m_Vertices[i].Position = Vector2Add(m_Vertices[i].Position, Direction);
+    }
+}
+void SATPlatformPolygon::draw() {
+    if (m_DrawInternal) {
+        for (int i = 0; i < m_NumberOfVertices; ++i) {
+            DrawTriangle(m_Vertices[0].Position, m_Vertices[i].Position, m_Vertices[(i + 1) % m_NumberOfVertices].Position, m_ActiveInternalColor);
+        }
+    }
+    else
+    {
+        for (int i = 0; i < m_NumberOfVertices; ++i) {
+            DrawTriangle(m_Vertices[0].Position, m_Vertices[i].Position, m_Vertices[(i + 1) % m_NumberOfVertices].Position, m_InactiveInternalColor);
+        }
+    }
+    for (int i = 0; i < m_NumberOfVertices; ++i) {
+        DrawLineEx(m_Vertices[i].Position, m_Vertices[(i + 1) % m_NumberOfVertices].Position, 5, m_EdgeColor);
+    }
+    for (int i = 0; i < m_NumberOfVertices; ++i) {
+        DrawCircle((int)m_Vertices[i].Position.x, (int)m_Vertices[i].Position.y, 10, m_VertexColor);
+    }
+}
+std::vector<Vector2> SATPlatformPolygon::getVertices() const {
+    std::vector<Vector2> Vertices;
+    for (int i = 0; i < m_NumberOfVertices; ++i) {
+        Vertices.push_back(m_Vertices[i].Position);
+    }
+    return Vertices;
+}
