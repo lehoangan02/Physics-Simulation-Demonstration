@@ -64,7 +64,14 @@ public:
     bool isActive() const {return m_DrawInternal;}
     std::vector<Vector2> getVertices() const;
 private:
+    const Color m_VertexColor{33, 53, 85, 255};
+    const Color m_EdgeColor{62, 88, 121, 255};
+    const Color m_ActiveInternalColor{216, 196, 182, 255};
+    const Color m_InactiveInternalColor{245, 239, 231, 255};
+    int m_NumberOfVertices = 0;
     bool m_DrawInternal = false;
     std::vector<Point> m_Vertices;
+    void sortVerticesCounterClockWise();
+    Vector2 getCenter() const;
 };
 #endif //PHYSICS_SIMULATION_DEMONSTRATION_PLATFORMTRIANGLE_HPP

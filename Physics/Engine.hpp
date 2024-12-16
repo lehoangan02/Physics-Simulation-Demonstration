@@ -14,6 +14,7 @@
 #include <cmath>
 #include <algorithm>
 #include "../Machine Learning/KMeansCalculator.h"
+#include "Collider.h"
 
 using namespace std;
 void calculateFinalVelocity(const float &Mass1, const float &Mass2, Vector2 &Velocity1,
@@ -213,5 +214,28 @@ private:
     void sortColors();
     void changeViewMode();
     void drawCetroids();
+};
+class DiscreteSATEulerianEngine
+{
+public:
+    DiscreteSATEulerianEngine(int Width, int Height);
+    void attachSATPolygon(SATPlatformPolygon* NewSATPolygon);
+    void update(float DeltaTime);
+    void draw();
+    void reset();
+    void turnOnOffCollision(bool CollisionOn);
+    void turnOnOffPlayerControl(bool PlayerControlOn);
+    void handlePlayerControl();
+private:
+    void applyConstraints();
+    void checkCollision();
+    void collideSATPolygons();
+private:
+    bool m_CollisionOn = true;
+    bool m_PlayerControlOn = false;
+    int m_Width;
+    int m_Height;
+    Texture2D m_Background;
+    vector<SATPlatformPolygon*> m_SATPolygonList;
 };
 #endif //PHYSICS_SIMULATION_DEMONSTRATION_ENGINE_HPP

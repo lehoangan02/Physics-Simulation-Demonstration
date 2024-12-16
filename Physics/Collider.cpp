@@ -87,10 +87,150 @@ bool TriangleSATCollider::isColliding(const std::vector<Vector2> &Shape1, const 
         if (AxisDirection.x == 0)
         {
             std::cout << "There is a vertical line" << std::endl;
+            Vector2 Origin = {600, 600};
+            std::pair<Vector2, Vector2> DirectionVectorAndPoint(AxisDirection, Origin);
+            Line Axis(DirectionVectorAndPoint);
+            std::vector<Vector2> ProjectionList1;
+            std::vector<Vector2> ProjectionList2;
+            for (auto& Point : Shape1) {
+                ProjectionList1.push_back(Axis.projection(Point));
+            }
+            for (auto& Point : Shape2) {
+                ProjectionList2.push_back(Axis.projection(Point));
+            }
+            int MinIndex1 = 0;
+            int MaxIndex1 = 0;
+            for (int i = 1; i < ProjectionList1.size(); ++i) {
+                if (ProjectionList1[i].y < ProjectionList1[MinIndex1].y) {
+                    MinIndex1 = i;
+                }
+                if (ProjectionList1[i].y > ProjectionList1[MaxIndex1].y) {
+                    MaxIndex1 = i;
+                }
+            }
+            int MinIndex2 = 0;
+            int MaxIndex2 = 0;
+            for (int i = 1; i < ProjectionList2.size(); ++i) {
+                if (ProjectionList2[i].y < ProjectionList2[MinIndex2].y) {
+                    MinIndex2 = i;
+                }
+                if (ProjectionList2[i].y > ProjectionList2[MaxIndex2].y) {
+                    MaxIndex2 = i;
+                }
+            }
+            if (ProjectionList1[MaxIndex1].y < ProjectionList2[MinIndex2].y || ProjectionList2[MaxIndex2].y < ProjectionList1[MinIndex1].y) {
+                return false;
+            }
         }
         else {
             Vector2 Orgin = {600, 600};
             std::pair<Vector2, Vector2> DirectionVectorAndPoint(AxisDirection, Orgin);
+            Line Axis(DirectionVectorAndPoint);
+            std::vector<Vector2> ProjectionList1;
+            std::vector<Vector2> ProjectionList2;
+            for (auto& Point : Shape1) {
+                ProjectionList1.push_back(Axis.projection(Point));
+            }
+            for (auto& Point : Shape2) {
+                ProjectionList2.push_back(Axis.projection(Point));
+            }
+            int MinIndex1 = 0;
+            int MaxIndex1 = 0;
+            for (int i = 1; i < ProjectionList1.size(); ++i) {
+                if (ProjectionList1[i].x < ProjectionList1[MinIndex1].x) {
+                    MinIndex1 = i;
+                }
+                if (ProjectionList1[i].x > ProjectionList1[MaxIndex1].x) {
+                    MaxIndex1 = i;
+                }
+            }
+            int MinIndex2 = 0;
+            int MaxIndex2 = 0;
+            for (int i = 1; i < ProjectionList2.size(); ++i) {
+                if (ProjectionList2[i].x < ProjectionList2[MinIndex2].x) {
+                    MinIndex2 = i;
+                }
+                if (ProjectionList2[i].x > ProjectionList2[MaxIndex2].x) {
+                    MaxIndex2 = i;
+                }
+            }
+            if (ProjectionList1[MaxIndex1].x < ProjectionList2[MinIndex2].x || ProjectionList2[MaxIndex2].x < ProjectionList1[MinIndex1].x) {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+SATCollider* SATPolygonCollider::getSATPolygonCollider() {
+    static SATPolygonCollider m_SATPolygonCollider;
+    return &m_SATPolygonCollider;
+}
+bool SATPolygonCollider::isColliding(const std::vector<Vector2> &Shape1, const std::vector<Vector2> &Shape2) {
+    // I accidentally wrote the full fetch polygon detection algorithm in the triangle SAT collider so I will just copy it here
+    std::vector<Vector2> AxisDirectionList1;
+    std::vector<Vector2> AxisDirectionList2;
+    for (int i = 0; i < Shape1.size(); ++i) {
+        Line Line1(Shape1[i], Shape1[(i + 1) % Shape1.size()]);
+        AxisDirectionList1.push_back(Line1.getNormalDirection());
+    }
+    for (int i = 0; i < Shape2.size(); ++i) {
+        Line Line2(Shape2[i], Shape2[(i + 1) % Shape2.size()]);
+        AxisDirectionList2.push_back(Line2.getNormalDirection());
+    }
+    std::vector<Vector2> AxisDirectionList;
+    for (auto& AxisDirection : AxisDirectionList1) {
+        AxisDirectionList.push_back(AxisDirection);
+    }
+    for (auto& AxisDirection : AxisDirectionList2) {
+        AxisDirectionList.push_back(AxisDirection);
+    }
+    for (auto& AxisDirection : AxisDirectionList) {
+        if (AxisDirection.x == 0 && AxisDirection.y == 0)
+        {
+            std::cout << "Not checking this axis" << std::endl;
+            continue;
+        }
+        if (AxisDirection.x == 0)
+        {
+            std::cout << "There is a vertical line" << std::endl;
+            Vector2 Origin = {600, 600};
+            std::pair<Vector2, Vector2> DirectionVectorAndPoint(AxisDirection, Origin);
+            Line Axis(DirectionVectorAndPoint);
+            std::vector<Vector2> ProjectionList1;
+            std::vector<Vector2> ProjectionList2;
+            for (auto& Point : Shape1) {
+                ProjectionList1.push_back(Axis.projection(Point));
+            }
+            for (auto& Point : Shape2) {
+                ProjectionList2.push_back(Axis.projection(Point));
+            }
+            int MinIndex1 = 0;
+            int MaxIndex1 = 0;
+            for (int i = 1; i < ProjectionList1.size(); ++i) {
+                if (ProjectionList1[i].y < ProjectionList1[MinIndex1].y) {
+                    MinIndex1 = i;
+                }
+                if (ProjectionList1[i].y > ProjectionList1[MaxIndex1].y) {
+                    MaxIndex1 = i;
+                }
+            }
+            int MinIndex2 = 0;
+            int MaxIndex2 = 0;
+            for (int i = 1; i < ProjectionList2.size(); ++i) {
+                if (ProjectionList2[i].y < ProjectionList2[MinIndex2].y) {
+                    MinIndex2 = i;
+                }
+                if (ProjectionList2[i].y > ProjectionList2[MaxIndex2].y) {
+                    MaxIndex2 = i;
+                }
+            }
+            if (ProjectionList1[MaxIndex1].y < ProjectionList2[MinIndex2].y || ProjectionList2[MaxIndex2].y < ProjectionList1[MinIndex1].y) {
+                return false;
+            }
+        }
+        else {
+            Vector2 Origin = {600, 600};
+            std::pair<Vector2, Vector2> DirectionVectorAndPoint(AxisDirection, Origin);
             Line Axis(DirectionVectorAndPoint);
             std::vector<Vector2> ProjectionList1;
             std::vector<Vector2> ProjectionList2;

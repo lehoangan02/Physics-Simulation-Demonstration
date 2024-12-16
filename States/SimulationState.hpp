@@ -35,7 +35,8 @@ enum StateNumber {
     CANVAS_STATE,
     PRESSURE_SOFT_BODY_STATE,
     SHAPE_MATCHING_SOFT_BODY_STATE,
-    SAT_TRIANGLE_STATE
+    SAT_TRIANGLE_STATE,
+    SAT_POLYGON_STATE,
 
 };
 class SimulationState;
@@ -440,6 +441,21 @@ private:
 private:
     SATTriangleState();
     ~SATTriangleState() override;
+    void reset() override;
+    void readCordinates();
+};
+class SATPolygonState : public SimulationState {
+public:
+    static SimulationState* getSATPolygonState();
+    SimulationState* update() override;
+    void draw() override;
+    void onNotify() override;
+private:
+    vector<SATPlatformPolygon*> m_PolygonList;
+    DiscreteSATEulerianEngine m_Engine;
+private:
+    SATPolygonState();
+    ~SATPolygonState() override;
     void reset() override;
     void readCordinates();
 };

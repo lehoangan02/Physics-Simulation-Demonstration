@@ -973,4 +973,117 @@ void KMeansEngine::drawCetroids() {
         DrawTexture(m_XTexture, m_Centroids[i].x - m_XTextureOffset.x, m_Centroids[i].y - m_XTextureOffset.y, WHITE);
     }
 }
+DiscreteSATEulerianEngine::DiscreteSATEulerianEngine(int Width, int Height) : m_Width(Width), m_Height(Height), m_CollisionOn(true)
+{
+    m_Background = LoadTexture("Assets/Textures/GridBackground.png");
+}
+void DiscreteSATEulerianEngine::attachSATPolygon(SATPlatformPolygon *NewSATPolygon) {
+    m_SATPolygonList.push_back(NewSATPolygon);
+}
+void DiscreteSATEulerianEngine::applyConstraints() {
+    for (auto& SATPolygon : m_SATPolygonList)
+    {
+        for (auto& vertex : SATPolygon->getVertices())
+        {
+            if (vertex.x < 0)
+            {
+                Vector2 Move = Vector2{-vertex.x, 0};
+                SATPolygon->move(Move);
+            }
+            if (vertex.x > m_Width)
+            {
+                Vector2 Move = Vector2{m_Width - vertex.x, 0};
+                SATPolygon->move(Move);
+            }
+            if (vertex.y < 0)
+            {
+                Vector2 Move = Vector2{0, -vertex.y};
+                SATPolygon->move(Move);
+            }
+            if (vertex.y > m_Height)
+            {
+                std::cout << "Height" << std::endl;
+                Vector2 Move = Vector2{0, m_Height - vertex.y};
+                SATPolygon->move(Move);
+            }
+        }
+    }
+}
+void DiscreteSATEulerianEngine::checkCollision() {
+    for (auto& SATPolygon : m_SATPolygonList)
+    {
+        SATPolygon->setActive(false);
+    }
+    for (auto& SATPolygon1 : m_SATPolygonList)
+    {
+        for (auto& SATPolygon2 : m_SATPolygonList)
+        {
+            if (SATPolygon1 != SATPolygon2)
+            {
+                SATCollider* Collider = SATPolygonCollider::getSATPolygonCollider();
+                if (Collider->isColliding(SATPolygon1->getVertices(), SATPolygon2->getVertices()))
+                {
+                    SATPolygon1->setActive(true);
+                    SATPolygon2->setActive(true);
+                }
+            }
+        }
+    }
+}
+void DiscreteSATEulerianEngine::turnOnOffCollision(bool CollisionOn) {
+    m_CollisionOn = CollisionOn;
+}
+void DiscreteSATEulerianEngine::turnOnOffPlayerControl(bool PlayerControlOn) {
+    m_PlayerControlOn = PlayerControlOn;
+}
+void DiscreteSATEulerianEngine::update(float DeltaTime) {
+    handlePlayerControl();
+    checkCollision();
+    if (m_CollisionOn)
+    {
+
+    }
+    applyConstraints();
+}
+void DiscreteSATEulerianEngine::draw() {
+    DrawTexture(m_Background, 0, 0, WHITE);
+    for (auto& SATPolygon : m_SATPolygonList)
+    {
+        SATPolygon->draw();
+    }
+}
+void DiscreteSATEulerianEngine::reset() {
+    m_SATPolygonList.clear();
+    m_CollisionOn = true;
+    m_PlayerControlOn = false;
+}
+void DiscreteSATEulerianEngine::handlePlayerControl() {
+    if (!m_PlayerControlOn)  return;
+//    std::cout << "Player Control" << std::endl;
+    if (IsKeyDown(KEY_LEFT))
+    {
+        m_SATPolygonList[0]->move(Vector2{-2, 0});
+    }
+    if (IsKeyDown(KEY_RIGHT))
+    {
+        m_SATPolygonList[0]->move(Vector2{2, 0});
+    }
+    if (IsKeyDown(KEY_UP))
+    {
+        m_SATPolygonList[0]->move(Vector2{0, -2});
+    }
+    if (IsKeyDown(KEY_DOWN))
+    {
+        m_SATPolygonList[0]->move(Vector2{0, 2});
+    }
+    if (IsKeyDown(KEY_ONE))
+    {
+        m_SATPolygonList[0]->rotate(-0.05f);
+    }
+    if (IsKeyDown(KEY_TWO))
+    {
+        m_SATPolygonList[0]->rotate(0.05f);
+    }
+
+}
 

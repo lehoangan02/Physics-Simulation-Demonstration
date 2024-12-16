@@ -21,6 +21,14 @@ public:
     bool isColliding(const std::vector<Vector2>& Shape1, const std::vector<Vector2>& Shape2) override;
     void drawProjectionY(const std::vector<Vector2>& Shape1, const std::vector<Vector2>& Shape2);
 };
+class SATPolygonCollider : public SATCollider {
+private:
+    SATPolygonCollider() = default;
+    ~SATPolygonCollider() = default;
+public:
+    static SATCollider* getSATPolygonCollider();
+    bool isColliding(const std::vector<Vector2>& Shape1, const std::vector<Vector2>& Shape2) override;
+};
 
 
 #endif //PHYSICS_SIMULATION_DEMONSTRATION_COLLIDER_H
