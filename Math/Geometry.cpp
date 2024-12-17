@@ -234,6 +234,9 @@ float Line::distanceToLine(const Line &Other) {
 Vector2 Line::getNormalDirection() {
     return Vector2{m_a, m_b};
 }
+Vector2 Line::getDirection() {
+    return Vector2{-m_b, m_a};
+}
 Ray2D::Ray2D(Vector2 Origin, Vector2 Direction) : m_Origin(Origin), m_Direction(Direction) {
 }
 Ray2D Ray2D::bisector(Ray2D Ray1, Ray2D Ray2) {
@@ -301,4 +304,23 @@ float calculateAreaPolygon(const vector<Vector2>& Polygon) {
         Area += calculateAreaTriangle(Center, Polygon[i], Polygon[(i + 1) % Polygon.size()]);
     }
     return Area;
+}
+void drawArrow(Vector2 Start, Vector2 End, Color color) {
+    float Thickness = 3;
+    DrawLineEx(Start, End, Thickness, color);
+    Vector2 direction = { End.x - Start.x, End.y - Start.y };
+    float length = sqrtf(direction.x * direction.x + direction.y * direction.y);
+    Vector2 unitDirection = { direction.x / length, direction.y / length };
+    const float arrowHeadLength = 20.0f;
+    const float arrowHeadAngle = 30.0f * (PI / 180.0f);
+    Vector2 arrowLeft = {
+            End.x - arrowHeadLength * (cosf(arrowHeadAngle) * unitDirection.x - sinf(arrowHeadAngle) * unitDirection.y),
+            End.y - arrowHeadLength * (sinf(arrowHeadAngle) * unitDirection.x + cosf(arrowHeadAngle) * unitDirection.y)
+    };
+    Vector2 arrowRight = {
+            End.x - arrowHeadLength * (cosf(-arrowHeadAngle) * unitDirection.x - sinf(-arrowHeadAngle) * unitDirection.y),
+            End.y - arrowHeadLength * (sinf(-arrowHeadAngle) * unitDirection.x + cosf(-arrowHeadAngle) * unitDirection.y)
+    };
+    DrawLineEx(End, arrowLeft, Thickness, color);
+    DrawLineEx(End, arrowRight, Thickness, color);
 }

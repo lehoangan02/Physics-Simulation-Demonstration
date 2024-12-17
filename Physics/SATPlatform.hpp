@@ -43,10 +43,15 @@ public:
     void draw();
     void move(Vector2 Direction);
     void rotate(float Angle);
+    void update(float DeltaTime);
     void setActive(bool Active) {m_DrawInternal = Active;}
     bool isActive() const {return m_DrawInternal;}
     std::vector<Vector2> getVertices() const;
     void setCustomColor(Color CustomColor) {m_CustomColor = CustomColor; m_UseCustomColor = true;}
+    void accelerate(Vector2 Acceleration);
+    void setVelocity(Vector2 Velocity) {m_Velocity = Velocity;}
+    Vector2 getVelocity() const {return m_Velocity;}
+    void addVelocity(Vector2 Velocity);
 private:
     const Color m_VertexColor{33, 53, 85, 255};
     const Color m_EdgeColor{62, 88, 121, 255};
@@ -57,9 +62,11 @@ private:
     int m_NumberOfVertices = 0;
     bool m_DrawInternal = false;
     std::vector<Point> m_Vertices;
+    Vector2 m_Velocity = {0, 0};
+    Vector2 m_Acceleration = {0, 0};
+private:
     void sortVerticesCounterClockWise();
     Vector2 getCenter() const;
-
 };
 class SATPlatformCircle : public EulerianRoundBall
 {
@@ -68,10 +75,17 @@ public:
     SATPlatformCircle(Vector2 Position, Color Color, float Mass);
     void draw() override;
     void move(Vector2 Direction);
+    void update(float DeltaTime);
     void setActive(bool Active) {m_DrawInternal = Active;}
     Vector2 getCenter() const {return m_CurrentPosition;}
     float getRadius() const {return m_Radius;}
     void setRadius(float Radius);
+    void accelerate(Vector2 Acceleration);
+    Vector2 getVelocity() const {return m_Velocity;}
+    float getMass() const {return m_Mass;}
+    void addVelocity(Vector2 Velocity);
+    void setVelocity(Vector2 Velocity);
+    Vector2 getCenter() {return m_CurrentPosition;}
 private:
     bool m_DrawInternal = false;
 };

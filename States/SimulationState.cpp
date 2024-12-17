@@ -50,6 +50,8 @@ SimulationState *StateFactory::getState(int StateNumber) {
             return SATPolygonState::getSATPolygonState();
         case StateNumber::SAT_CIRCLE_POLYGON_STATE:
             return SATCirclePolygonState::getSATCirclePolygonState();
+        case StateNumber::SAT_RESPONSE_STATE:
+            return SATResponseState::getSATResponseState();
         default:
             return nullptr;
     }
@@ -2419,4 +2421,157 @@ SimulationState* SATCirclePolygonState::update() {
     m_Engine.update(m_FrameTime);
     return nullptr;
 }
+SATResponseState::SATResponseState() : m_Engine(1800, 1000) {
+    m_StateNumber = StateNumber::SAT_RESPONSE_STATE;
+    m_ColorList.push_back(Color{22, 114, 136, 255});
+    m_ColorList.push_back(Color{140, 218, 236, 255});
+    m_ColorList.push_back(Color{180, 82, 72, 255});
+    m_ColorList.push_back(Color{212, 140, 132, 255});
+    m_ColorList.push_back(Color{168, 154, 73, 255});
+    m_ColorList.push_back(Color{214, 207, 162, 255});
+    m_ColorList.push_back(Color{60, 180, 100, 255});
+    m_ColorList.push_back(Color{155, 221, 177, 255});
+    m_ColorList.push_back(Color{100, 60, 106, 255});
+    m_ColorList.push_back(Color{131, 99, 148, 255});
+    m_Engine.setControlType(DiscreteSATEulerianEngine::CONTROL_TYPE::ACCELERATE_CONTROL);
+    m_Engine.setObjectTypeToControl(DiscreteSATEulerianEngine::CONTROL_OBJECT::CIRCLE);
+    reset();
+}
+SATResponseState::~SATResponseState() {
+    m_IsActive = true;
+    for (auto& polygon : m_PolygonList)
+    {
+        delete polygon;
+        polygon = nullptr;
+    }
+    m_PolygonList.clear();
+    for (auto& circle : m_CircleList)
+    {
+        delete circle;
+        circle = nullptr;
+    }
+    m_CircleList.clear();
+}
+void SATResponseState::reset() {
+    m_IsActive = true;
+    for (auto& polygon : m_PolygonList)
+    {
+        delete polygon;
+        polygon = nullptr;
+    }
+    m_PolygonList.clear();
+    for (auto& circle : m_CircleList)
+    {
+        delete circle;
+        circle = nullptr;
+    }
+    m_CircleList.clear();
+    m_Engine.reset();
+    readCordinates();
+    for (auto& polygon : m_PolygonList)
+    {
+        m_Engine.attachSATPolygon(polygon);
+    }
+    for (auto& circle : m_CircleList)
+    {
+        m_Engine.attachSATCircle(circle);
+    }
+    m_Engine.turnOnOffPlayerControl(true);
+    int ObjectType = DiscreteSATEulerianEngine::CONTROL_OBJECT::CIRCLE;
+    m_Engine.setObjectTypeToControl(ObjectType);
+}
+void SATResponseState::onNotify() {
+    exitState();
+}
+void SATResponseState::readCordinates() {
+    ifstream fin;
+    fin.open("PolygonCoordinates.txt");
+    if (!fin.is_open())
+    {
+        cerr << "Error opening file\n";
+        return;
+    }
+    int NumberOfPolygons;
+    fin >> NumberOfPolygons;
+    for (int i = 0; i < NumberOfPolygons; ++i)
+    {
+        int NumberOfVertices;
+        fin >> NumberOfVertices;
+        vector<Vector2> Vertices;
+        for (int j = 0; j < NumberOfVertices; ++j)
+        {
+            float x, y;
+            fin >> x >> y;
+            Vertices.push_back(Vector2{x, y});
+        }
+        SATPlatformPolygon* NewPolygon = new SATPlatformPolygon(Vertices, RED);
+        NewPolygon->setCustomColor(m_ColorList[i + 6]);
+        m_PolygonList.push_back(NewPolygon);
+    }
+    fin.close();
+    fin.open("CircleCoordinate.txt");
+    if (!fin.is_open())
+    {
+        cerr << "Error opening file\n";
+        return;
+    }
+    int NumberOfCircles;
+    fin >> NumberOfCircles;
+    for (int i = 0; i < NumberOfCircles; ++i) {
+        float x, y;
+        fin >> x >> y;
+        SATPlatformCircle *NewCircle = new SATPlatformCircle(Vector2{x, y}, m_ColorList[i], 1.0f);
+        switch (i) {
+            case 0:
+                NewCircle->setRadius(80);
+                break;
+            case 1:
+                NewCircle->setRadius(50);
+                break;
+            case 2:
+                NewCircle->setRadius(60);
+                break;
+            case 3:
+                NewCircle->setRadius(70);
+                break;
+            case 4:
+                NewCircle->setRadius(40);
+                break;
+            case 5:
+                NewCircle->setRadius(90);
+                break;
+            case 6:
+                NewCircle->setRadius(100);
+                break;
+        }
+
+        m_CircleList.push_back(NewCircle);
+    }
+}
+void SATResponseState::draw() {
+    m_Engine.draw();
+    DrawText("SAT Response State", 100, 10, 20, RED);
+    DrawText("Use arrow keys to move", 100, 30, 20, RED);
+    DrawText("Use 1 to select circle and 2 to select polygon", 100, 50, 20, RED);
+}
+SimulationState* SATResponseState::update() {
+    if (!m_IsActive) {
+        return HomeState::getHomeState();
+    }
+    m_Engine.update(m_FrameTime);
+    if (IsKeyPressed(KEY_ONE))
+    {
+        m_Engine.setObjectTypeToControl(DiscreteSATEulerianEngine::CONTROL_OBJECT::CIRCLE);
+    }
+    if (IsKeyPressed(KEY_TWO))
+    {
+        m_Engine.setObjectTypeToControl(DiscreteSATEulerianEngine::CONTROL_OBJECT::POLYGON);
+    }
+    return nullptr;
+}
+SimulationState* SATResponseState::getSATResponseState() {
+    static SATResponseState MySATResponseState;
+    return &MySATResponseState;
+}
+
 

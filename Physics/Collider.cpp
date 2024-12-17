@@ -439,6 +439,51 @@ bool SATCirclePolygonCollider::isColliding(const SATPlatformCircle &Circle, cons
         if (AxisDirection.x == 0)
         {
             std::cout << "There is a vertical line" << std::endl;
+            Vector2 Origin = {600, 600};
+            std::pair<Vector2, Vector2> DirectionVectorAndPoint(AxisDirection, Origin);
+            Line Axis(DirectionVectorAndPoint);
+            std::vector<Vector2> ProjectionList1;
+            std::vector<Vector2> ProjectionList2;
+            Vector2 Point1;
+            Vector2 Point2;
+            Point1 = Vector2Normalize(AxisDirection);
+            Point1 = Vector2Scale(Point1, Circle.getRadius());
+            Point1 = Vector2Add(Point1, Circle.getCenter());
+            Point2 = Vector2Normalize(AxisDirection);
+            Point2 = Vector2Scale(Point2, -Circle.getRadius());
+            Point2 = Vector2Add(Point2, Circle.getCenter());
+            ProjectionList1.push_back(Axis.projection(Point1));
+            ProjectionList1.push_back(Axis.projection(Point2));
+            for (auto& Point : Shape) {
+                ProjectionList2.push_back(Axis.projection(Point));
+            }
+            int MinIndex1 = 0;
+            int MaxIndex1 = 0;
+            for (int i = 1; i < ProjectionList1.size(); ++i) {
+                if (ProjectionList1[i].y < ProjectionList1[MinIndex1].y) {
+                    MinIndex1 = i;
+                }
+                if (ProjectionList1[i].y > ProjectionList1[MaxIndex1].y) {
+                    MaxIndex1 = i;
+                }
+            }
+            int MinIndex2 = 0;
+            int MaxIndex2 = 0;
+            for (int i = 1; i < ProjectionList2.size(); ++i) {
+                if (ProjectionList2[i].y < ProjectionList2[MinIndex2].y) {
+                    MinIndex2 = i;
+                }
+                if (ProjectionList2[i].y > ProjectionList2[MaxIndex2].y) {
+                    MaxIndex2 = i;
+                }
+            }
+            Min1 = ProjectionList1[MinIndex1];
+            Max1 = ProjectionList1[MaxIndex1];
+            Min2 = ProjectionList2[MinIndex2];
+            Max2 = ProjectionList2[MaxIndex2];
+            if (ProjectionList1[MaxIndex1].y < ProjectionList2[MinIndex2].y || ProjectionList2[MaxIndex2].y < ProjectionList1[MinIndex1].y) {
+                return false;
+            }
         }
         else
         {

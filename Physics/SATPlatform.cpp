@@ -154,7 +154,24 @@ std::vector<Vector2> SATPlatformPolygon::getVertices() const {
     }
     return Vertices;
 }
+void SATPlatformPolygon::accelerate(Vector2 Acceleration) {
+    m_Acceleration = Vector2Add(m_Acceleration, Acceleration);
+}
+void SATPlatformPolygon::update(float DeltaTime) {
+    m_Velocity = Vector2Add(m_Velocity, m_Acceleration);
+    for (int i = 0; i < m_NumberOfVertices; ++i) {
+        m_Vertices[i].Position = Vector2Add(m_Vertices[i].Position, m_Velocity);
+    }
+    m_Acceleration = Vector2Scale(m_Acceleration, 0);
+}
+void SATPlatformPolygon::addVelocity(Vector2 Velocity) {
+    m_Velocity = Vector2Add(m_Velocity, Velocity);
+}
 SATPlatformCircle::SATPlatformCircle(Vector2 Position, Color Color, float Mass) : EulerianRoundBall(Position, Color, Mass) {
+    m_CurrentPosition = Position;
+    m_Color = Color;
+    m_Radius = 10;
+    m_Acceleration = Vector2{0, 0};
 }
 void SATPlatformCircle::draw() {
     DrawCircle(m_CurrentPosition.x, m_CurrentPosition.y, m_Radius, BLACK);
@@ -170,4 +187,18 @@ void SATPlatformCircle::setRadius(float Radius) {
         m_Radius = 10;
     }
     m_Radius = Radius;
+}
+void SATPlatformCircle::update(float DeltaTime) {
+    EulerianRoundBall::update(DeltaTime);
+}
+void SATPlatformCircle::accelerate(Vector2 Acceleration) {
+//    print("SATPlatformCircle::accelerate\n");
+//    std::cout << m_CurrentPosition.x << " " << m_CurrentPosition.y << std::endl;
+    EulerianRoundBall::accelerate(Acceleration);
+}
+void SATPlatformCircle::addVelocity(Vector2 Velocity) {
+    m_Velocity = Vector2Add(m_Velocity, Velocity);
+}
+void SATPlatformCircle::setVelocity(Vector2 Velocity) {
+    m_Velocity = Velocity;
 }

@@ -58,6 +58,7 @@ public:
     float distanceToLine(const Line& Other);
     void draw(Color color) { DrawLineEx(Vector2{findX(0), 0}, Vector2{findX(1000), 1000}, 2, color); }
     Vector2 getNormalDirection();
+    Vector2 getDirection();
 };
 class Ray2D {
 private:
@@ -80,4 +81,5 @@ float degreeToRadian(float Degree);
 Vector2 flipVector(Vector2 Initial, Vector2 Mirror);
 float calculateAreaTriangle(const Vector2& A, const Vector2& B, const Vector2& C);
 float calculateAreaPolygon(const vector<Vector2>& Polygon);
+void drawArrow(Vector2 Start, Vector2 End, Color color);
 #endif //PHYSICS_SIMULATION_DEMONSTRATION_GEOMETRY_HPP

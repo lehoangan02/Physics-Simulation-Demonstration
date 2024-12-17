@@ -219,6 +219,23 @@ private:
 class DiscreteSATEulerianEngine
 {
 public:
+enum CONTROL_OBJECT
+{
+    NONE,
+    POLYGON,
+    CIRCLE,
+};
+enum class CONTROL_TYPE
+{
+    INSTANT_CONTROL,
+    ACCELERATE_CONTROL,
+};
+enum class ENGINE_MODE
+{
+    INSTANT_ENGINE,
+    ACCELERATE_ENGINE,
+};
+public:
     DiscreteSATEulerianEngine(int Width, int Height);
     void attachSATPolygon(SATPlatformPolygon* NewSATPolygon);
     void attachSATCircle(SATPlatformCircle* NewSATCircle);
@@ -228,22 +245,23 @@ public:
     void turnOnOffCollision(bool CollisionOn);
     void turnOnOffPlayerControl(bool PlayerControlOn);
     void setObjectTypeToControl(int ObjectTypeToControl);
+    void setControlType(CONTROL_TYPE ControlType);
+    void setEngineMode(ENGINE_MODE EngineMode);
     void handlePlayerControl();
 private:
     void applyConstraints();
     void checkCollision();
     void collideSATPolygons();
     void collideSATCircle();
-public:
-    enum CONTROL_OBJECT
-    {
-        NONE,
-        POLYGON,
-        CIRCLE,
-    };
+    void collideSATPolygonsInstant();
+    void collideSATCircleInstant();
+    void collideSATPolygonsAccelerate();
+    void collideSATCircleAccelerate();
 private:
     bool m_CollisionOn = true;
     bool m_PlayerControlOn = false;
+    CONTROL_TYPE m_ControlType = CONTROL_TYPE::INSTANT_CONTROL;
+    ENGINE_MODE m_EngineMode = ENGINE_MODE::INSTANT_ENGINE;
     int m_ObjectTypeToControl = CONTROL_OBJECT::NONE;
     int m_Width;
     int m_Height;
