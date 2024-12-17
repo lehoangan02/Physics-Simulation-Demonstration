@@ -1098,6 +1098,7 @@ void DiscreteSATEulerianEngine::draw() {
 }
 void DiscreteSATEulerianEngine::reset() {
     m_SATPolygonList.clear();
+    m_SATCircleList.clear();
     m_CollisionOn = true;
     m_PlayerControlOn = false;
 }

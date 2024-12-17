@@ -143,7 +143,7 @@ void SATPlatformPolygon::draw() {
             DrawLineEx(m_Vertices[i].Position, m_Vertices[(i + 1) % m_NumberOfVertices].Position, 6, BLACK);
         }
         for (int i = 0; i < m_NumberOfVertices; ++i) {
-            DrawCircle((int) m_Vertices[i].Position.x, (int) m_Vertices[i].Position.y, 3, m_VertexColor);
+            DrawCircle((int) m_Vertices[i].Position.x, (int) m_Vertices[i].Position.y, 2, BLACK);
         }
     }
 }

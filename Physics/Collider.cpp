@@ -533,7 +533,61 @@ CollisionResolve SATCirclePolygonCollider::getCollisionResolution(const SATPlatf
         }
         if (AxisDirection.x == 0) {
             std::cout << "There is a vertical line" << std::endl;
-        } else {
+            Vector2 Origin = {600, 600};
+            std::pair<Vector2, Vector2> DirectionVectorAndPoint(AxisDirection, Origin);
+            Line Axis(DirectionVectorAndPoint);
+            std::vector<Vector2> ProjectionList1;
+            std::vector<Vector2> ProjectionList2;
+            Vector2 Point1;
+            Vector2 Point2;
+            Point1 = Vector2Normalize(AxisDirection);
+            Point1 = Vector2Scale(Point1, Circle.getRadius());
+            Point1 = Vector2Add(Point1, Circle.getCenter());
+            Point2 = Vector2Normalize(AxisDirection);
+            Point2 = Vector2Scale(Point2, -Circle.getRadius());
+            Point2 = Vector2Add(Point2, Circle.getCenter());
+            ProjectionList1.push_back(Axis.projection(Point1));
+            ProjectionList1.push_back(Axis.projection(Point2));
+            for (auto& Point : Shape) {
+                ProjectionList2.push_back(Axis.projection(Point));
+            }
+            int MinIndex1 = 0;
+            int MaxIndex1 = 0;
+            for (int i = 1; i < ProjectionList1.size(); ++i) {
+                if (ProjectionList1[i].y < ProjectionList1[MinIndex1].y) {
+                    MinIndex1 = i;
+                }
+                if (ProjectionList1[i].y > ProjectionList1[MaxIndex1].y) {
+                    MaxIndex1 = i;
+                }
+            }
+            int MinIndex2 = 0;
+            int MaxIndex2 = 0;
+            for (int i = 1; i < ProjectionList2.size(); ++i) {
+                if (ProjectionList2[i].y < ProjectionList2[MinIndex2].y) {
+                    MinIndex2 = i;
+                }
+                if (ProjectionList2[i].y > ProjectionList2[MaxIndex2].y) {
+                    MaxIndex2 = i;
+                }
+            }
+            Min1 = ProjectionList1[MinIndex1];
+            Max1 = ProjectionList1[MaxIndex1];
+            Min2 = ProjectionList2[MinIndex2];
+            Max2 = ProjectionList2[MaxIndex2];
+            if (ProjectionList1[MaxIndex1].y < ProjectionList2[MinIndex2].y || ProjectionList2[MaxIndex2].y < ProjectionList1[MinIndex1].y) {
+                return {Vector2{0, 0}, Vector2{0, 0}};
+            }
+            Vector2 Min1Max2 = Vector2Subtract(ProjectionList2[MaxIndex2], ProjectionList1[MinIndex1]);
+            Vector2 Min2Max1 = Vector2Subtract(ProjectionList1[MaxIndex1], ProjectionList2[MinIndex2]);
+            if (Vector2Length(Min1Max2) < Vector2Length(MinTranslationVectorMin1Max2)) {
+                MinTranslationVectorMin1Max2 = Min1Max2;
+            }
+            if (Vector2Length(Min2Max1) < Vector2Length(MinTranslationVectorMin2Max1)) {
+                MinTranslationVectorMin2Max1 = Min2Max1;
+            }
+        }
+        else {
             Vector2 Origin = {600, 600};
             std::pair<Vector2, Vector2> DirectionVectorAndPoint(AxisDirection, Origin);
             Line Axis(DirectionVectorAndPoint);
@@ -593,13 +647,13 @@ CollisionResolve SATCirclePolygonCollider::getCollisionResolution(const SATPlatf
 //    DrawLineEx(Min1, Max1, 5, RED);
 //    DrawLineEx(Min2, Max2, 3, BLUE);
     if (Vector2Length(MinTranslationVectorMin1Max2) < Vector2Length(MinTranslationVectorMin2Max1)) {
-        std::cout << "Case 1" << std::endl;
+//        std::cout << "Case 1" << std::endl;
         Vector2 FirstResolution = Vector2Scale(MinTranslationVectorMin1Max2, 0.5);
         Vector2 SecondResolution = Vector2Scale(MinTranslationVectorMin1Max2, -0.5);
         return {FirstResolution, SecondResolution};
     }
     else {
-        std::cout << "Case 2" << std::endl;
+//        std::cout << "Case 2" << std::endl;
         Vector2 FirstResolution = Vector2Scale(MinTranslationVectorMin2Max1, -0.5);
         Vector2 SecondResolution = Vector2Scale(MinTranslationVectorMin2Max1, 0.5);
         return {FirstResolution, SecondResolution};
