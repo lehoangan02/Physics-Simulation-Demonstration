@@ -306,7 +306,12 @@ float calculateAreaPolygon(const vector<Vector2>& Polygon) {
     return Area;
 }
 void drawArrow(Vector2 Start, Vector2 End, Color color) {
+    if (Vector2Length(Vector2Subtract(End, Start)) == 0) return;
+    float BorderThickness = 3;
     float Thickness = 3;
+    DrawCircleV(Start, Thickness / 2 + BorderThickness, BLACK);
+    DrawLineEx(Start, End, Thickness + BorderThickness * 2, BLACK);
+    DrawCircleV(Start, Thickness / 2, color);
     DrawLineEx(Start, End, Thickness, color);
     Vector2 direction = { End.x - Start.x, End.y - Start.y };
     float length = sqrtf(direction.x * direction.x + direction.y * direction.y);
@@ -321,9 +326,49 @@ void drawArrow(Vector2 Start, Vector2 End, Color color) {
             End.x - arrowHeadLength * (cosf(-arrowHeadAngle) * unitDirection.x - sinf(-arrowHeadAngle) * unitDirection.y),
             End.y - arrowHeadLength * (sinf(-arrowHeadAngle) * unitDirection.x + cosf(-arrowHeadAngle) * unitDirection.y)
     };
+    DrawCircleV(End, Thickness / 2 + BorderThickness, BLACK);
+    DrawCircleV(End, Thickness / 2, color);
+    DrawCircleV(arrowLeft, Thickness / 2 + BorderThickness, BLACK);
+    DrawCircleV(arrowRight, Thickness / 2 + BorderThickness, BLACK);
+    DrawCircleV(arrowLeft, Thickness / 2, color);
+    DrawCircleV(arrowRight, Thickness / 2, color);
+    DrawLineEx(End, arrowLeft, Thickness + BorderThickness * 2, BLACK);
+    DrawLineEx(End, arrowRight, Thickness + BorderThickness * 2, BLACK);
     DrawLineEx(End, arrowLeft, Thickness, color);
     DrawLineEx(End, arrowRight, Thickness, color);
 }
+void drawArrow(Vector2 Start, Vector2 End, Color color, float Thickness) {
+    if (Vector2Length(Vector2Subtract(End, Start)) == 0) return;
+    float BorderThickness = Thickness;
+    DrawCircleV(Start, Thickness / 2 + BorderThickness, BLACK);
+    DrawLineEx(Start, End, Thickness + BorderThickness * 2, BLACK);
+    DrawCircleV(Start, Thickness / 2, color);
+    DrawLineEx(Start, End, Thickness, color);
+    Vector2 direction = { End.x - Start.x, End.y - Start.y };
+    float length = sqrtf(direction.x * direction.x + direction.y * direction.y);
+    Vector2 unitDirection = { direction.x / length, direction.y / length };
+    const float arrowHeadLength = 20.0f;
+    const float arrowHeadAngle = 30.0f * (PI / 180.0f);
+    Vector2 arrowLeft = {
+        End.x - arrowHeadLength * (cosf(arrowHeadAngle) * unitDirection.x - sinf(arrowHeadAngle) * unitDirection.y),
+        End.y - arrowHeadLength * (sinf(arrowHeadAngle) * unitDirection.x + cosf(arrowHeadAngle) * unitDirection.y)
+};
+    Vector2 arrowRight = {
+        End.x - arrowHeadLength * (cosf(-arrowHeadAngle) * unitDirection.x - sinf(-arrowHeadAngle) * unitDirection.y),
+        End.y - arrowHeadLength * (sinf(-arrowHeadAngle) * unitDirection.x + cosf(-arrowHeadAngle) * unitDirection.y)
+};
+    DrawCircleV(End, Thickness / 2 + BorderThickness, BLACK);
+    DrawCircleV(End, Thickness / 2, color);
+    DrawCircleV(arrowLeft, Thickness / 2 + BorderThickness, BLACK);
+    DrawCircleV(arrowRight, Thickness / 2 + BorderThickness, BLACK);
+    DrawCircleV(arrowLeft, Thickness / 2, color);
+    DrawCircleV(arrowRight, Thickness / 2, color);
+    DrawLineEx(End, arrowLeft, Thickness + BorderThickness * 2, BLACK);
+    DrawLineEx(End, arrowRight, Thickness + BorderThickness * 2, BLACK);
+    DrawLineEx(End, arrowLeft, Thickness, color);
+    DrawLineEx(End, arrowRight, Thickness, color);
+}
+
 vector<Vector2> dilatePolygon(const vector<Vector2>& Polygon, float Scale) {
     Vector2 Center = {0, 0};
     for (int i = 0; i < Polygon.size(); ++i) {

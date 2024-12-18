@@ -82,5 +82,6 @@ Vector2 flipVector(Vector2 Initial, Vector2 Mirror);
 float calculateAreaTriangle(const Vector2& A, const Vector2& B, const Vector2& C);
 float calculateAreaPolygon(const vector<Vector2>& Polygon);
 void drawArrow(Vector2 Start, Vector2 End, Color color);
+void drawArrow(Vector2 Start, Vector2 End, Color color, float Thickness);
 vector<Vector2> dilatePolygon(const vector<Vector2>& Polygon, float Scale);
 #endif //PHYSICS_SIMULATION_DEMONSTRATION_GEOMETRY_HPP

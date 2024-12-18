@@ -52,6 +52,7 @@ public:
     void setVelocity(Vector2 Velocity) {m_Velocity = Velocity;}
     Vector2 getVelocity() const {return m_Velocity;}
     void addVelocity(Vector2 Velocity);
+    Vector2 getCenter() const;
 private:
     const Color m_VertexColor{33, 53, 85, 255};
     const Color m_EdgeColor{62, 88, 121, 255};
@@ -66,7 +67,6 @@ private:
     Vector2 m_Acceleration = {0, 0};
 private:
     void sortVerticesCounterClockWise();
-    Vector2 getCenter() const;
 };
 class SATPlatformCircle : public EulerianRoundBall
 {

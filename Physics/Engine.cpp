@@ -1151,11 +1151,28 @@ void DiscreteSATEulerianEngine::draw() {
     }
     if (m_PlayerControlOn)
     {
+        Vector2 End = m_SATPolygonList[0]->getCenter();
         if (m_ObjectTypeToControl == CONTROL_OBJECT::POLYGON)
         {
             if (IsKeyDown(KEY_LEFT))
             {
+                End = Vector2Subtract(End, Vector2{50, 0});
+
             }
+            if (IsKeyDown(KEY_RIGHT))
+            {
+                End = Vector2Add(End, Vector2{50, 0});
+            }
+            if (IsKeyDown(KEY_UP))
+            {
+                End = Vector2Subtract(End, Vector2{0, 50});
+            }
+            if (IsKeyDown(KEY_DOWN))
+            {
+                End = Vector2Add(End, Vector2{0, 50});
+            }
+            Color ArrowColor = Color{255, 131, 131, 255};
+            drawArrow(m_SATPolygonList[0]->getCenter(), End, ArrowColor, 4);
         }
         else if (m_ObjectTypeToControl == CONTROL_OBJECT::CIRCLE)
         {
@@ -1177,7 +1194,7 @@ void DiscreteSATEulerianEngine::draw() {
                 End = Vector2Add(End, Vector2{0, 50});
             }
             Color ArrowColor = Color{255, 131, 131, 255};
-            drawArrow(m_SATCircleList[0]->getCenter(), End, ArrowColor);
+            drawArrow(m_SATCircleList[0]->getCenter(), End, ArrowColor, 4);
         }
     }
 }
@@ -1436,7 +1453,28 @@ void DiscreteSATEulerianEngine::collideSATPolygonsAccelerate() {
                     }
                 }
                 if (Inside) {
-
+                    // find the closest vertex to the circle center
+                    int ClosestVertexIndex = 0;
+                    for (int i = 0; i < Vertices.size(); ++i)
+                    {
+                        if (Vector2Distance(SATCircle->getCenter(), Vertices[i]) < Vector2Distance(SATCircle->getCenter(), Vertices[ClosestVertexIndex]))
+                        {
+                            ClosestVertexIndex = i;
+                        }
+                    }
+                    Vector2 Normal = Vector2Normalize(Vector2Subtract(SATCircle->getCenter(), Vertices[ClosestVertexIndex]));
+                    Vector2 RelativeVelocity = Vector2Subtract(SATCircle->getVelocity(), SATPolygon->getVelocity());
+                    float e = 1.0f; // coefficient of restitution
+                    float Mass1 = 1.0f;
+                    float Mass2 = 1.0f;
+                    float j = -(1 + e) * Vector2DotProduct(RelativeVelocity, Normal) /
+                              (1 / Mass1 + 1 / Mass2);
+                    SATPolygon->addVelocity(Vector2Scale(Normal, -j / Mass1));
+                    SATCircle->addVelocity(Vector2Scale(Normal, +j / Mass2));
+                    Vector2 FirstResolution = Collider->getCollisionResolution(*SATCircle, SATPolygon->getVertices()).FirstResolution;
+                    Vector2 SecondResolution = Collider->getCollisionResolution(*SATCircle, SATPolygon->getVertices()).SecondResolution;
+                    SATCircle->move(FirstResolution);
+                    SATPolygon->move(SecondResolution);
                 }
                 else {
                     // find the closest edge to the circle center
@@ -1484,8 +1522,6 @@ void DiscreteSATEulerianEngine::collideSATPolygonsAccelerate() {
                     SATCircle->move(FirstResolution);
                     SATPolygon->move(SecondResolution);
                 }
-
-
             }
         }
     }
