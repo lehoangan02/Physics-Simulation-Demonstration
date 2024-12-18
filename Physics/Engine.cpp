@@ -1244,19 +1244,19 @@ void DiscreteSATEulerianEngine::handlePlayerControl() {
         {
             if (IsKeyDown(KEY_LEFT))
             {
-                m_SATPolygonList[0]->accelerate(Vector2{-0.1f, 0});
+                m_SATPolygonList[0]->accelerate(Vector2{-100.0f, 0});
             }
             if (IsKeyDown(KEY_RIGHT))
             {
-                m_SATPolygonList[0]->accelerate(Vector2{0.1f, 0});
+                m_SATPolygonList[0]->accelerate(Vector2{100.0f, 0});
             }
             if (IsKeyDown(KEY_UP))
             {
-                m_SATPolygonList[0]->accelerate(Vector2{0, -0.1f});
+                m_SATPolygonList[0]->accelerate(Vector2{0, -100.0f});
             }
             if (IsKeyDown(KEY_DOWN))
             {
-                m_SATPolygonList[0]->accelerate(Vector2{0, 0.1f});
+                m_SATPolygonList[0]->accelerate(Vector2{0, 100.0f});
             }
         }
         else if (m_ObjectTypeToControl == CONTROL_OBJECT::CIRCLE)

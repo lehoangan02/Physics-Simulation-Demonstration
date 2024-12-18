@@ -16,6 +16,7 @@
 #include "../Machine Learning/KMeansCalculator.h"
 #include "Collider.h"
 #include "SATPlatform.hpp"
+#include <climits>
 
 using namespace std;
 void calculateFinalVelocity(const float &Mass1, const float &Mass2, Vector2 &Velocity1,

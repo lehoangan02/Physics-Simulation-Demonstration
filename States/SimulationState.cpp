@@ -2558,7 +2558,11 @@ SimulationState* SATResponseState::update() {
     if (!m_IsActive) {
         return HomeState::getHomeState();
     }
-    m_Engine.update(m_FrameTime);
+    int SubStep = 8;
+    for (int i = 0; i < SubStep; ++i)
+    {
+        m_Engine.update(m_FrameTime / (float)SubStep);
+    }
     if (IsKeyPressed(KEY_ONE))
     {
         m_Engine.setObjectTypeToControl(DiscreteSATEulerianEngine::CONTROL_OBJECT::CIRCLE);

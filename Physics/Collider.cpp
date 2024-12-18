@@ -293,8 +293,8 @@ CollisionResolve SATPolygonCollider::getCollisionResolution(const std::vector<Ve
     for (auto& AxisDirection : AxisDirectionList2) {
         AxisDirectionList.push_back(AxisDirection);
     }
-    Vector2 MinTranslationVectorMin1Max2 = {INT_MAX, INT_MAX};
-    Vector2 MinTranslationVectorMin2Max1 = {INT_MAX, INT_MAX};
+    Vector2 MinTranslationVectorMin1Max2 (INT_MAX, INT_MAX);
+    Vector2 MinTranslationVectorMin2Max1 (INT_MAX, INT_MAX);
     for (auto& AxisDirection : AxisDirectionList) {
         if (AxisDirection.x == 0 && AxisDirection.y == 0)
         {
@@ -565,8 +565,8 @@ CollisionResolve SATCirclePolygonCollider::getCollisionResolution(const SATPlatf
         }
     }
     AxisDirectionList.push_back(Vector2Normalize(Vector2Subtract(Circle.getCenter(), CircleClosestVertexDirection)));
-    Vector2 MinTranslationVectorMin1Max2 = {INT_MAX, INT_MAX};
-    Vector2 MinTranslationVectorMin2Max1 = {INT_MAX, INT_MAX};
+    Vector2 MinTranslationVectorMin1Max2 (INT_MAX, INT_MAX);
+    Vector2 MinTranslationVectorMin2Max1(INT_MAX, INT_MAX);
     Vector2 Min1;
     Vector2 Max2;
     Vector2 Min2;

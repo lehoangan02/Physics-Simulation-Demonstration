@@ -158,9 +158,9 @@ void SATPlatformPolygon::accelerate(Vector2 Acceleration) {
     m_Acceleration = Vector2Add(m_Acceleration, Acceleration);
 }
 void SATPlatformPolygon::update(float DeltaTime) {
-    m_Velocity = Vector2Add(m_Velocity, m_Acceleration);
+    m_Velocity = Vector2Add(m_Velocity, Vector2Scale (m_Acceleration, DeltaTime));
     for (int i = 0; i < m_NumberOfVertices; ++i) {
-        m_Vertices[i].Position = Vector2Add(m_Vertices[i].Position, m_Velocity);
+        m_Vertices[i].Position = Vector2Add(m_Vertices[i].Position, Vector2Scale(m_Velocity, DeltaTime));
     }
     m_Acceleration = Vector2Scale(m_Acceleration, 0);
 }

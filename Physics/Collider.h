@@ -8,6 +8,7 @@
 #include <vector>
 #include "raylib.h"
 #include "SATPlatform.hpp"
+#include <climits>
 struct CollisionResolve
 {
     Vector2 FirstResolution;
