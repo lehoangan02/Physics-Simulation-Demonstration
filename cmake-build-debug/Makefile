@@ -393,6 +393,30 @@ Physics/RoundBall.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Physics_Simulation_Demonstration.dir/build.make CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/RoundBall.cpp.s
 .PHONY : Physics/RoundBall.cpp.s
 
+Physics/SATPlatform.o: Physics/SATPlatform.cpp.o
+.PHONY : Physics/SATPlatform.o
+
+# target to build an object file
+Physics/SATPlatform.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Physics_Simulation_Demonstration.dir/build.make CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/SATPlatform.cpp.o
+.PHONY : Physics/SATPlatform.cpp.o
+
+Physics/SATPlatform.i: Physics/SATPlatform.cpp.i
+.PHONY : Physics/SATPlatform.i
+
+# target to preprocess a source file
+Physics/SATPlatform.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Physics_Simulation_Demonstration.dir/build.make CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/SATPlatform.cpp.i
+.PHONY : Physics/SATPlatform.cpp.i
+
+Physics/SATPlatform.s: Physics/SATPlatform.cpp.s
+.PHONY : Physics/SATPlatform.s
+
+# target to generate assembly for a file
+Physics/SATPlatform.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Physics_Simulation_Demonstration.dir/build.make CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/SATPlatform.cpp.s
+.PHONY : Physics/SATPlatform.cpp.s
+
 Physics/Spring.o: Physics/Spring.cpp.o
 .PHONY : Physics/Spring.o
 
@@ -603,6 +627,9 @@ help:
 	@echo "... Physics/RoundBall.o"
 	@echo "... Physics/RoundBall.i"
 	@echo "... Physics/RoundBall.s"
+	@echo "... Physics/SATPlatform.o"
+	@echo "... Physics/SATPlatform.i"
+	@echo "... Physics/SATPlatform.s"
 	@echo "... Physics/Spring.o"
 	@echo "... Physics/Spring.i"
 	@echo "... Physics/Spring.s"

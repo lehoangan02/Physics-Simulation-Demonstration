@@ -6,5 +6,5 @@ CXX_DEFINES =
 
 CXX_INCLUDES = -I/opt/homebrew/Cellar/raylib/5.0/include
 
-CXX_FLAGS = -g -std=gnu++20 -fdiagnostics-color=always -I/usr/local/include
+CXX_FLAGS = -g -std=gnu++23 -fdiagnostics-color=always -I/usr/local/include
 

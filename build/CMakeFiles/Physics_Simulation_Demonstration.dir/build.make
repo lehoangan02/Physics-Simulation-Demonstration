@@ -76,239 +76,267 @@ CMakeFiles/Physics_Simulation_Demonstration.dir/main.cpp.o: CMakeFiles/Physics_S
 CMakeFiles/Physics_Simulation_Demonstration.dir/main.cpp.o: /Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/main.cpp
 CMakeFiles/Physics_Simulation_Demonstration.dir/main.cpp.o: CMakeFiles/Physics_Simulation_Demonstration.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/Physics_Simulation_Demonstration.dir/main.cpp.o"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/Physics_Simulation_Demonstration.dir/main.cpp.o -MF CMakeFiles/Physics_Simulation_Demonstration.dir/main.cpp.o.d -o CMakeFiles/Physics_Simulation_Demonstration.dir/main.cpp.o -c /Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/main.cpp
+	/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/Physics_Simulation_Demonstration.dir/main.cpp.o -MF CMakeFiles/Physics_Simulation_Demonstration.dir/main.cpp.o.d -o CMakeFiles/Physics_Simulation_Demonstration.dir/main.cpp.o -c /Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/main.cpp
 
 CMakeFiles/Physics_Simulation_Demonstration.dir/main.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/Physics_Simulation_Demonstration.dir/main.cpp.i"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/main.cpp > CMakeFiles/Physics_Simulation_Demonstration.dir/main.cpp.i
+	/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/main.cpp > CMakeFiles/Physics_Simulation_Demonstration.dir/main.cpp.i
 
 CMakeFiles/Physics_Simulation_Demonstration.dir/main.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/Physics_Simulation_Demonstration.dir/main.cpp.s"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/main.cpp -o CMakeFiles/Physics_Simulation_Demonstration.dir/main.cpp.s
+	/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/main.cpp -o CMakeFiles/Physics_Simulation_Demonstration.dir/main.cpp.s
 
 CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/RoundBall.cpp.o: CMakeFiles/Physics_Simulation_Demonstration.dir/flags.make
 CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/RoundBall.cpp.o: /Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/Physics/RoundBall.cpp
 CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/RoundBall.cpp.o: CMakeFiles/Physics_Simulation_Demonstration.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/RoundBall.cpp.o"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/RoundBall.cpp.o -MF CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/RoundBall.cpp.o.d -o CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/RoundBall.cpp.o -c /Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/Physics/RoundBall.cpp
+	/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/RoundBall.cpp.o -MF CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/RoundBall.cpp.o.d -o CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/RoundBall.cpp.o -c /Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/Physics/RoundBall.cpp
 
 CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/RoundBall.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/RoundBall.cpp.i"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/Physics/RoundBall.cpp > CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/RoundBall.cpp.i
+	/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/Physics/RoundBall.cpp > CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/RoundBall.cpp.i
 
 CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/RoundBall.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/RoundBall.cpp.s"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/Physics/RoundBall.cpp -o CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/RoundBall.cpp.s
+	/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/Physics/RoundBall.cpp -o CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/RoundBall.cpp.s
 
 CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/Engine.cpp.o: CMakeFiles/Physics_Simulation_Demonstration.dir/flags.make
 CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/Engine.cpp.o: /Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/Physics/Engine.cpp
 CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/Engine.cpp.o: CMakeFiles/Physics_Simulation_Demonstration.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/Engine.cpp.o"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/Engine.cpp.o -MF CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/Engine.cpp.o.d -o CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/Engine.cpp.o -c /Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/Physics/Engine.cpp
+	/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/Engine.cpp.o -MF CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/Engine.cpp.o.d -o CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/Engine.cpp.o -c /Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/Physics/Engine.cpp
 
 CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/Engine.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/Engine.cpp.i"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/Physics/Engine.cpp > CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/Engine.cpp.i
+	/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/Physics/Engine.cpp > CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/Engine.cpp.i
 
 CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/Engine.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/Engine.cpp.s"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/Physics/Engine.cpp -o CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/Engine.cpp.s
+	/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/Physics/Engine.cpp -o CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/Engine.cpp.s
 
 CMakeFiles/Physics_Simulation_Demonstration.dir/States/SimulationState.cpp.o: CMakeFiles/Physics_Simulation_Demonstration.dir/flags.make
 CMakeFiles/Physics_Simulation_Demonstration.dir/States/SimulationState.cpp.o: /Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/States/SimulationState.cpp
 CMakeFiles/Physics_Simulation_Demonstration.dir/States/SimulationState.cpp.o: CMakeFiles/Physics_Simulation_Demonstration.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/Physics_Simulation_Demonstration.dir/States/SimulationState.cpp.o"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/Physics_Simulation_Demonstration.dir/States/SimulationState.cpp.o -MF CMakeFiles/Physics_Simulation_Demonstration.dir/States/SimulationState.cpp.o.d -o CMakeFiles/Physics_Simulation_Demonstration.dir/States/SimulationState.cpp.o -c /Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/States/SimulationState.cpp
+	/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/Physics_Simulation_Demonstration.dir/States/SimulationState.cpp.o -MF CMakeFiles/Physics_Simulation_Demonstration.dir/States/SimulationState.cpp.o.d -o CMakeFiles/Physics_Simulation_Demonstration.dir/States/SimulationState.cpp.o -c /Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/States/SimulationState.cpp
 
 CMakeFiles/Physics_Simulation_Demonstration.dir/States/SimulationState.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/Physics_Simulation_Demonstration.dir/States/SimulationState.cpp.i"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/States/SimulationState.cpp > CMakeFiles/Physics_Simulation_Demonstration.dir/States/SimulationState.cpp.i
+	/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/States/SimulationState.cpp > CMakeFiles/Physics_Simulation_Demonstration.dir/States/SimulationState.cpp.i
 
 CMakeFiles/Physics_Simulation_Demonstration.dir/States/SimulationState.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/Physics_Simulation_Demonstration.dir/States/SimulationState.cpp.s"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/States/SimulationState.cpp -o CMakeFiles/Physics_Simulation_Demonstration.dir/States/SimulationState.cpp.s
+	/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/States/SimulationState.cpp -o CMakeFiles/Physics_Simulation_Demonstration.dir/States/SimulationState.cpp.s
 
 CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/PlatformTriangle.cpp.o: CMakeFiles/Physics_Simulation_Demonstration.dir/flags.make
 CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/PlatformTriangle.cpp.o: /Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/Physics/PlatformTriangle.cpp
 CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/PlatformTriangle.cpp.o: CMakeFiles/Physics_Simulation_Demonstration.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/PlatformTriangle.cpp.o"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/PlatformTriangle.cpp.o -MF CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/PlatformTriangle.cpp.o.d -o CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/PlatformTriangle.cpp.o -c /Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/Physics/PlatformTriangle.cpp
+	/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/PlatformTriangle.cpp.o -MF CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/PlatformTriangle.cpp.o.d -o CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/PlatformTriangle.cpp.o -c /Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/Physics/PlatformTriangle.cpp
 
 CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/PlatformTriangle.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/PlatformTriangle.cpp.i"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/Physics/PlatformTriangle.cpp > CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/PlatformTriangle.cpp.i
+	/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/Physics/PlatformTriangle.cpp > CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/PlatformTriangle.cpp.i
 
 CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/PlatformTriangle.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/PlatformTriangle.cpp.s"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/Physics/PlatformTriangle.cpp -o CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/PlatformTriangle.cpp.s
+	/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/Physics/PlatformTriangle.cpp -o CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/PlatformTriangle.cpp.s
 
 CMakeFiles/Physics_Simulation_Demonstration.dir/Math/Geometry.cpp.o: CMakeFiles/Physics_Simulation_Demonstration.dir/flags.make
 CMakeFiles/Physics_Simulation_Demonstration.dir/Math/Geometry.cpp.o: /Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/Math/Geometry.cpp
 CMakeFiles/Physics_Simulation_Demonstration.dir/Math/Geometry.cpp.o: CMakeFiles/Physics_Simulation_Demonstration.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/Physics_Simulation_Demonstration.dir/Math/Geometry.cpp.o"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/Physics_Simulation_Demonstration.dir/Math/Geometry.cpp.o -MF CMakeFiles/Physics_Simulation_Demonstration.dir/Math/Geometry.cpp.o.d -o CMakeFiles/Physics_Simulation_Demonstration.dir/Math/Geometry.cpp.o -c /Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/Math/Geometry.cpp
+	/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/Physics_Simulation_Demonstration.dir/Math/Geometry.cpp.o -MF CMakeFiles/Physics_Simulation_Demonstration.dir/Math/Geometry.cpp.o.d -o CMakeFiles/Physics_Simulation_Demonstration.dir/Math/Geometry.cpp.o -c /Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/Math/Geometry.cpp
 
 CMakeFiles/Physics_Simulation_Demonstration.dir/Math/Geometry.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/Physics_Simulation_Demonstration.dir/Math/Geometry.cpp.i"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/Math/Geometry.cpp > CMakeFiles/Physics_Simulation_Demonstration.dir/Math/Geometry.cpp.i
+	/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/Math/Geometry.cpp > CMakeFiles/Physics_Simulation_Demonstration.dir/Math/Geometry.cpp.i
 
 CMakeFiles/Physics_Simulation_Demonstration.dir/Math/Geometry.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/Physics_Simulation_Demonstration.dir/Math/Geometry.cpp.s"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/Math/Geometry.cpp -o CMakeFiles/Physics_Simulation_Demonstration.dir/Math/Geometry.cpp.s
+	/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/Math/Geometry.cpp -o CMakeFiles/Physics_Simulation_Demonstration.dir/Math/Geometry.cpp.s
 
 CMakeFiles/Physics_Simulation_Demonstration.dir/Math/EquationsSolver.cpp.o: CMakeFiles/Physics_Simulation_Demonstration.dir/flags.make
 CMakeFiles/Physics_Simulation_Demonstration.dir/Math/EquationsSolver.cpp.o: /Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/Math/EquationsSolver.cpp
 CMakeFiles/Physics_Simulation_Demonstration.dir/Math/EquationsSolver.cpp.o: CMakeFiles/Physics_Simulation_Demonstration.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/Physics_Simulation_Demonstration.dir/Math/EquationsSolver.cpp.o"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/Physics_Simulation_Demonstration.dir/Math/EquationsSolver.cpp.o -MF CMakeFiles/Physics_Simulation_Demonstration.dir/Math/EquationsSolver.cpp.o.d -o CMakeFiles/Physics_Simulation_Demonstration.dir/Math/EquationsSolver.cpp.o -c /Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/Math/EquationsSolver.cpp
+	/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/Physics_Simulation_Demonstration.dir/Math/EquationsSolver.cpp.o -MF CMakeFiles/Physics_Simulation_Demonstration.dir/Math/EquationsSolver.cpp.o.d -o CMakeFiles/Physics_Simulation_Demonstration.dir/Math/EquationsSolver.cpp.o -c /Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/Math/EquationsSolver.cpp
 
 CMakeFiles/Physics_Simulation_Demonstration.dir/Math/EquationsSolver.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/Physics_Simulation_Demonstration.dir/Math/EquationsSolver.cpp.i"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/Math/EquationsSolver.cpp > CMakeFiles/Physics_Simulation_Demonstration.dir/Math/EquationsSolver.cpp.i
+	/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/Math/EquationsSolver.cpp > CMakeFiles/Physics_Simulation_Demonstration.dir/Math/EquationsSolver.cpp.i
 
 CMakeFiles/Physics_Simulation_Demonstration.dir/Math/EquationsSolver.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/Physics_Simulation_Demonstration.dir/Math/EquationsSolver.cpp.s"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/Math/EquationsSolver.cpp -o CMakeFiles/Physics_Simulation_Demonstration.dir/Math/EquationsSolver.cpp.s
+	/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/Math/EquationsSolver.cpp -o CMakeFiles/Physics_Simulation_Demonstration.dir/Math/EquationsSolver.cpp.s
 
 CMakeFiles/Physics_Simulation_Demonstration.dir/Commands/Command.cpp.o: CMakeFiles/Physics_Simulation_Demonstration.dir/flags.make
 CMakeFiles/Physics_Simulation_Demonstration.dir/Commands/Command.cpp.o: /Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/Commands/Command.cpp
 CMakeFiles/Physics_Simulation_Demonstration.dir/Commands/Command.cpp.o: CMakeFiles/Physics_Simulation_Demonstration.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/Physics_Simulation_Demonstration.dir/Commands/Command.cpp.o"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/Physics_Simulation_Demonstration.dir/Commands/Command.cpp.o -MF CMakeFiles/Physics_Simulation_Demonstration.dir/Commands/Command.cpp.o.d -o CMakeFiles/Physics_Simulation_Demonstration.dir/Commands/Command.cpp.o -c /Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/Commands/Command.cpp
+	/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/Physics_Simulation_Demonstration.dir/Commands/Command.cpp.o -MF CMakeFiles/Physics_Simulation_Demonstration.dir/Commands/Command.cpp.o.d -o CMakeFiles/Physics_Simulation_Demonstration.dir/Commands/Command.cpp.o -c /Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/Commands/Command.cpp
 
 CMakeFiles/Physics_Simulation_Demonstration.dir/Commands/Command.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/Physics_Simulation_Demonstration.dir/Commands/Command.cpp.i"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/Commands/Command.cpp > CMakeFiles/Physics_Simulation_Demonstration.dir/Commands/Command.cpp.i
+	/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/Commands/Command.cpp > CMakeFiles/Physics_Simulation_Demonstration.dir/Commands/Command.cpp.i
 
 CMakeFiles/Physics_Simulation_Demonstration.dir/Commands/Command.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/Physics_Simulation_Demonstration.dir/Commands/Command.cpp.s"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/Commands/Command.cpp -o CMakeFiles/Physics_Simulation_Demonstration.dir/Commands/Command.cpp.s
+	/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/Commands/Command.cpp -o CMakeFiles/Physics_Simulation_Demonstration.dir/Commands/Command.cpp.s
 
 CMakeFiles/Physics_Simulation_Demonstration.dir/Buttons/Buttons.cpp.o: CMakeFiles/Physics_Simulation_Demonstration.dir/flags.make
 CMakeFiles/Physics_Simulation_Demonstration.dir/Buttons/Buttons.cpp.o: /Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/Buttons/Buttons.cpp
 CMakeFiles/Physics_Simulation_Demonstration.dir/Buttons/Buttons.cpp.o: CMakeFiles/Physics_Simulation_Demonstration.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/Physics_Simulation_Demonstration.dir/Buttons/Buttons.cpp.o"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/Physics_Simulation_Demonstration.dir/Buttons/Buttons.cpp.o -MF CMakeFiles/Physics_Simulation_Demonstration.dir/Buttons/Buttons.cpp.o.d -o CMakeFiles/Physics_Simulation_Demonstration.dir/Buttons/Buttons.cpp.o -c /Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/Buttons/Buttons.cpp
+	/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/Physics_Simulation_Demonstration.dir/Buttons/Buttons.cpp.o -MF CMakeFiles/Physics_Simulation_Demonstration.dir/Buttons/Buttons.cpp.o.d -o CMakeFiles/Physics_Simulation_Demonstration.dir/Buttons/Buttons.cpp.o -c /Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/Buttons/Buttons.cpp
 
 CMakeFiles/Physics_Simulation_Demonstration.dir/Buttons/Buttons.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/Physics_Simulation_Demonstration.dir/Buttons/Buttons.cpp.i"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/Buttons/Buttons.cpp > CMakeFiles/Physics_Simulation_Demonstration.dir/Buttons/Buttons.cpp.i
+	/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/Buttons/Buttons.cpp > CMakeFiles/Physics_Simulation_Demonstration.dir/Buttons/Buttons.cpp.i
 
 CMakeFiles/Physics_Simulation_Demonstration.dir/Buttons/Buttons.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/Physics_Simulation_Demonstration.dir/Buttons/Buttons.cpp.s"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/Buttons/Buttons.cpp -o CMakeFiles/Physics_Simulation_Demonstration.dir/Buttons/Buttons.cpp.s
+	/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/Buttons/Buttons.cpp -o CMakeFiles/Physics_Simulation_Demonstration.dir/Buttons/Buttons.cpp.s
 
 CMakeFiles/Physics_Simulation_Demonstration.dir/Utilites/Utilities.cpp.o: CMakeFiles/Physics_Simulation_Demonstration.dir/flags.make
 CMakeFiles/Physics_Simulation_Demonstration.dir/Utilites/Utilities.cpp.o: /Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/Utilites/Utilities.cpp
 CMakeFiles/Physics_Simulation_Demonstration.dir/Utilites/Utilities.cpp.o: CMakeFiles/Physics_Simulation_Demonstration.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object CMakeFiles/Physics_Simulation_Demonstration.dir/Utilites/Utilities.cpp.o"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/Physics_Simulation_Demonstration.dir/Utilites/Utilities.cpp.o -MF CMakeFiles/Physics_Simulation_Demonstration.dir/Utilites/Utilities.cpp.o.d -o CMakeFiles/Physics_Simulation_Demonstration.dir/Utilites/Utilities.cpp.o -c /Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/Utilites/Utilities.cpp
+	/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/Physics_Simulation_Demonstration.dir/Utilites/Utilities.cpp.o -MF CMakeFiles/Physics_Simulation_Demonstration.dir/Utilites/Utilities.cpp.o.d -o CMakeFiles/Physics_Simulation_Demonstration.dir/Utilites/Utilities.cpp.o -c /Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/Utilites/Utilities.cpp
 
 CMakeFiles/Physics_Simulation_Demonstration.dir/Utilites/Utilities.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/Physics_Simulation_Demonstration.dir/Utilites/Utilities.cpp.i"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/Utilites/Utilities.cpp > CMakeFiles/Physics_Simulation_Demonstration.dir/Utilites/Utilities.cpp.i
+	/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/Utilites/Utilities.cpp > CMakeFiles/Physics_Simulation_Demonstration.dir/Utilites/Utilities.cpp.i
 
 CMakeFiles/Physics_Simulation_Demonstration.dir/Utilites/Utilities.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/Physics_Simulation_Demonstration.dir/Utilites/Utilities.cpp.s"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/Utilites/Utilities.cpp -o CMakeFiles/Physics_Simulation_Demonstration.dir/Utilites/Utilities.cpp.s
+	/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/Utilites/Utilities.cpp -o CMakeFiles/Physics_Simulation_Demonstration.dir/Utilites/Utilities.cpp.s
 
 CMakeFiles/Physics_Simulation_Demonstration.dir/Utilites/BackgroundMusic.cpp.o: CMakeFiles/Physics_Simulation_Demonstration.dir/flags.make
 CMakeFiles/Physics_Simulation_Demonstration.dir/Utilites/BackgroundMusic.cpp.o: /Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/Utilites/BackgroundMusic.cpp
 CMakeFiles/Physics_Simulation_Demonstration.dir/Utilites/BackgroundMusic.cpp.o: CMakeFiles/Physics_Simulation_Demonstration.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building CXX object CMakeFiles/Physics_Simulation_Demonstration.dir/Utilites/BackgroundMusic.cpp.o"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/Physics_Simulation_Demonstration.dir/Utilites/BackgroundMusic.cpp.o -MF CMakeFiles/Physics_Simulation_Demonstration.dir/Utilites/BackgroundMusic.cpp.o.d -o CMakeFiles/Physics_Simulation_Demonstration.dir/Utilites/BackgroundMusic.cpp.o -c /Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/Utilites/BackgroundMusic.cpp
+	/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/Physics_Simulation_Demonstration.dir/Utilites/BackgroundMusic.cpp.o -MF CMakeFiles/Physics_Simulation_Demonstration.dir/Utilites/BackgroundMusic.cpp.o.d -o CMakeFiles/Physics_Simulation_Demonstration.dir/Utilites/BackgroundMusic.cpp.o -c /Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/Utilites/BackgroundMusic.cpp
 
 CMakeFiles/Physics_Simulation_Demonstration.dir/Utilites/BackgroundMusic.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/Physics_Simulation_Demonstration.dir/Utilites/BackgroundMusic.cpp.i"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/Utilites/BackgroundMusic.cpp > CMakeFiles/Physics_Simulation_Demonstration.dir/Utilites/BackgroundMusic.cpp.i
+	/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/Utilites/BackgroundMusic.cpp > CMakeFiles/Physics_Simulation_Demonstration.dir/Utilites/BackgroundMusic.cpp.i
 
 CMakeFiles/Physics_Simulation_Demonstration.dir/Utilites/BackgroundMusic.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/Physics_Simulation_Demonstration.dir/Utilites/BackgroundMusic.cpp.s"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/Utilites/BackgroundMusic.cpp -o CMakeFiles/Physics_Simulation_Demonstration.dir/Utilites/BackgroundMusic.cpp.s
+	/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/Utilites/BackgroundMusic.cpp -o CMakeFiles/Physics_Simulation_Demonstration.dir/Utilites/BackgroundMusic.cpp.s
 
 CMakeFiles/Physics_Simulation_Demonstration.dir/States/Observer.cpp.o: CMakeFiles/Physics_Simulation_Demonstration.dir/flags.make
 CMakeFiles/Physics_Simulation_Demonstration.dir/States/Observer.cpp.o: /Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/States/Observer.cpp
 CMakeFiles/Physics_Simulation_Demonstration.dir/States/Observer.cpp.o: CMakeFiles/Physics_Simulation_Demonstration.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Building CXX object CMakeFiles/Physics_Simulation_Demonstration.dir/States/Observer.cpp.o"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/Physics_Simulation_Demonstration.dir/States/Observer.cpp.o -MF CMakeFiles/Physics_Simulation_Demonstration.dir/States/Observer.cpp.o.d -o CMakeFiles/Physics_Simulation_Demonstration.dir/States/Observer.cpp.o -c /Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/States/Observer.cpp
+	/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/Physics_Simulation_Demonstration.dir/States/Observer.cpp.o -MF CMakeFiles/Physics_Simulation_Demonstration.dir/States/Observer.cpp.o.d -o CMakeFiles/Physics_Simulation_Demonstration.dir/States/Observer.cpp.o -c /Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/States/Observer.cpp
 
 CMakeFiles/Physics_Simulation_Demonstration.dir/States/Observer.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/Physics_Simulation_Demonstration.dir/States/Observer.cpp.i"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/States/Observer.cpp > CMakeFiles/Physics_Simulation_Demonstration.dir/States/Observer.cpp.i
+	/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/States/Observer.cpp > CMakeFiles/Physics_Simulation_Demonstration.dir/States/Observer.cpp.i
 
 CMakeFiles/Physics_Simulation_Demonstration.dir/States/Observer.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/Physics_Simulation_Demonstration.dir/States/Observer.cpp.s"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/States/Observer.cpp -o CMakeFiles/Physics_Simulation_Demonstration.dir/States/Observer.cpp.s
+	/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/States/Observer.cpp -o CMakeFiles/Physics_Simulation_Demonstration.dir/States/Observer.cpp.s
 
 CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/Chains.cpp.o: CMakeFiles/Physics_Simulation_Demonstration.dir/flags.make
 CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/Chains.cpp.o: /Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/Physics/Chains.cpp
 CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/Chains.cpp.o: CMakeFiles/Physics_Simulation_Demonstration.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_13) "Building CXX object CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/Chains.cpp.o"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/Chains.cpp.o -MF CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/Chains.cpp.o.d -o CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/Chains.cpp.o -c /Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/Physics/Chains.cpp
+	/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/Chains.cpp.o -MF CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/Chains.cpp.o.d -o CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/Chains.cpp.o -c /Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/Physics/Chains.cpp
 
 CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/Chains.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/Chains.cpp.i"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/Physics/Chains.cpp > CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/Chains.cpp.i
+	/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/Physics/Chains.cpp > CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/Chains.cpp.i
 
 CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/Chains.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/Chains.cpp.s"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/Physics/Chains.cpp -o CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/Chains.cpp.s
+	/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/Physics/Chains.cpp -o CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/Chains.cpp.s
 
 CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/Spring.cpp.o: CMakeFiles/Physics_Simulation_Demonstration.dir/flags.make
 CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/Spring.cpp.o: /Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/Physics/Spring.cpp
 CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/Spring.cpp.o: CMakeFiles/Physics_Simulation_Demonstration.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_14) "Building CXX object CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/Spring.cpp.o"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/Spring.cpp.o -MF CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/Spring.cpp.o.d -o CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/Spring.cpp.o -c /Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/Physics/Spring.cpp
+	/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/Spring.cpp.o -MF CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/Spring.cpp.o.d -o CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/Spring.cpp.o -c /Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/Physics/Spring.cpp
 
 CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/Spring.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/Spring.cpp.i"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/Physics/Spring.cpp > CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/Spring.cpp.i
+	/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/Physics/Spring.cpp > CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/Spring.cpp.i
 
 CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/Spring.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/Spring.cpp.s"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/Physics/Spring.cpp -o CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/Spring.cpp.s
+	/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/Physics/Spring.cpp -o CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/Spring.cpp.s
 
 CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/PlatformRectangle.cpp.o: CMakeFiles/Physics_Simulation_Demonstration.dir/flags.make
 CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/PlatformRectangle.cpp.o: /Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/Physics/PlatformRectangle.cpp
 CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/PlatformRectangle.cpp.o: CMakeFiles/Physics_Simulation_Demonstration.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_15) "Building CXX object CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/PlatformRectangle.cpp.o"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/PlatformRectangle.cpp.o -MF CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/PlatformRectangle.cpp.o.d -o CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/PlatformRectangle.cpp.o -c /Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/Physics/PlatformRectangle.cpp
+	/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/PlatformRectangle.cpp.o -MF CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/PlatformRectangle.cpp.o.d -o CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/PlatformRectangle.cpp.o -c /Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/Physics/PlatformRectangle.cpp
 
 CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/PlatformRectangle.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/PlatformRectangle.cpp.i"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/Physics/PlatformRectangle.cpp > CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/PlatformRectangle.cpp.i
+	/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/Physics/PlatformRectangle.cpp > CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/PlatformRectangle.cpp.i
 
 CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/PlatformRectangle.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/PlatformRectangle.cpp.s"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/Physics/PlatformRectangle.cpp -o CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/PlatformRectangle.cpp.s
+	/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/Physics/PlatformRectangle.cpp -o CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/PlatformRectangle.cpp.s
 
 CMakeFiles/Physics_Simulation_Demonstration.dir/Utilites/Mediator.cpp.o: CMakeFiles/Physics_Simulation_Demonstration.dir/flags.make
 CMakeFiles/Physics_Simulation_Demonstration.dir/Utilites/Mediator.cpp.o: /Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/Utilites/Mediator.cpp
 CMakeFiles/Physics_Simulation_Demonstration.dir/Utilites/Mediator.cpp.o: CMakeFiles/Physics_Simulation_Demonstration.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_16) "Building CXX object CMakeFiles/Physics_Simulation_Demonstration.dir/Utilites/Mediator.cpp.o"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/Physics_Simulation_Demonstration.dir/Utilites/Mediator.cpp.o -MF CMakeFiles/Physics_Simulation_Demonstration.dir/Utilites/Mediator.cpp.o.d -o CMakeFiles/Physics_Simulation_Demonstration.dir/Utilites/Mediator.cpp.o -c /Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/Utilites/Mediator.cpp
+	/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/Physics_Simulation_Demonstration.dir/Utilites/Mediator.cpp.o -MF CMakeFiles/Physics_Simulation_Demonstration.dir/Utilites/Mediator.cpp.o.d -o CMakeFiles/Physics_Simulation_Demonstration.dir/Utilites/Mediator.cpp.o -c /Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/Utilites/Mediator.cpp
 
 CMakeFiles/Physics_Simulation_Demonstration.dir/Utilites/Mediator.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/Physics_Simulation_Demonstration.dir/Utilites/Mediator.cpp.i"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/Utilites/Mediator.cpp > CMakeFiles/Physics_Simulation_Demonstration.dir/Utilites/Mediator.cpp.i
+	/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/Utilites/Mediator.cpp > CMakeFiles/Physics_Simulation_Demonstration.dir/Utilites/Mediator.cpp.i
 
 CMakeFiles/Physics_Simulation_Demonstration.dir/Utilites/Mediator.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/Physics_Simulation_Demonstration.dir/Utilites/Mediator.cpp.s"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/Utilites/Mediator.cpp -o CMakeFiles/Physics_Simulation_Demonstration.dir/Utilites/Mediator.cpp.s
+	/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/Utilites/Mediator.cpp -o CMakeFiles/Physics_Simulation_Demonstration.dir/Utilites/Mediator.cpp.s
 
 CMakeFiles/Physics_Simulation_Demonstration.dir/Machine_Learning/KMeansCalculator.cpp.o: CMakeFiles/Physics_Simulation_Demonstration.dir/flags.make
 CMakeFiles/Physics_Simulation_Demonstration.dir/Machine_Learning/KMeansCalculator.cpp.o: /Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/Machine\ Learning/KMeansCalculator.cpp
 CMakeFiles/Physics_Simulation_Demonstration.dir/Machine_Learning/KMeansCalculator.cpp.o: CMakeFiles/Physics_Simulation_Demonstration.dir/compiler_depend.ts
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_17) "Building CXX object CMakeFiles/Physics_Simulation_Demonstration.dir/Machine_Learning/KMeansCalculator.cpp.o"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/Physics_Simulation_Demonstration.dir/Machine_Learning/KMeansCalculator.cpp.o -MF CMakeFiles/Physics_Simulation_Demonstration.dir/Machine_Learning/KMeansCalculator.cpp.o.d -o CMakeFiles/Physics_Simulation_Demonstration.dir/Machine_Learning/KMeansCalculator.cpp.o -c "/Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/Machine Learning/KMeansCalculator.cpp"
+	/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/Physics_Simulation_Demonstration.dir/Machine_Learning/KMeansCalculator.cpp.o -MF CMakeFiles/Physics_Simulation_Demonstration.dir/Machine_Learning/KMeansCalculator.cpp.o.d -o CMakeFiles/Physics_Simulation_Demonstration.dir/Machine_Learning/KMeansCalculator.cpp.o -c "/Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/Machine Learning/KMeansCalculator.cpp"
 
 CMakeFiles/Physics_Simulation_Demonstration.dir/Machine_Learning/KMeansCalculator.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/Physics_Simulation_Demonstration.dir/Machine_Learning/KMeansCalculator.cpp.i"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "/Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/Machine Learning/KMeansCalculator.cpp" > CMakeFiles/Physics_Simulation_Demonstration.dir/Machine_Learning/KMeansCalculator.cpp.i
+	/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E "/Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/Machine Learning/KMeansCalculator.cpp" > CMakeFiles/Physics_Simulation_Demonstration.dir/Machine_Learning/KMeansCalculator.cpp.i
 
 CMakeFiles/Physics_Simulation_Demonstration.dir/Machine_Learning/KMeansCalculator.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/Physics_Simulation_Demonstration.dir/Machine_Learning/KMeansCalculator.cpp.s"
-	/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "/Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/Machine Learning/KMeansCalculator.cpp" -o CMakeFiles/Physics_Simulation_Demonstration.dir/Machine_Learning/KMeansCalculator.cpp.s
+	/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "/Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/Machine Learning/KMeansCalculator.cpp" -o CMakeFiles/Physics_Simulation_Demonstration.dir/Machine_Learning/KMeansCalculator.cpp.s
+
+CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/Collider.cpp.o: CMakeFiles/Physics_Simulation_Demonstration.dir/flags.make
+CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/Collider.cpp.o: /Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/Physics/Collider.cpp
+CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/Collider.cpp.o: CMakeFiles/Physics_Simulation_Demonstration.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_18) "Building CXX object CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/Collider.cpp.o"
+	/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/Collider.cpp.o -MF CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/Collider.cpp.o.d -o CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/Collider.cpp.o -c /Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/Physics/Collider.cpp
+
+CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/Collider.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/Collider.cpp.i"
+	/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/Physics/Collider.cpp > CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/Collider.cpp.i
+
+CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/Collider.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/Collider.cpp.s"
+	/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/Physics/Collider.cpp -o CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/Collider.cpp.s
+
+CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/SATPlatform.cpp.o: CMakeFiles/Physics_Simulation_Demonstration.dir/flags.make
+CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/SATPlatform.cpp.o: /Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/Physics/SATPlatform.cpp
+CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/SATPlatform.cpp.o: CMakeFiles/Physics_Simulation_Demonstration.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_19) "Building CXX object CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/SATPlatform.cpp.o"
+	/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/SATPlatform.cpp.o -MF CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/SATPlatform.cpp.o.d -o CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/SATPlatform.cpp.o -c /Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/Physics/SATPlatform.cpp
+
+CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/SATPlatform.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/SATPlatform.cpp.i"
+	/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/Physics/SATPlatform.cpp > CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/SATPlatform.cpp.i
+
+CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/SATPlatform.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/SATPlatform.cpp.s"
+	/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/Physics/SATPlatform.cpp -o CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/SATPlatform.cpp.s
 
 # Object files for target Physics_Simulation_Demonstration
 Physics_Simulation_Demonstration_OBJECTS = \
@@ -328,7 +356,9 @@ Physics_Simulation_Demonstration_OBJECTS = \
 "CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/Spring.cpp.o" \
 "CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/PlatformRectangle.cpp.o" \
 "CMakeFiles/Physics_Simulation_Demonstration.dir/Utilites/Mediator.cpp.o" \
-"CMakeFiles/Physics_Simulation_Demonstration.dir/Machine_Learning/KMeansCalculator.cpp.o"
+"CMakeFiles/Physics_Simulation_Demonstration.dir/Machine_Learning/KMeansCalculator.cpp.o" \
+"CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/Collider.cpp.o" \
+"CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/SATPlatform.cpp.o"
 
 # External object files for target Physics_Simulation_Demonstration
 Physics_Simulation_Demonstration_EXTERNAL_OBJECTS =
@@ -350,10 +380,12 @@ Physics_Simulation_Demonstration_EXTERNAL_OBJECTS =
 /Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/Physics_Simulation_Demonstration: CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/PlatformRectangle.cpp.o
 /Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/Physics_Simulation_Demonstration: CMakeFiles/Physics_Simulation_Demonstration.dir/Utilites/Mediator.cpp.o
 /Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/Physics_Simulation_Demonstration: CMakeFiles/Physics_Simulation_Demonstration.dir/Machine_Learning/KMeansCalculator.cpp.o
+/Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/Physics_Simulation_Demonstration: CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/Collider.cpp.o
+/Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/Physics_Simulation_Demonstration: CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/SATPlatform.cpp.o
 /Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/Physics_Simulation_Demonstration: CMakeFiles/Physics_Simulation_Demonstration.dir/build.make
 /Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/Physics_Simulation_Demonstration: /opt/homebrew/lib/libraylib.dylib
 /Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/Physics_Simulation_Demonstration: CMakeFiles/Physics_Simulation_Demonstration.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_18) "Linking CXX executable /Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/Physics_Simulation_Demonstration"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_20) "Linking CXX executable /Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/Physics_Simulation_Demonstration"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/Physics_Simulation_Demonstration.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

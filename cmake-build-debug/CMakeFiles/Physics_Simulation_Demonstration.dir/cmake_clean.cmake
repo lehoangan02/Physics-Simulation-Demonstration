@@ -23,6 +23,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/PlatformTriangle.cpp.o.d"
   "CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/RoundBall.cpp.o"
   "CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/RoundBall.cpp.o.d"
+  "CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/SATPlatform.cpp.o"
+  "CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/SATPlatform.cpp.o.d"
   "CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/Spring.cpp.o"
   "CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/Spring.cpp.o.d"
   "CMakeFiles/Physics_Simulation_Demonstration.dir/States/Observer.cpp.o"

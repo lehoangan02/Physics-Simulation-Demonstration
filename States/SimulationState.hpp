@@ -16,6 +16,7 @@
 #include "../Physics/Spring.hpp"
 #include "../Machine Learning/KMeansCalculator.h"
 #include "../Physics/Collider.h"
+#include "../Physics/SATPlatform.hpp"
 enum StateNumber {
     HOME_STATE,
     VERLET_DROP_STATE,
@@ -37,7 +38,8 @@ enum StateNumber {
     SHAPE_MATCHING_SOFT_BODY_STATE,
     SAT_TRIANGLE_STATE,
     SAT_POLYGON_STATE,
-
+    SAT_CIRCLE_POLYGON_STATE,
+    SAT_RESPONSE_STATE,
 };
 class SimulationState;
 class StateFactory
@@ -271,7 +273,7 @@ protected:
     vector<PlatformRectangle*> m_PlatformRectangleList;
     float m_PushRectangleTime = 14.0f;
     float m_TotalTime = 0.0f;
-    Color m_BallColor = Color(66, 62, 117, 255);
+    Color m_BallColor = Color{66, 62, 117, 255};
     Color m_SpringColor = Color(66, 62, 117, 255);
 protected:
     SpringSoftBodyState();
@@ -290,7 +292,7 @@ private:
     void reset() override;
 private:
     EulerianRoundBall* m_SelectedBall = nullptr;
-    Color m_SelectedColor = Color(255, 128, 0, 255);
+    Color m_SelectedColor = Color{255, 128, 0, 255};
     float m_Force = 300000.f;
 };
 class KmeansGroupingState : public SimulationState {
@@ -459,5 +461,38 @@ private:
     void reset() override;
     void readCordinates();
 };
-
+class SATCirclePolygonState : public SimulationState {
+public:
+    static SimulationState* getSATCirclePolygonState();
+    SimulationState* update() override;
+    void draw() override;
+    void onNotify() override;
+private:
+    vector<SATPlatformCircle*> m_CircleList;
+    vector<SATPlatformPolygon*> m_PolygonList;
+    DiscreteSATEulerianEngine m_Engine;
+    vector<Color> m_ColorList;
+private:
+    SATCirclePolygonState();
+    ~SATCirclePolygonState() override;
+    void reset() override;
+    void readCordinates();
+};
+class SATResponseState : public SimulationState {
+public:
+    static SimulationState* getSATResponseState();
+    SimulationState* update() override;
+    void draw() override;
+    void onNotify() override;
+private:
+    vector<SATPlatformPolygon*> m_PolygonList;
+    vector<SATPlatformCircle*> m_CircleList;
+    DiscreteSATEulerianEngine m_Engine;
+    vector<Color> m_ColorList;
+private:
+    SATResponseState();
+    ~SATResponseState() override;
+    void reset() override;
+    void readCordinates();
+};
 #endif //PHYSICS_SIMULATION_DEMONSTRATION_SIMULATIONSTATE_HPP

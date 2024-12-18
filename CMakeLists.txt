@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.27)
 project(Physics_Simulation_Demonstration)
 
-set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR})
 
 add_executable(Physics_Simulation_Demonstration main.cpp
@@ -38,7 +38,9 @@ add_executable(Physics_Simulation_Demonstration main.cpp
         "Machine Learning/KMeansCalculator.cpp"
         "Machine Learning/KMeansCalculator.h"
         Physics/Collider.cpp
-        Physics/Collider.h)
+        Physics/Collider.h
+        Physics/SATPlatform.cpp
+        Physics/SATPlatform.hpp)
 include_directories(/opt/homebrew/Cellar/raylib/5.0/include)
 
 find_package(raylib 4.5 REQUIRED)

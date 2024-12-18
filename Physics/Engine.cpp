@@ -980,31 +980,102 @@ DiscreteSATEulerianEngine::DiscreteSATEulerianEngine(int Width, int Height) : m_
 void DiscreteSATEulerianEngine::attachSATPolygon(SATPlatformPolygon *NewSATPolygon) {
     m_SATPolygonList.push_back(NewSATPolygon);
 }
+void DiscreteSATEulerianEngine::attachSATCircle(SATPlatformCircle *NewSATCircle) {
+    m_SATCircleList.push_back(NewSATCircle);
+}
 void DiscreteSATEulerianEngine::applyConstraints() {
-    for (auto& SATPolygon : m_SATPolygonList)
+    if (!m_CollisionOn) return;
+    if (m_EngineMode == ENGINE_MODE::INSTANT_ENGINE) {
+        for (auto &SATPolygon: m_SATPolygonList) {
+            for (auto &vertex: SATPolygon->getVertices()) {
+                if (vertex.x < 0) {
+                    Vector2 Move = Vector2{-vertex.x, 0};
+                    SATPolygon->move(Move);
+                }
+                if (vertex.x > m_Width) {
+                    Vector2 Move = Vector2{m_Width - vertex.x, 0};
+                    SATPolygon->move(Move);
+                }
+                if (vertex.y < 0) {
+                    Vector2 Move = Vector2{0, -vertex.y};
+                    SATPolygon->move(Move);
+                }
+                if (vertex.y > m_Height) {
+
+                    Vector2 Move = Vector2{0, m_Height - vertex.y};
+                    SATPolygon->move(Move);
+                }
+            }
+        }
+        for (auto &SATCircle: m_SATCircleList) {
+            if (SATCircle->getCenter().x - SATCircle->getRadius() < 0) {
+                Vector2 Move = Vector2{-SATCircle->getCenter().x + SATCircle->getRadius(), 0};
+                SATCircle->move(Move);
+            }
+            if (SATCircle->getCenter().x + SATCircle->getRadius() > m_Width) {
+                Vector2 Move = Vector2{m_Width - SATCircle->getCenter().x - SATCircle->getRadius(), 0};
+                SATCircle->move(Move);
+            }
+            if (SATCircle->getCenter().y - SATCircle->getRadius() < 0) {
+                Vector2 Move = Vector2{0, -SATCircle->getCenter().y + SATCircle->getRadius()};
+                SATCircle->move(Move);
+            }
+            if (SATCircle->getCenter().y + SATCircle->getRadius() > m_Height) {
+                Vector2 Move = Vector2{0, m_Height - SATCircle->getCenter().y - SATCircle->getRadius()};
+                SATCircle->move(Move);
+            }
+        }
+    }
+    else if (m_EngineMode == ENGINE_MODE::ACCELERATE_ENGINE)
     {
-        for (auto& vertex : SATPolygon->getVertices())
-        {
-            if (vertex.x < 0)
-            {
-                Vector2 Move = Vector2{-vertex.x, 0};
-                SATPolygon->move(Move);
+        for (auto &SATPolygon: m_SATPolygonList) {
+            for (auto &vertex: SATPolygon->getVertices()) {
+                if (vertex.x < 0) {
+                    Vector2 Move = Vector2{-vertex.x, 0};
+                    SATPolygon->move(Move);
+                    SATPolygon->setVelocity(Vector2{-SATPolygon->getVelocity().x, SATPolygon->getVelocity().y});
+                    break;
+                }
+                if (vertex.x > m_Width) {
+                    Vector2 Move = Vector2{m_Width - vertex.x, 0};
+                    SATPolygon->move(Move);
+                    SATPolygon->setVelocity(Vector2{-SATPolygon->getVelocity().x, SATPolygon->getVelocity().y});
+                    break;
+                }
+                if (vertex.y < 0) {
+                    Vector2 Move = Vector2{0, -vertex.y};
+                    SATPolygon->move(Move);
+                    SATPolygon->setVelocity(Vector2{SATPolygon->getVelocity().x, -SATPolygon->getVelocity().y});
+                    break;
+                }
+                if (vertex.y > m_Height) {
+                    Vector2 Move = Vector2{0, m_Height - vertex.y};
+                    SATPolygon->move(Move);
+                    SATPolygon->setVelocity(Vector2{SATPolygon->getVelocity().x, -SATPolygon->getVelocity().y});
+                    break;
+                }
             }
-            if (vertex.x > m_Width)
-            {
-                Vector2 Move = Vector2{m_Width - vertex.x, 0};
-                SATPolygon->move(Move);
+        }
+        for (auto &SATCircle: m_SATCircleList) {
+            if (SATCircle->getCenter().x - SATCircle->getRadius() < 0) {
+                Vector2 Move = Vector2{-SATCircle->getCenter().x + SATCircle->getRadius(), 0};
+                SATCircle->move(Move);
+                SATCircle->setVelocity(Vector2{-SATCircle->getVelocity().x, SATCircle->getVelocity().y});
             }
-            if (vertex.y < 0)
-            {
-                Vector2 Move = Vector2{0, -vertex.y};
-                SATPolygon->move(Move);
+            if (SATCircle->getCenter().x + SATCircle->getRadius() > m_Width) {
+                Vector2 Move = Vector2{m_Width - SATCircle->getCenter().x - SATCircle->getRadius(), 0};
+                SATCircle->move(Move);
+                SATCircle->setVelocity(Vector2{-SATCircle->getVelocity().x, SATCircle->getVelocity().y});
             }
-            if (vertex.y > m_Height)
-            {
-                std::cout << "Height" << std::endl;
-                Vector2 Move = Vector2{0, m_Height - vertex.y};
-                SATPolygon->move(Move);
+            if (SATCircle->getCenter().y - SATCircle->getRadius() < 0) {
+                Vector2 Move = Vector2{0, -SATCircle->getCenter().y + SATCircle->getRadius()};
+                SATCircle->move(Move);
+                SATCircle->setVelocity(Vector2{SATCircle->getVelocity().x, -SATCircle->getVelocity().y});
+            }
+            if (SATCircle->getCenter().y + SATCircle->getRadius() > m_Height) {
+                Vector2 Move = Vector2{0, m_Height - SATCircle->getCenter().y - SATCircle->getRadius()};
+                SATCircle->move(Move);
+                SATCircle->setVelocity(Vector2{SATCircle->getVelocity().x, -SATCircle->getVelocity().y});
             }
         }
     }
@@ -1013,6 +1084,10 @@ void DiscreteSATEulerianEngine::checkCollision() {
     for (auto& SATPolygon : m_SATPolygonList)
     {
         SATPolygon->setActive(false);
+    }
+    for (auto& SATCircle : m_SATCircleList)
+    {
+        SATCircle->setActive(false);
     }
     for (auto& SATPolygon1 : m_SATPolygonList)
     {
@@ -1029,6 +1104,20 @@ void DiscreteSATEulerianEngine::checkCollision() {
             }
         }
     }
+
+    for (auto& SATPolygon : m_SATPolygonList)
+    {
+        for (auto& SATCircle : m_SATCircleList)
+        {
+            SATCirclePolygonCollider* Collider = SATCirclePolygonCollider::getSATCirclePolygonCollider();
+            if (Collider->isColliding(*SATCircle, SATPolygon->getVertices()))
+            {
+//                std::cout << "Checking Collision" << std::endl;
+                SATPolygon->setActive(true);
+                SATCircle->setActive(true);
+            }
+        }
+    }
 }
 void DiscreteSATEulerianEngine::turnOnOffCollision(bool CollisionOn) {
     m_CollisionOn = CollisionOn;
@@ -1038,11 +1127,16 @@ void DiscreteSATEulerianEngine::turnOnOffPlayerControl(bool PlayerControlOn) {
 }
 void DiscreteSATEulerianEngine::update(float DeltaTime) {
     handlePlayerControl();
-    checkCollision();
-    if (m_CollisionOn)
+    for (auto& SATPolygon : m_SATPolygonList)
     {
-
+        SATPolygon->update(DeltaTime);
     }
+    for (auto& SATCircle : m_SATCircleList)
+    {
+        SATCircle->update(DeltaTime);
+    }
+    collideSATPolygons();
+    collideSATCircle();
     applyConstraints();
 }
 void DiscreteSATEulerianEngine::draw() {
@@ -1051,39 +1145,326 @@ void DiscreteSATEulerianEngine::draw() {
     {
         SATPolygon->draw();
     }
+    for (auto& SATCircle : m_SATCircleList)
+    {
+        SATCircle->draw();
+    }
+    if (m_PlayerControlOn)
+    {
+        if (m_ObjectTypeToControl == CONTROL_OBJECT::POLYGON)
+        {
+            if (IsKeyDown(KEY_LEFT))
+            {
+            }
+        }
+        else if (m_ObjectTypeToControl == CONTROL_OBJECT::CIRCLE)
+        {
+            Vector2 End = m_SATCircleList[0]->getCenter();
+            if (IsKeyDown(KEY_LEFT))
+            {
+                End = Vector2Subtract(End, Vector2{50, 0});
+            }
+            if (IsKeyDown(KEY_RIGHT))
+            {
+                End = Vector2Add(End, Vector2{50, 0});
+            }
+            if (IsKeyDown(KEY_UP))
+            {
+                End = Vector2Subtract(End, Vector2{0, 50});
+            }
+            if (IsKeyDown(KEY_DOWN))
+            {
+                End = Vector2Add(End, Vector2{0, 50});
+            }
+            Color ArrowColor = Color{255, 131, 131, 255};
+            drawArrow(m_SATCircleList[0]->getCenter(), End, ArrowColor);
+        }
+    }
 }
 void DiscreteSATEulerianEngine::reset() {
     m_SATPolygonList.clear();
+    m_SATCircleList.clear();
     m_CollisionOn = true;
     m_PlayerControlOn = false;
 }
 void DiscreteSATEulerianEngine::handlePlayerControl() {
     if (!m_PlayerControlOn)  return;
-//    std::cout << "Player Control" << std::endl;
-    if (IsKeyDown(KEY_LEFT))
+    if (m_ObjectTypeToControl == CONTROL_OBJECT::NONE) return;
+    if (m_ControlType == CONTROL_TYPE::INSTANT_CONTROL)
     {
-        m_SATPolygonList[0]->move(Vector2{-2, 0});
+        if (m_ObjectTypeToControl == CONTROL_OBJECT::POLYGON)
+        {
+            if (IsKeyDown(KEY_LEFT))
+            {
+                m_SATPolygonList[0]->move(Vector2{-2, 0});
+            }
+            if (IsKeyDown(KEY_RIGHT))
+            {
+                m_SATPolygonList[0]->move(Vector2{2, 0});
+            }
+            if (IsKeyDown(KEY_UP))
+            {
+                m_SATPolygonList[0]->move(Vector2{0, -2});
+            }
+            if (IsKeyDown(KEY_DOWN))
+            {
+                m_SATPolygonList[0]->move(Vector2{0, 2});
+            }
+            if (IsKeyDown(KEY_ONE))
+            {
+                m_SATPolygonList[0]->rotate(-0.05f);
+            }
+            if (IsKeyDown(KEY_TWO))
+            {
+                m_SATPolygonList[0]->rotate(0.05f);
+            }
+        }
+        else if (m_ObjectTypeToControl == CONTROL_OBJECT::CIRCLE)
+        {
+            if (IsKeyDown(KEY_LEFT))
+            {
+                m_SATCircleList[0]->move(Vector2{-4, 0});
+            }
+            if (IsKeyDown(KEY_RIGHT))
+            {
+                m_SATCircleList[0]->move(Vector2{4, 0});
+            }
+            if (IsKeyDown(KEY_UP))
+            {
+                m_SATCircleList[0]->move(Vector2{0, -4});
+            }
+            if (IsKeyDown(KEY_DOWN)) {
+                m_SATCircleList[0]->move(Vector2{0, 4});
+            }
+        }
     }
-    if (IsKeyDown(KEY_RIGHT))
+    else if (m_ControlType == CONTROL_TYPE::ACCELERATE_CONTROL)
     {
-        m_SATPolygonList[0]->move(Vector2{2, 0});
-    }
-    if (IsKeyDown(KEY_UP))
-    {
-        m_SATPolygonList[0]->move(Vector2{0, -2});
-    }
-    if (IsKeyDown(KEY_DOWN))
-    {
-        m_SATPolygonList[0]->move(Vector2{0, 2});
-    }
-    if (IsKeyDown(KEY_ONE))
-    {
-        m_SATPolygonList[0]->rotate(-0.05f);
-    }
-    if (IsKeyDown(KEY_TWO))
-    {
-        m_SATPolygonList[0]->rotate(0.05f);
-    }
+        if (m_ObjectTypeToControl == CONTROL_OBJECT::POLYGON)
+        {
+            if (IsKeyDown(KEY_LEFT))
+            {
+                m_SATPolygonList[0]->accelerate(Vector2{-0.1f, 0});
+            }
+            if (IsKeyDown(KEY_RIGHT))
+            {
+                m_SATPolygonList[0]->accelerate(Vector2{0.1f, 0});
+            }
+            if (IsKeyDown(KEY_UP))
+            {
+                m_SATPolygonList[0]->accelerate(Vector2{0, -0.1f});
+            }
+            if (IsKeyDown(KEY_DOWN))
+            {
+                m_SATPolygonList[0]->accelerate(Vector2{0, 0.1f});
+            }
+        }
+        else if (m_ObjectTypeToControl == CONTROL_OBJECT::CIRCLE)
+        {
 
+            if (IsKeyDown(KEY_LEFT))
+            {   std::cout << "Controling Circle" << std::endl;
+                m_SATCircleList[0]->accelerate(Vector2{-100.0f, 0});
+            }
+            if (IsKeyDown(KEY_RIGHT))
+            {
+                m_SATCircleList[0]->accelerate(Vector2{100.0f, 0});
+            }
+            if (IsKeyDown(KEY_UP))
+            {
+                m_SATCircleList[0]->accelerate(Vector2{0, -100.0f});
+            }
+            if (IsKeyDown(KEY_DOWN))
+            {
+                m_SATCircleList[0]->accelerate(Vector2{0, 100.0f});
+            }
+        }
+    }
 }
+void DiscreteSATEulerianEngine::collideSATPolygons() {
+    if (m_EngineMode == ENGINE_MODE::INSTANT_ENGINE)
+    {
+        collideSATPolygonsInstant();
+    }
+    else if (m_EngineMode == ENGINE_MODE::ACCELERATE_ENGINE)
+    {
+        collideSATPolygonsAccelerate();
+    }
+}
+void DiscreteSATEulerianEngine::collideSATCircle() {
+    if (m_EngineMode == ENGINE_MODE::INSTANT_ENGINE)
+    {
+        collideSATCircleInstant();
+    }
+    else if (m_EngineMode == ENGINE_MODE::ACCELERATE_ENGINE)
+    {
+        collideSATCircleAccelerate();
+    }
+}
+void DiscreteSATEulerianEngine::collideSATPolygonsInstant()
+{
+    checkCollision();
+    if (m_CollisionOn)
+    {
+        SATCollider* Collider = SATPolygonCollider::getSATPolygonCollider();
+        for (auto& SATPolygon1 : m_SATPolygonList)
+        {
+            for (auto& SATPolygon2 : m_SATPolygonList)
+            {
+                if (SATPolygon1 != SATPolygon2)
+                {
+                    SATPolygon1->move(Collider->getCollisionResolution(SATPolygon1->getVertices(), SATPolygon2->getVertices()).FirstResolution);
+                    SATPolygon2->move(Collider->getCollisionResolution(SATPolygon1->getVertices(), SATPolygon2->getVertices()).SecondResolution);
+                }
+            }
+        }
+    }
+    for (auto& SATPolygon : m_SATPolygonList)
+    {
+        for (auto& SATCircle : m_SATCircleList)
+        {
 
+            SATCirclePolygonCollider* Collider = SATCirclePolygonCollider::getSATCirclePolygonCollider();
+            if (Collider->isColliding(*SATCircle, SATPolygon->getVertices()))
+            {
+
+                SATCircle->move(Collider->getCollisionResolution(*SATCircle, SATPolygon->getVertices()).FirstResolution);
+                SATPolygon->move(Collider->getCollisionResolution(*SATCircle, SATPolygon->getVertices()).SecondResolution);
+            }
+        }
+    }
+}
+void DiscreteSATEulerianEngine::collideSATCircleInstant()
+{
+    if (m_CollisionOn)
+    {
+        for (auto& SATCircle1 : m_SATCircleList)
+        {
+            for (auto& SATCircle2 : m_SATCircleList)
+            {
+                if (SATCircle1 != SATCircle2)
+                {
+                    if (Vector2Distance(SATCircle1->getCenter(), SATCircle2->getCenter()) < SATCircle1->getRadius() + SATCircle2->getRadius())
+                    {
+                        Vector2 NormalizedDirectVector = Vector2Normalize(Vector2Subtract(SATCircle2->getCenter(), SATCircle1->getCenter()));
+                        SATCircle2->move(Vector2Scale(NormalizedDirectVector, 0.5 * (SATCircle1->getRadius() + SATCircle2->getRadius() - Vector2Distance(SATCircle1->getCenter(), SATCircle2->getCenter()))));
+                        SATCircle1->move(Vector2Scale(NormalizedDirectVector, -0.5 * (SATCircle1->getRadius() + SATCircle2->getRadius() - Vector2Distance(SATCircle1->getCenter(), SATCircle2->getCenter()))));
+                    }
+                }
+            }
+        }
+    }
+}
+void DiscreteSATEulerianEngine::collideSATPolygonsAccelerate() {
+    for (auto &SATPolygon1: m_SATPolygonList)
+    {
+        for (auto &SATPolygon2: m_SATPolygonList)
+        {
+            if (SATPolygon1 != SATPolygon2)
+            {
+                SATCollider* Collider = SATPolygonCollider::getSATPolygonCollider();
+                if (Collider->isColliding(SATPolygon1->getVertices(), SATPolygon2->getVertices()))
+                {
+                    vector<Vector2> Vertices1 = SATPolygon1->getVertices();
+                    vector<Vector2> Vertices2 = SATPolygon2->getVertices();
+                    vector<LineSegment> Edges2;
+                    for (int i = 0; i < Vertices2.size(); ++i)
+                    {
+                        LineSegment Edge = {Vertices2[i], Vertices2[(i + 1) % Vertices2.size()]};
+                        Edges2.push_back(Edge);
+                    }
+                    int IndexInside2 = 0;
+                    float MaxPenetration = -INT_MAX;
+                    for (int i = 0; i < Vertices1.size(); ++i) {
+                        float Penetration = 0.0f;
+                        for (auto &Edge : Edges2) {
+                            Line LineEdge(Edge);
+                            Penetration = LineEdge.distanceToPoint(Vertices1[i]);
+                            if (isInsidePolygon(Vertices1[i], Edges2) && Penetration > MaxPenetration) {
+                                MaxPenetration = Penetration;
+                                IndexInside2 = i;
+                            }
+                        }
+                    }
+                    int ClosestEdgeIndex = 0;
+                    for (int i = 0; i < Edges2.size(); ++i)
+                    {
+                        Line Line2(Edges2[i]);
+                        Line MinLine2(Edges2[ClosestEdgeIndex]);
+                        if (Line2.distanceToPoint(Vertices1[IndexInside2]) < MinLine2.distanceToPoint(Vertices1[IndexInside2]))
+                        {
+                            ClosestEdgeIndex = i;
+                        }
+
+                    }
+                    Vector2 Projection = Line(Edges2[ClosestEdgeIndex]).projection(Vertices1[IndexInside2]);
+                    Vector2 Normal = Vector2Normalize(Vector2Subtract(Projection, Vertices1[IndexInside2]));
+                    Normal = Vector2Normalize(Normal);
+                    Vector2 RelativeVelocity = Vector2Subtract(SATPolygon2->getVelocity(), SATPolygon1->getVelocity());
+                    float e = 1.0f; // coefficient of restitution
+                    float Mass1 = 1.0f;
+                    float Mass2 = 1.0f;
+                    float j = -(1 + e) * Vector2DotProduct(RelativeVelocity, Normal) /
+                              (1 / Mass1 + 1 / Mass2);
+                    SATPolygon1->addVelocity(Vector2Scale(Normal, -j / Mass1));
+                    SATPolygon2->addVelocity(Vector2Scale(Normal, +j / Mass2));
+                    SATPolygon1->move(Collider->getCollisionResolution(SATPolygon1->getVertices(), SATPolygon2->getVertices()).FirstResolution);
+                    SATPolygon2->move(Collider->getCollisionResolution(SATPolygon1->getVertices(), SATPolygon2->getVertices()).SecondResolution);
+                }
+            }
+        }
+    }
+}
+void DiscreteSATEulerianEngine::collideSATCircleAccelerate() {
+    for (auto& circle1: m_SATCircleList)
+    {
+        for (auto& circle2: m_SATCircleList)
+        {
+            if (circle1 != circle2)
+            {
+                Vector2 DirectVector = Vector2Subtract(circle2->getCenter(), circle1->getCenter());
+                float Distance = Vector2Length(DirectVector);
+                if (Distance < circle1->getRadius() + circle2->getRadius()) {
+                    Vector2 NormalizedDirectVector = Vector2Normalize(DirectVector);
+                    circle2->move(Vector2Scale(NormalizedDirectVector,
+                                               0.5 * (circle1->getRadius() + circle2->getRadius() - Distance)));
+                    circle1->move(Vector2Scale(NormalizedDirectVector,
+                                               -0.5 * (circle1->getRadius() + circle2->getRadius() - Distance)));
+
+                    Vector2 NormalVector = Vector2Normalize(DirectVector);
+                    float e = 1.0f; // coefficient of restitution
+                    Vector2 RelativeVelocity = Vector2Subtract(circle2->getVelocity(), circle1->getVelocity());
+                    float j = -(1 + e) * Vector2DotProduct(RelativeVelocity, NormalVector) /
+                              (1 / circle1->getMass() + 1 / circle2->getMass());
+                    circle1->addVelocity(Vector2Scale(NormalVector, -j / circle1->getMass()));
+                    circle2->addVelocity(Vector2Scale(NormalVector, +j / circle2->getMass()));
+                }
+            }
+        }
+    }
+}
+void DiscreteSATEulerianEngine::setControlType(CONTROL_TYPE ControlType) {
+    m_ControlType = ControlType;
+    if (m_ControlType == CONTROL_TYPE::INSTANT_CONTROL)
+    {
+        m_EngineMode = ENGINE_MODE::INSTANT_ENGINE;
+    }
+    else if (m_ControlType == CONTROL_TYPE::ACCELERATE_CONTROL)
+    {
+        m_EngineMode = ENGINE_MODE::ACCELERATE_ENGINE;
+    }
+}
+void DiscreteSATEulerianEngine::setEngineMode(ENGINE_MODE EngineMode) {
+    m_EngineMode = EngineMode;
+    if (m_EngineMode == ENGINE_MODE::INSTANT_ENGINE)
+    {
+        m_ControlType = CONTROL_TYPE::INSTANT_CONTROL;
+    }
+    else if (m_EngineMode == ENGINE_MODE::ACCELERATE_ENGINE)
+    {
+        m_ControlType = CONTROL_TYPE::ACCELERATE_CONTROL;
+    }
+}
+void DiscreteSATEulerianEngine::setObjectTypeToControl(int ObjectTypeToControl) {
+    m_ObjectTypeToControl = ObjectTypeToControl;
+}
