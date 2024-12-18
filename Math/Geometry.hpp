@@ -84,4 +84,9 @@ float calculateAreaPolygon(const vector<Vector2>& Polygon);
 void drawArrow(Vector2 Start, Vector2 End, Color color);
 void drawArrow(Vector2 Start, Vector2 End, Color color, float Thickness);
 vector<Vector2> dilatePolygon(const vector<Vector2>& Polygon, float Scale);
+float calculateAreaPolygon(const vector<Vector2>& Polygon);
+void drawSquare(Vector2 Center, float EdgeSize, float Thickness, Color Color);
+void drawSquare(Vector2 Center, float EdgeSize, Color Color);
+void drawSquare(Vector2 Center);
+void drawSquare(Vector2 Center, float EdgeSize);
 #endif //PHYSICS_SIMULATION_DEMONSTRATION_GEOMETRY_HPP

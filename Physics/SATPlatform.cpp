@@ -143,7 +143,7 @@ void SATPlatformPolygon::draw() {
             DrawLineEx(m_Vertices[i].Position, m_Vertices[(i + 1) % m_NumberOfVertices].Position, 6, BLACK);
         }
         for (int i = 0; i < m_NumberOfVertices; ++i) {
-            DrawCircle((int) m_Vertices[i].Position.x, (int) m_Vertices[i].Position.y, 2, BLACK);
+            DrawCircle((int) m_Vertices[i].Position.x, (int) m_Vertices[i].Position.y, 3, BLACK);
         }
     }
 }
@@ -166,6 +166,18 @@ void SATPlatformPolygon::update(float DeltaTime) {
 }
 void SATPlatformPolygon::addVelocity(Vector2 Velocity) {
     m_Velocity = Vector2Add(m_Velocity, Velocity);
+}
+void SATPlatformPolygon::setMassUsingArea() {
+    float Area = 0;
+    for (int i = 0; i < m_NumberOfVertices; ++i) {
+        Area += m_Vertices[i].Position.x * m_Vertices[(i + 1) % m_NumberOfVertices].Position.y -
+                m_Vertices[(i + 1) % m_NumberOfVertices].Position.x * m_Vertices[i].Position.y;
+    }
+    m_Mass = Area;
+}
+void SATPlatformPolygon::setFixed(bool Fixed) {
+    m_Fixed = Fixed;
+    m_Mass = INT_MAX;
 }
 SATPlatformCircle::SATPlatformCircle(Vector2 Position, Color Color, float Mass) : EulerianRoundBall(Position, Color, Mass) {
     m_CurrentPosition = Position;
@@ -201,4 +213,11 @@ void SATPlatformCircle::addVelocity(Vector2 Velocity) {
 }
 void SATPlatformCircle::setVelocity(Vector2 Velocity) {
     m_Velocity = Velocity;
+}
+void SATPlatformCircle::setMassUsingArea() {
+    m_Mass = PI * m_Radius * m_Radius;
+}
+void SATPlatformCircle::setFixed(bool Fixed) {
+    m_Fixed = Fixed;
+    m_Mass = INT_MAX;
 }

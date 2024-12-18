@@ -383,3 +383,39 @@ vector<Vector2> dilatePolygon(const vector<Vector2>& Polygon, float Scale) {
     }
     return DilatedPolygon;
 }
+float calculateAreaPolygon(const vector<Vector2>& Polygon, const vector<int>& Index) {
+    float Area = 0;
+    Vector2 Center = {0, 0};
+    for (int i = 0; i < Index.size(); ++i) {
+        Center = Vector2Add(Center, Polygon[Index[i]]);
+    }
+    Center = Vector2Scale(Center, 1.0f / Index.size());
+    for (int i = 0; i < Index.size(); ++i) {
+        Area += calculateAreaTriangle(Center, Polygon[Index[i]], Polygon[Index[(i + 1) % Index.size()]]);
+    }
+    return Area;
+}
+void drawSquare(Vector2 Center, float EdgeSize, float Thickness, Color Color) {
+    Vector2 A = {Center.x - EdgeSize / 2, Center.y - EdgeSize / 2};
+    Vector2 B = {Center.x + EdgeSize / 2, Center.y - EdgeSize / 2};
+    Vector2 C = {Center.x + EdgeSize / 2, Center.y + EdgeSize / 2};
+    Vector2 D = {Center.x - EdgeSize / 2, Center.y + EdgeSize / 2};
+    DrawLineEx(A, B, Thickness, Color);
+    DrawLineEx(B, C, Thickness, Color);
+    DrawLineEx(C, D, Thickness, Color);
+    DrawLineEx(D, A, Thickness, Color);
+    DrawCircleV(A, Thickness / 2, Color);
+    DrawCircleV(B, Thickness / 2, Color);
+    DrawCircleV(C, Thickness / 2, Color);
+    DrawCircleV(D, Thickness / 2, Color);
+}
+
+void drawSquare(Vector2 Center, float EdgeSize, Color Color) {
+    drawSquare(Center, EdgeSize, 3, Color);
+}
+void drawSquare(Vector2 Center) {
+    drawSquare(Center, 50, 3, RED);
+}
+void drawSquare(Vector2 Center, float EdgeSize) {
+    drawSquare(Center, EdgeSize, 3, RED);
+}

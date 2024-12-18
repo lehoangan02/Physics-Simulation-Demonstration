@@ -979,9 +979,11 @@ DiscreteSATEulerianEngine::DiscreteSATEulerianEngine(int Width, int Height) : m_
 }
 void DiscreteSATEulerianEngine::attachSATPolygon(SATPlatformPolygon *NewSATPolygon) {
     m_SATPolygonList.push_back(NewSATPolygon);
+    NewSATPolygon->setMassUsingArea();
 }
 void DiscreteSATEulerianEngine::attachSATCircle(SATPlatformCircle *NewSATCircle) {
     m_SATCircleList.push_back(NewSATCircle);
+    NewSATCircle->setMassUsingArea();
 }
 void DiscreteSATEulerianEngine::applyConstraints() {
     if (!m_CollisionOn) return;

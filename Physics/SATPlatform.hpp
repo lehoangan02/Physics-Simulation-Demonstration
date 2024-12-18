@@ -7,6 +7,7 @@
 #include "raylib.h"
 #include "PlatformTriangle.hpp"
 #include "RoundBall.hpp"
+#include <climits>
 struct Point
 {
     Vector2 Position;
@@ -53,6 +54,8 @@ public:
     Vector2 getVelocity() const {return m_Velocity;}
     void addVelocity(Vector2 Velocity);
     Vector2 getCenter() const;
+    void setMassUsingArea();
+    void setFixed(bool Fixed);
 private:
     const Color m_VertexColor{33, 53, 85, 255};
     const Color m_EdgeColor{62, 88, 121, 255};
@@ -65,6 +68,8 @@ private:
     std::vector<Point> m_Vertices;
     Vector2 m_Velocity = {0, 0};
     Vector2 m_Acceleration = {0, 0};
+    bool m_Fixed = false;
+    float m_Mass = 1.0f;
 private:
     void sortVerticesCounterClockWise();
 };
@@ -86,6 +91,10 @@ public:
     void addVelocity(Vector2 Velocity);
     void setVelocity(Vector2 Velocity);
     Vector2 getCenter() {return m_CurrentPosition;}
+    void setFixed(bool Fixed);
+    bool isFixed() const {return m_Fixed;}
+    void setMass(float Mass) {m_Mass = Mass;}
+    void setMassUsingArea();
 private:
     bool m_DrawInternal = false;
 };

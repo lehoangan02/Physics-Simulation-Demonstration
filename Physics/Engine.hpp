@@ -269,5 +269,6 @@ private:
     Texture2D m_Background;
     vector<SATPlatformPolygon*> m_SATPolygonList;
     vector<SATPlatformCircle*> m_SATCircleList;
+    vector<Vector2> m_ContactPointList;
 };
 #endif //PHYSICS_SIMULATION_DEMONSTRATION_ENGINE_HPP
