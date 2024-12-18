@@ -23,8 +23,8 @@ public:
     float getLength();
     Vector2 getMidPoint();
     void draw(Color color) { DrawLineEx(A, B, 2, color); }
-private:
     bool haveProjection(const Vector2& Point);
+private:
     Vector2 projection(const Vector2& Point);
     friend class ContinuousEulerianEngine;
     Vector2 getPointWithDistance(const float& Distance, std::string Side);
@@ -82,4 +82,5 @@ Vector2 flipVector(Vector2 Initial, Vector2 Mirror);
 float calculateAreaTriangle(const Vector2& A, const Vector2& B, const Vector2& C);
 float calculateAreaPolygon(const vector<Vector2>& Polygon);
 void drawArrow(Vector2 Start, Vector2 End, Color color);
+vector<Vector2> dilatePolygon(const vector<Vector2>& Polygon, float Scale);
 #endif //PHYSICS_SIMULATION_DEMONSTRATION_GEOMETRY_HPP

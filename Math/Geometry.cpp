@@ -324,3 +324,17 @@ void drawArrow(Vector2 Start, Vector2 End, Color color) {
     DrawLineEx(End, arrowLeft, Thickness, color);
     DrawLineEx(End, arrowRight, Thickness, color);
 }
+vector<Vector2> dilatePolygon(const vector<Vector2>& Polygon, float Scale) {
+    Vector2 Center = {0, 0};
+    for (int i = 0; i < Polygon.size(); ++i) {
+        Center = Vector2Add(Center, Polygon[i]);
+    }
+    Center = Vector2Scale(Center, 1.0f / Polygon.size());
+    vector<Vector2> DilatedPolygon;
+    for (int i = 0; i < Polygon.size(); ++i) {
+        Vector2 Direction = Vector2Subtract(Polygon[i], Center);
+        Direction = Vector2Scale(Direction, Scale);
+        DilatedPolygon.push_back(Vector2Add(Center, Direction));
+    }
+    return DilatedPolygon;
+}

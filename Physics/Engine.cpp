@@ -1244,7 +1244,7 @@ void DiscreteSATEulerianEngine::handlePlayerControl() {
         {
             if (IsKeyDown(KEY_LEFT))
             {
-                m_SATPolygonList[0]->accelerate(Vector2{-100.0f, 0});
+                m_SATPolygonList[0]->accelerate(Vector2{-100.0, 0});
             }
             if (IsKeyDown(KEY_RIGHT))
             {
@@ -1263,7 +1263,7 @@ void DiscreteSATEulerianEngine::handlePlayerControl() {
         {
 
             if (IsKeyDown(KEY_LEFT))
-            {   std::cout << "Controling Circle" << std::endl;
+            {
                 m_SATCircleList[0]->accelerate(Vector2{-100.0f, 0});
             }
             if (IsKeyDown(KEY_RIGHT))
@@ -1315,6 +1315,7 @@ void DiscreteSATEulerianEngine::collideSATPolygonsInstant()
                 {
                     SATPolygon1->move(Collider->getCollisionResolution(SATPolygon1->getVertices(), SATPolygon2->getVertices()).FirstResolution);
                     SATPolygon2->move(Collider->getCollisionResolution(SATPolygon1->getVertices(), SATPolygon2->getVertices()).SecondResolution);
+
                 }
             }
         }
@@ -1330,6 +1331,7 @@ void DiscreteSATEulerianEngine::collideSATPolygonsInstant()
 
                 SATCircle->move(Collider->getCollisionResolution(*SATCircle, SATPolygon->getVertices()).FirstResolution);
                 SATPolygon->move(Collider->getCollisionResolution(*SATCircle, SATPolygon->getVertices()).SecondResolution);
+
             }
         }
     }
@@ -1349,6 +1351,7 @@ void DiscreteSATEulerianEngine::collideSATCircleInstant()
                         Vector2 NormalizedDirectVector = Vector2Normalize(Vector2Subtract(SATCircle2->getCenter(), SATCircle1->getCenter()));
                         SATCircle2->move(Vector2Scale(NormalizedDirectVector, 0.5 * (SATCircle1->getRadius() + SATCircle2->getRadius() - Vector2Distance(SATCircle1->getCenter(), SATCircle2->getCenter()))));
                         SATCircle1->move(Vector2Scale(NormalizedDirectVector, -0.5 * (SATCircle1->getRadius() + SATCircle2->getRadius() - Vector2Distance(SATCircle1->getCenter(), SATCircle2->getCenter()))));
+
                     }
                 }
             }
@@ -1411,6 +1414,78 @@ void DiscreteSATEulerianEngine::collideSATPolygonsAccelerate() {
                     SATPolygon1->move(Collider->getCollisionResolution(SATPolygon1->getVertices(), SATPolygon2->getVertices()).FirstResolution);
                     SATPolygon2->move(Collider->getCollisionResolution(SATPolygon1->getVertices(), SATPolygon2->getVertices()).SecondResolution);
                 }
+            }
+        }
+    }
+    for (auto& SATPolygon : m_SATPolygonList)
+    {
+        for (auto& SATCircle : m_SATCircleList)
+        {
+            SATCirclePolygonCollider* Collider = SATCirclePolygonCollider::getSATCirclePolygonCollider();
+            if (Collider->isColliding(*SATCircle, SATPolygon->getVertices()))
+            {
+                // find if there is a vertex inside the circle
+                bool Inside = false;
+                vector<Vector2> Vertices = SATPolygon->getVertices();
+                for (int i = 0; i < Vertices.size(); ++i)
+                {
+                    if (Vector2Distance(SATCircle->getCenter(), Vertices[i]) < SATCircle->getRadius())
+                    {
+                        Inside = true;
+                        break;
+                    }
+                }
+                if (Inside) {
+
+                }
+                else {
+                    // find the closest edge to the circle center
+                    vector<Vector2> Vertices = SATPolygon->getVertices();
+                    vector<LineSegment> Edges;
+                    for (int i = 0; i < Vertices.size(); ++i)
+                    {
+                        LineSegment Edge = {Vertices[i], Vertices[(i + 1) % Vertices.size()]};
+                        Edges.push_back(Edge);
+                    }
+                    vector<bool> HaveProjection(Edges.size(), false);
+                    int ClosestEdgeIndex;
+                    for (int i = 0; i < Edges.size(); ++i)
+                    {
+                        if (Edges[i].haveProjection(SATCircle->getCenter()))
+                        {
+                            HaveProjection[i] = true;
+                            ClosestEdgeIndex = i;
+                        }
+                    }
+                    for (int i = 0; i < Edges.size(); ++i)
+                    {
+                        if (!HaveProjection[i]) continue;
+                        Line LineEdge(Edges[i]);
+                        Line MinLineEdge(Edges[ClosestEdgeIndex]);
+                        if (LineEdge.distanceToPoint(SATCircle->getCenter()) < MinLineEdge.distanceToPoint(SATCircle->getCenter()))
+                        {
+                            ClosestEdgeIndex = i;
+                        }
+                    }
+                    Line ClosestEdgeLine(Edges[ClosestEdgeIndex]);
+                    Vector2 Projection = ClosestEdgeLine.projection(SATCircle->getCenter());
+                    Vector2 Normal = Vector2Normalize(Vector2Subtract(Projection, SATCircle->getCenter()));
+                    Vector2 RelativeVelocity = Vector2Subtract(SATCircle->getVelocity(), SATPolygon->getVelocity());
+                    float e = 1.0f; // coefficient of restitution
+                    float Mass1 = 1.0f;
+                    float Mass2 = 1.0f;
+                    float j = -(1 + e) * Vector2DotProduct(RelativeVelocity, Normal) /
+                              (1 / Mass1 + 1 / Mass2);
+                    SATPolygon->addVelocity(Vector2Scale(Normal, -j / Mass1));
+                    SATCircle->addVelocity(Vector2Scale(Normal, +j / Mass2));
+                    Vector2 FirstResolution = Collider->getCollisionResolution(*SATCircle, SATPolygon->getVertices()).FirstResolution;
+                    Vector2 SecondResolution = Collider->getCollisionResolution(*SATCircle, SATPolygon->getVertices()).SecondResolution;
+
+                    SATCircle->move(FirstResolution);
+                    SATPolygon->move(SecondResolution);
+                }
+
+
             }
         }
     }

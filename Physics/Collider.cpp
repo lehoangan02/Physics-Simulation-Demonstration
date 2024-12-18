@@ -409,8 +409,9 @@ SATCirclePolygonCollider *SATCirclePolygonCollider::getSATCirclePolygonCollider(
     return &m_SATCirclePolygonCollider;
 }
 bool SATCirclePolygonCollider::isColliding(const SATPlatformCircle &Circle, const std::vector<Vector2> &Shape) {
+
     std::vector<Vector2> AxisDirectionList;
-    Vector2 CircleClosestVertexDirection;
+    Vector2 CircleClosestVertexDirection = Shape[0];
     for (int i = 0; i < Shape.size(); ++i)
     {
         Line Line1(Shape[i], Shape[(i + 1) % Shape.size()]);
@@ -431,6 +432,7 @@ bool SATCirclePolygonCollider::isColliding(const SATPlatformCircle &Circle, cons
     Vector2 Min2;
     Vector2 Max1;
     for (auto& AxisDirection : AxisDirectionList) {
+        AxisDirection = Vector2Normalize(AxisDirection);
         if (AxisDirection.x == 0 && AxisDirection.y == 0)
         {
             std::cout << "Not checking this axis" << std::endl;
@@ -546,11 +548,10 @@ bool SATCirclePolygonCollider::isColliding(const SATPlatformCircle &Circle, cons
     }
     return true;
 }
-CollisionResolve SATCirclePolygonCollider::getCollisionResolution(const SATPlatformCircle &Circle,
-                                                                  const std::vector<Vector2> &Shape) {
-
+CollisionResolve SATCirclePolygonCollider::getCollisionResolution(const SATPlatformCircle &Circle, std::vector<Vector2> Shape) {
+    Shape = dilatePolygon(Shape, 1.01f);
     std::vector<Vector2> AxisDirectionList;
-    Vector2 CircleClosestVertexDirection;
+    Vector2 CircleClosestVertexDirection = Shape[0];
     for (int i = 0; i < Shape.size(); ++i)
     {
         Line Line1(Shape[i], Shape[(i + 1) % Shape.size()]);
@@ -692,13 +693,11 @@ CollisionResolve SATCirclePolygonCollider::getCollisionResolution(const SATPlatf
 //    DrawLineEx(Min1, Max1, 5, RED);
 //    DrawLineEx(Min2, Max2, 3, BLUE);
     if (Vector2Length(MinTranslationVectorMin1Max2) < Vector2Length(MinTranslationVectorMin2Max1)) {
-//        std::cout << "Case 1" << std::endl;
         Vector2 FirstResolution = Vector2Scale(MinTranslationVectorMin1Max2, 0.5);
         Vector2 SecondResolution = Vector2Scale(MinTranslationVectorMin1Max2, -0.5);
         return {FirstResolution, SecondResolution};
     }
     else {
-//        std::cout << "Case 2" << std::endl;
         Vector2 FirstResolution = Vector2Scale(MinTranslationVectorMin2Max1, -0.5);
         Vector2 SecondResolution = Vector2Scale(MinTranslationVectorMin2Max1, 0.5);
         return {FirstResolution, SecondResolution};

@@ -45,7 +45,7 @@ private:
 public:
     static SATCirclePolygonCollider* getSATCirclePolygonCollider();
     bool isColliding(const SATPlatformCircle& Circle, const std::vector<Vector2>& Shape);
-    CollisionResolve getCollisionResolution(const SATPlatformCircle& Circle, const std::vector<Vector2>& Shape);
+    CollisionResolve getCollisionResolution(const SATPlatformCircle& Circle, std::vector<Vector2> Shape);
 };
 
 #endif //PHYSICS_SIMULATION_DEMONSTRATION_COLLIDER_H
