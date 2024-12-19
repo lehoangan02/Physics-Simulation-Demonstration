@@ -980,6 +980,7 @@ DiscreteSATEulerianEngine::DiscreteSATEulerianEngine(int Width, int Height) : m_
 void DiscreteSATEulerianEngine::attachSATPolygon(SATPlatformPolygon *NewSATPolygon) {
     m_SATPolygonList.push_back(NewSATPolygon);
     NewSATPolygon->setMassUsingArea();
+    std::cout << "Mass: " << NewSATPolygon->getMass() << std::endl;
 }
 void DiscreteSATEulerianEngine::attachSATCircle(SATPlatformCircle *NewSATCircle) {
     m_SATCircleList.push_back(NewSATCircle);
@@ -1129,6 +1130,7 @@ void DiscreteSATEulerianEngine::turnOnOffPlayerControl(bool PlayerControlOn) {
 }
 void DiscreteSATEulerianEngine::update(float DeltaTime) {
     handlePlayerControl();
+    applyGravity();
     for (auto& SATPolygon : m_SATPolygonList)
     {
         SATPolygon->update(DeltaTime);
@@ -1423,9 +1425,10 @@ void DiscreteSATEulerianEngine::collideSATPolygonsAccelerate() {
                     Vector2 Normal = Vector2Normalize(Vector2Subtract(Projection, Vertices1[IndexInside2]));
                     Normal = Vector2Normalize(Normal);
                     Vector2 RelativeVelocity = Vector2Subtract(SATPolygon2->getVelocity(), SATPolygon1->getVelocity());
-                    float e = 1.0f; // coefficient of restitution
-                    float Mass1 = 1.0f;
-                    float Mass2 = 1.0f;
+                    float e = 0.8f; // coefficient of restitution
+                    // e = 0.5f;
+                    float Mass1 = SATPolygon1->getMass();
+                    float Mass2 = SATPolygon2->getMass();
                     float j = -(1 + e) * Vector2DotProduct(RelativeVelocity, Normal) /
                               (1 / Mass1 + 1 / Mass2);
                     SATPolygon1->addVelocity(Vector2Scale(Normal, -j / Mass1));
@@ -1466,9 +1469,11 @@ void DiscreteSATEulerianEngine::collideSATPolygonsAccelerate() {
                     }
                     Vector2 Normal = Vector2Normalize(Vector2Subtract(SATCircle->getCenter(), Vertices[ClosestVertexIndex]));
                     Vector2 RelativeVelocity = Vector2Subtract(SATCircle->getVelocity(), SATPolygon->getVelocity());
-                    float e = 1.0f; // coefficient of restitution
+                    float e = 0.8f; // coefficient of restitution
                     float Mass1 = 1.0f;
                     float Mass2 = 1.0f;
+                    std::cout << "Real mass 1: " << SATPolygon->getMass() << std::endl;
+                    std::cout << "Real mass 2: " << SATCircle->getMass() << std::endl;
                     float j = -(1 + e) * Vector2DotProduct(RelativeVelocity, Normal) /
                               (1 / Mass1 + 1 / Mass2);
                     SATPolygon->addVelocity(Vector2Scale(Normal, -j / Mass1));
@@ -1511,7 +1516,7 @@ void DiscreteSATEulerianEngine::collideSATPolygonsAccelerate() {
                     Vector2 Projection = ClosestEdgeLine.projection(SATCircle->getCenter());
                     Vector2 Normal = Vector2Normalize(Vector2Subtract(Projection, SATCircle->getCenter()));
                     Vector2 RelativeVelocity = Vector2Subtract(SATCircle->getVelocity(), SATPolygon->getVelocity());
-                    float e = 1.0f; // coefficient of restitution
+                    float e = 0.8f; // coefficient of restitution
                     float Mass1 = 1.0f;
                     float Mass2 = 1.0f;
                     float j = -(1 + e) * Vector2DotProduct(RelativeVelocity, Normal) /
@@ -1545,7 +1550,7 @@ void DiscreteSATEulerianEngine::collideSATCircleAccelerate() {
                                                -0.5 * (circle1->getRadius() + circle2->getRadius() - Distance)));
 
                     Vector2 NormalVector = Vector2Normalize(DirectVector);
-                    float e = 1.0f; // coefficient of restitution
+                    float e = 0.8f; // coefficient of restitution
                     Vector2 RelativeVelocity = Vector2Subtract(circle2->getVelocity(), circle1->getVelocity());
                     float j = -(1 + e) * Vector2DotProduct(RelativeVelocity, NormalVector) /
                               (1 / circle1->getMass() + 1 / circle2->getMass());
@@ -1580,4 +1585,15 @@ void DiscreteSATEulerianEngine::setEngineMode(ENGINE_MODE EngineMode) {
 }
 void DiscreteSATEulerianEngine::setObjectTypeToControl(int ObjectTypeToControl) {
     m_ObjectTypeToControl = ObjectTypeToControl;
+}
+void DiscreteSATEulerianEngine::applyGravity() {
+    if (m_ApplyGravity) return;
+    for (auto& SATPolygon : m_SATPolygonList)
+    {
+        SATPolygon->accelerate(Vector2{0, 9.8f});
+    }
+    for (auto& SATCircle : m_SATCircleList)
+    {
+        SATCircle->accelerate(Vector2{0, 9.8f});
+    }
 }

@@ -249,6 +249,8 @@ public:
     void setControlType(CONTROL_TYPE ControlType);
     void setEngineMode(ENGINE_MODE EngineMode);
     void handlePlayerControl();
+    void turnOnOffGravity(bool ApplyGravity) { m_ApplyGravity = ApplyGravity; }
+    void turnOnOffDisplayContactPoint(bool DisplayContactPoint) { m_DisplayContactPoint = DisplayContactPoint; }
 private:
     void applyConstraints();
     void checkCollision();
@@ -258,9 +260,12 @@ private:
     void collideSATCircleInstant();
     void collideSATPolygonsAccelerate();
     void collideSATCircleAccelerate();
+    void applyGravity();
 private:
     bool m_CollisionOn = true;
     bool m_PlayerControlOn = false;
+    bool m_DisplayContactPoint = false;
+    bool m_ApplyGravity = false;
     CONTROL_TYPE m_ControlType = CONTROL_TYPE::INSTANT_CONTROL;
     ENGINE_MODE m_EngineMode = ENGINE_MODE::INSTANT_ENGINE;
     int m_ObjectTypeToControl = CONTROL_OBJECT::NONE;

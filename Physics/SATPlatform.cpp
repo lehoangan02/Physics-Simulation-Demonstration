@@ -168,11 +168,7 @@ void SATPlatformPolygon::addVelocity(Vector2 Velocity) {
     m_Velocity = Vector2Add(m_Velocity, Velocity);
 }
 void SATPlatformPolygon::setMassUsingArea() {
-    float Area = 0;
-    for (int i = 0; i < m_NumberOfVertices; ++i) {
-        Area += m_Vertices[i].Position.x * m_Vertices[(i + 1) % m_NumberOfVertices].Position.y -
-                m_Vertices[(i + 1) % m_NumberOfVertices].Position.x * m_Vertices[i].Position.y;
-    }
+    float Area = calculateAreaPolygon(this->getVertices());
     m_Mass = Area;
 }
 void SATPlatformPolygon::setFixed(bool Fixed) {

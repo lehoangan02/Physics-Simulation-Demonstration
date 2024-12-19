@@ -56,6 +56,7 @@ public:
     Vector2 getCenter() const;
     void setMassUsingArea();
     void setFixed(bool Fixed);
+    float getMass() const {return m_Mass;}
 private:
     const Color m_VertexColor{33, 53, 85, 255};
     const Color m_EdgeColor{62, 88, 121, 255};

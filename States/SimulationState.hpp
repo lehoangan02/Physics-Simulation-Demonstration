@@ -40,6 +40,7 @@ enum StateNumber {
     SAT_POLYGON_STATE,
     SAT_CIRCLE_POLYGON_STATE,
     SAT_RESPONSE_STATE,
+    SAT_GRAVITY_AND_CONTACT_POINTS_STATE
 };
 class SimulationState;
 class StateFactory
@@ -492,6 +493,23 @@ private:
 private:
     SATResponseState();
     ~SATResponseState() override;
+    void reset() override;
+    void readCordinates();
+};
+class SATGravityAndContactPointsState : public SimulationState {
+public:
+    static SimulationState* getSATGravityAndContactPointsState();
+    SimulationState* update() override;
+    void draw() override;
+    void onNotify() override;
+private:
+    vector<SATPlatformPolygon*> m_PolygonList;
+    vector<SATPlatformCircle*> m_CircleList;
+    DiscreteSATEulerianEngine m_Engine;
+    vector<Color> m_ColorList;
+private:
+    SATGravityAndContactPointsState();
+    ~SATGravityAndContactPointsState() override;
     void reset() override;
     void readCordinates();
 };
