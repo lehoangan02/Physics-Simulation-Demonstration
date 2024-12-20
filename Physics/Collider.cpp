@@ -82,12 +82,12 @@ bool TriangleSATCollider::isColliding(const std::vector<Vector2> &Shape1, const 
     for (auto& AxisDirection : AxisDirectionList) {
         if (AxisDirection.x == 0 && AxisDirection.y == 0)
         {
-            std::cout << "Not checking this axis" << std::endl;
+            // std::cout << "Not checking this axis" << std::endl;
             continue;
         }
         if (AxisDirection.x == 0)
         {
-            std::cout << "There is a vertical line" << std::endl;
+            // std::cout << "There is a vertical line" << std::endl;
             Vector2 Origin = {600, 600};
             std::pair<Vector2, Vector2> DirectionVectorAndPoint(AxisDirection, Origin);
             Line Axis(DirectionVectorAndPoint);
@@ -193,12 +193,12 @@ bool SATPolygonCollider::isColliding(const std::vector<Vector2> &Shape1, const s
     for (auto& AxisDirection : AxisDirectionList) {
         if (AxisDirection.x == 0 && AxisDirection.y == 0)
         {
-            std::cout << "Not checking this axis" << std::endl;
+            // std::cout << "Not checking this axis" << std::endl;
             continue;
         }
         if (AxisDirection.x == 0)
         {
-            std::cout << "There is a vertical line" << std::endl;
+            // std::cout << "There is a vertical line" << std::endl;
             Vector2 Origin = {600, 600};
             std::pair<Vector2, Vector2> DirectionVectorAndPoint(AxisDirection, Origin);
             Line Axis(DirectionVectorAndPoint);
@@ -298,12 +298,12 @@ CollisionResolve SATPolygonCollider::getCollisionResolution(const std::vector<Ve
     for (auto& AxisDirection : AxisDirectionList) {
         if (AxisDirection.x == 0 && AxisDirection.y == 0)
         {
-            std::cout << "Not checking this axis" << std::endl;
+            // std::cout << "Not checking this axis" << std::endl;
             continue;
         }
         if (AxisDirection.x == 0)
         {
-            std::cout << "There is a vertical line" << std::endl;
+            // std::cout << "There is a vertical line" << std::endl;
             Vector2 Origin = {600, 600};
             std::pair<Vector2, Vector2> DirectionVectorAndPoint(AxisDirection, Origin);
             Line Axis(DirectionVectorAndPoint);
@@ -435,12 +435,12 @@ bool SATCirclePolygonCollider::isColliding(const SATPlatformCircle &Circle, cons
         AxisDirection = Vector2Normalize(AxisDirection);
         if (AxisDirection.x == 0 && AxisDirection.y == 0)
         {
-            std::cout << "Not checking this axis" << std::endl;
+            // std::cout << "Not checking this axis" << std::endl;
             continue;
         }
         if (AxisDirection.x == 0)
         {
-            std::cout << "There is a vertical line" << std::endl;
+            // std::cout << "There is a vertical line" << std::endl;
             Vector2 Origin = {600, 600};
             std::pair<Vector2, Vector2> DirectionVectorAndPoint(AxisDirection, Origin);
             Line Axis(DirectionVectorAndPoint);
@@ -574,11 +574,11 @@ CollisionResolve SATCirclePolygonCollider::getCollisionResolution(const SATPlatf
     Vector2 Max1;
     for (auto& AxisDirection : AxisDirectionList) {
         if (AxisDirection.x == 0 && AxisDirection.y == 0) {
-            std::cout << "Not checking this axis" << std::endl;
+            // std::cout << "Not checking this axis" << std::endl;
             continue;
         }
         if (AxisDirection.x == 0) {
-            std::cout << "There is a vertical line" << std::endl;
+            // std::cout << "There is a vertical line" << std::endl;
             Vector2 Origin = {600, 600};
             std::pair<Vector2, Vector2> DirectionVectorAndPoint(AxisDirection, Origin);
             Line Axis(DirectionVectorAndPoint);

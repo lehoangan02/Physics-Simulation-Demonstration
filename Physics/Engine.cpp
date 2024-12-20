@@ -989,6 +989,7 @@ void DiscreteSATEulerianEngine::attachSATCircle(SATPlatformCircle *NewSATCircle)
 void DiscreteSATEulerianEngine::applyConstraints() {
     if (!m_CollisionOn) return;
     if (m_EngineMode == ENGINE_MODE::INSTANT_ENGINE) {
+
         for (auto &SATPolygon: m_SATPolygonList) {
             for (auto &vertex: SATPolygon->getVertices()) {
                 if (vertex.x < 0) {
@@ -1130,6 +1131,8 @@ void DiscreteSATEulerianEngine::turnOnOffPlayerControl(bool PlayerControlOn) {
 }
 void DiscreteSATEulerianEngine::update(float DeltaTime) {
     handlePlayerControl();
+
+    // std::cout << "Contact Points: " << m_ContactPointList.size() << std::endl;
     applyGravity();
     for (auto& SATPolygon : m_SATPolygonList)
     {
@@ -1139,6 +1142,7 @@ void DiscreteSATEulerianEngine::update(float DeltaTime) {
     {
         SATCircle->update(DeltaTime);
     }
+    calculateContactPoints();
     collideSATPolygons();
     collideSATCircle();
     applyConstraints();
@@ -1153,6 +1157,7 @@ void DiscreteSATEulerianEngine::draw() {
     {
         SATCircle->draw();
     }
+    drawContactPoints();
     if (m_PlayerControlOn)
     {
         Vector2 End = m_SATPolygonList[0]->getCenter();
@@ -1201,6 +1206,7 @@ void DiscreteSATEulerianEngine::draw() {
             drawArrow(m_SATCircleList[0]->getCenter(), End, ArrowColor, 4);
         }
     }
+
 }
 void DiscreteSATEulerianEngine::reset() {
     m_SATPolygonList.clear();
@@ -1425,7 +1431,7 @@ void DiscreteSATEulerianEngine::collideSATPolygonsAccelerate() {
                     Vector2 Normal = Vector2Normalize(Vector2Subtract(Projection, Vertices1[IndexInside2]));
                     Normal = Vector2Normalize(Normal);
                     Vector2 RelativeVelocity = Vector2Subtract(SATPolygon2->getVelocity(), SATPolygon1->getVelocity());
-                    float e = 0.8f; // coefficient of restitution
+                    float e = 1.0f; // coefficient of restitution
                     // e = 0.5f;
                     float Mass1 = SATPolygon1->getMass();
                     float Mass2 = SATPolygon2->getMass();
@@ -1469,11 +1475,11 @@ void DiscreteSATEulerianEngine::collideSATPolygonsAccelerate() {
                     }
                     Vector2 Normal = Vector2Normalize(Vector2Subtract(SATCircle->getCenter(), Vertices[ClosestVertexIndex]));
                     Vector2 RelativeVelocity = Vector2Subtract(SATCircle->getVelocity(), SATPolygon->getVelocity());
-                    float e = 0.8f; // coefficient of restitution
-                    float Mass1 = 1.0f;
-                    float Mass2 = 1.0f;
-                    std::cout << "Real mass 1: " << SATPolygon->getMass() << std::endl;
-                    std::cout << "Real mass 2: " << SATCircle->getMass() << std::endl;
+                    float e = 1.0f; // coefficient of restitution
+                    float Mass1 = SATPolygon->getMass();
+                    float Mass2 = SATCircle->getMass();
+                    // std::cout << "Real mass 1: " << SATPolygon->getMass() << std::endl;
+                    // std::cout << "Real mass 2: " << SATCircle->getMass() << std::endl;
                     float j = -(1 + e) * Vector2DotProduct(RelativeVelocity, Normal) /
                               (1 / Mass1 + 1 / Mass2);
                     SATPolygon->addVelocity(Vector2Scale(Normal, -j / Mass1));
@@ -1516,9 +1522,9 @@ void DiscreteSATEulerianEngine::collideSATPolygonsAccelerate() {
                     Vector2 Projection = ClosestEdgeLine.projection(SATCircle->getCenter());
                     Vector2 Normal = Vector2Normalize(Vector2Subtract(Projection, SATCircle->getCenter()));
                     Vector2 RelativeVelocity = Vector2Subtract(SATCircle->getVelocity(), SATPolygon->getVelocity());
-                    float e = 0.8f; // coefficient of restitution
-                    float Mass1 = 1.0f;
-                    float Mass2 = 1.0f;
+                    float e = 1.0f; // coefficient of restitution
+                    float Mass1 = SATPolygon->getMass();
+                    float Mass2 = SATCircle->getMass();
                     float j = -(1 + e) * Vector2DotProduct(RelativeVelocity, Normal) /
                               (1 / Mass1 + 1 / Mass2);
                     SATPolygon->addVelocity(Vector2Scale(Normal, -j / Mass1));
@@ -1550,7 +1556,7 @@ void DiscreteSATEulerianEngine::collideSATCircleAccelerate() {
                                                -0.5 * (circle1->getRadius() + circle2->getRadius() - Distance)));
 
                     Vector2 NormalVector = Vector2Normalize(DirectVector);
-                    float e = 0.8f; // coefficient of restitution
+                    float e = 1.0f; // coefficient of restitution
                     Vector2 RelativeVelocity = Vector2Subtract(circle2->getVelocity(), circle1->getVelocity());
                     float j = -(1 + e) * Vector2DotProduct(RelativeVelocity, NormalVector) /
                               (1 / circle1->getMass() + 1 / circle2->getMass());
@@ -1566,6 +1572,7 @@ void DiscreteSATEulerianEngine::setControlType(CONTROL_TYPE ControlType) {
     if (m_ControlType == CONTROL_TYPE::INSTANT_CONTROL)
     {
         m_EngineMode = ENGINE_MODE::INSTANT_ENGINE;
+        this -> turnOnOffGravity(false);
     }
     else if (m_ControlType == CONTROL_TYPE::ACCELERATE_CONTROL)
     {
@@ -1576,6 +1583,7 @@ void DiscreteSATEulerianEngine::setEngineMode(ENGINE_MODE EngineMode) {
     m_EngineMode = EngineMode;
     if (m_EngineMode == ENGINE_MODE::INSTANT_ENGINE)
     {
+        this -> turnOnOffGravity(false);
         m_ControlType = CONTROL_TYPE::INSTANT_CONTROL;
     }
     else if (m_EngineMode == ENGINE_MODE::ACCELERATE_ENGINE)
@@ -1587,13 +1595,219 @@ void DiscreteSATEulerianEngine::setObjectTypeToControl(int ObjectTypeToControl) 
     m_ObjectTypeToControl = ObjectTypeToControl;
 }
 void DiscreteSATEulerianEngine::applyGravity() {
-    if (m_ApplyGravity) return;
+    if (!m_ApplyGravity) return;
+    Vector2 Gravity = Vector2{0, 9.8 * 10};
     for (auto& SATPolygon : m_SATPolygonList)
     {
-        SATPolygon->accelerate(Vector2{0, 9.8f});
+        SATPolygon->accelerate(Gravity);
     }
     for (auto& SATCircle : m_SATCircleList)
     {
-        SATCircle->accelerate(Vector2{0, 9.8f});
+        SATCircle->accelerate(Gravity);
     }
 }
+void DiscreteSATEulerianEngine::calculateContactPoints() {
+
+    if (!m_DisplayContactPoint) return;
+    for (auto& SATCircle1 : m_SATCircleList) {
+        for (auto& SATCircle2 : m_SATCircleList) {
+            if (SATCircle1 != SATCircle2) {
+                Vector2 DirectVector = Vector2Subtract(SATCircle2->getCenter(), SATCircle1->getCenter());
+                float Distance = Vector2Length(DirectVector);
+                if (Distance < SATCircle1->getRadius() + SATCircle2->getRadius()) {
+                    Vector2 ContactPoint = Vector2Add(SATCircle1->getCenter(), Vector2Scale(DirectVector, SATCircle1->getRadius() / (SATCircle1->getRadius() + SATCircle2->getRadius())));
+                    m_ContactPointList.push_back(ContactPoint);
+                }
+            }
+        }
+    }
+    for (auto& SATPolygon1 : m_SATPolygonList) {
+        for (auto& SATPolygon2 : m_SATPolygonList) {
+            if (SATPolygon1 != SATPolygon2) {
+                SATCollider* Collider = SATPolygonCollider::getSATPolygonCollider();
+                if (Collider -> isColliding(SATPolygon1->getVertices(), SATPolygon2->getVertices())) {
+                    std::cout << "Colliding" << std::endl;
+                    vector<Vector2> VerticesWithProjection1;
+                    vector<Vector2> VerticesWithProjection2;
+                    vector<LineSegment> LineSegments1;
+                    for (int i = 0; i < SATPolygon1->getVertices().size(); ++i) {
+                        LineSegment Edge = {SATPolygon1->getVertices()[i], SATPolygon1->getVertices()[(i + 1) % SATPolygon1->getVertices().size()]};
+                        LineSegments1.push_back(Edge);
+                    }
+                    vector<LineSegment> LineSegments2;
+                    for (int i = 0; i < SATPolygon2->getVertices().size(); ++i) {
+                        LineSegment Edge = {SATPolygon2->getVertices()[i], SATPolygon2->getVertices()[(i + 1) % SATPolygon2->getVertices().size()]};
+                        LineSegments2.push_back(Edge);
+                    }
+                    for (auto& Vertex : SATPolygon1->getVertices()) {
+                        for (auto& Edge : LineSegments2) {
+                            if (Edge.haveProjection(Vertex)) {
+                                VerticesWithProjection1.push_back(Vertex);
+                                break;
+                            }
+                        }
+                    }
+                    for (auto& Vertex : SATPolygon2->getVertices()) {
+                        for (auto& Edge : LineSegments1) {
+                            if (Edge.haveProjection(Vertex)) {
+                                VerticesWithProjection2.push_back(Vertex);
+                                break;
+                            }
+                        }
+                    }
+                    // std::cout << "Number of vertices with projection 1: " << VerticesWithProjection1.size() << std::endl;
+                    // std::cout << "Number of vertices with projection 2: " << VerticesWithProjection2.size() << std::endl;
+                    const float InaccuracyThreshold = 0.000000001f;
+                    float MinDistance1 = INT_MAX;
+                    int MinimumDistanceIndex1 = 0;
+                    for (int i = 0; i < VerticesWithProjection1.size(); ++i) {
+                        float LocalMinDistance = INT_MAX;
+                        for (auto& Edge : LineSegments2) {
+                            float Distance = Line(Edge).distanceToPoint(VerticesWithProjection1[i]);
+                            if (Distance < LocalMinDistance) {
+                                LocalMinDistance = Distance;
+                            }
+                        }
+                        if (LocalMinDistance < MinDistance1) {
+                            MinDistance1 = LocalMinDistance;
+                            MinimumDistanceIndex1 = i;
+                        }
+                    }
+                    float MinDistance2 = INT_MAX;
+                    int MinimumDistanceIndex2 = 0;
+                    for (int i = 0; i < VerticesWithProjection2.size(); ++i) {
+                        float LocalMinDistance = INT_MAX;
+                        for (auto& Edge : LineSegments1) {
+                            float Distance = Line(Edge).distanceToPoint(VerticesWithProjection2[i]);
+                            if (Distance < LocalMinDistance) {
+                                LocalMinDistance = Distance;
+                            }
+                        }
+                        if (LocalMinDistance < MinDistance2) {
+                            MinDistance2 = LocalMinDistance;
+                            MinimumDistanceIndex2 = i;
+                        }
+                    }
+                    float MinimumDistance;
+                    if (MinDistance1 < MinDistance2) {
+                        MinimumDistance = MinDistance1;
+                    }
+                    else {
+                        MinimumDistance = MinDistance2;
+                    }
+                    for (int i = 0; i < VerticesWithProjection1.size(); ++i) {
+                        for (auto& Edge : LineSegments2) {
+                            if (!Edge.haveProjection(VerticesWithProjection1[i])) continue;
+                            float Distance = Line(Edge).distanceToPoint(VerticesWithProjection1[i]);
+                            if (Distance <= MinimumDistance + InaccuracyThreshold) {
+                                Vector2 Projection = Line(Edge).projection(VerticesWithProjection1[i]);
+                                m_ContactPointList.push_back(Projection);
+                                break;
+                            }
+                        }
+                    }
+                    for (int i = 0; i < VerticesWithProjection2.size(); ++i) {
+                        for (auto& Edge : LineSegments1) {
+                            if (!(Edge.haveProjection(VerticesWithProjection2[i]))) continue;
+                            float Distance = Line(Edge).distanceToPoint(VerticesWithProjection2[i]);
+                            if (Distance <= MinimumDistance + InaccuracyThreshold) {
+                                Vector2 Projection = Line(Edge).projection(VerticesWithProjection2[i]);
+                                m_ContactPointList.push_back(Projection);
+                                break;
+                            }
+                        }
+                    }
+                    // BeginDrawing();
+                    // for (auto& Point : m_ContactPointList) {
+                    //     DrawCircle(Point.x, Point.y, 5, RED);
+                    // }
+                    // EndDrawing();
+                    std::cout << "Number of contact points: " << m_ContactPointList.size() << std::endl;
+                }
+            }
+        }
+    }
+    for (auto& SATPolygon : m_SATPolygonList)
+    {
+        for (auto& SATCircle : m_SATCircleList)
+        {
+            SATCirclePolygonCollider* Collider = SATCirclePolygonCollider::getSATCirclePolygonCollider();
+            if (Collider->isColliding(*SATCircle, SATPolygon->getVertices()))
+            {
+                // find if there is a vertex inside the circle
+                bool Inside = false;
+                vector<Vector2> Vertices = SATPolygon->getVertices();
+                for (int i = 0; i < Vertices.size(); ++i)
+                {
+                    if (Vector2Distance(SATCircle->getCenter(), Vertices[i]) < SATCircle->getRadius())
+                    {
+                        Inside = true;
+                        break;
+                    }
+                }
+                if (Inside) {
+                    // find the closest vertex to the circle center
+                    int ClosestVertexIndex = 0;
+                    for (int i = 0; i < Vertices.size(); ++i)
+                    {
+                        if (Vector2Distance(SATCircle->getCenter(), Vertices[i]) < Vector2Distance(SATCircle->getCenter(), Vertices[ClosestVertexIndex]))
+                        {
+                            ClosestVertexIndex = i;
+                        }
+                    }
+                    Vector2 Projection = Vertices[ClosestVertexIndex];
+                    m_ContactPointList.push_back(Projection);
+                }
+                else {
+                    // find the closest edge to the circle center
+                    vector<Vector2> Vertices = SATPolygon->getVertices();
+                    vector<LineSegment> Edges;
+                    for (int i = 0; i < Vertices.size(); ++i)
+                    {
+                        LineSegment Edge = {Vertices[i], Vertices[(i + 1) % Vertices.size()]};
+                        Edges.push_back(Edge);
+                    }
+                    vector<bool> HaveProjection(Edges.size(), false);
+                    int ClosestEdgeIndex;
+                    for (int i = 0; i < Edges.size(); ++i)
+                    {
+                        if (Edges[i].haveProjection(SATCircle->getCenter()))
+                        {
+                            HaveProjection[i] = true;
+                            ClosestEdgeIndex = i;
+                        }
+                    }
+                    for (int i = 0; i < Edges.size(); ++i)
+                    {
+                        if (!HaveProjection[i]) continue;
+                        Line LineEdge(Edges[i]);
+                        Line MinLineEdge(Edges[ClosestEdgeIndex]);
+                        if (LineEdge.distanceToPoint(SATCircle->getCenter()) < MinLineEdge.distanceToPoint(SATCircle->getCenter()))
+                        {
+                            ClosestEdgeIndex = i;
+                        }
+                    }
+                    Line ClosestEdgeLine(Edges[ClosestEdgeIndex]);
+                    Vector2 Projection = ClosestEdgeLine.projection(SATCircle->getCenter());
+                    m_ContactPointList.push_back(Projection);
+                }
+            }
+        }
+    }
+}
+void DiscreteSATEulerianEngine::drawContactPoints() {
+    if (!m_DisplayContactPoint) return;
+    // std::cout << "Number of contact points: " << m_ContactPointList.size() << std::endl;
+    for (auto& Point : m_ContactPointList) {
+        drawSquare(Point, 10, MAGENTA);
+    }
+    static int FrameSkipped = 0;
+    const int FrameSkip = 20;
+    if (FrameSkipped == FrameSkip) {
+        m_ContactPointList.clear();
+        FrameSkipped = 0;
+    }
+    ++FrameSkipped;
+}
+
+

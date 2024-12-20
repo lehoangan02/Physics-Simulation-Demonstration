@@ -217,3 +217,26 @@ void SATPlatformCircle::setFixed(bool Fixed) {
     m_Fixed = Fixed;
     m_Mass = INT_MAX;
 }
+SATRotatingPlatformPolygon::SATRotatingPlatformPolygon(const std::vector<Vector2>& Vertices, Color Color) : SATPlatformPolygon(Vertices, Color) {
+    m_RotationalVelocity = 0;
+    calculateVirtualRadius();
+}
+void SATRotatingPlatformPolygon::calculateVirtualRadius() {
+    Vector2 Center = getCenter();
+    for (int i = 0; i < this -> getVertices().size(); ++i) {
+        Vector2 Direction = Vector2Subtract(this -> getVertices()[i], Center);
+        float Distance = Vector2Length(Direction);
+        m_VirtualRadius += Distance;
+    }
+    m_VirtualRadius /= this -> getVertices().size();
+}
+void SATRotatingPlatformPolygon::update(float DeltaTime) {
+    SATPlatformPolygon::update(DeltaTime);
+    float Angle = m_RotationalVelocity * DeltaTime;
+    rotate(Angle);
+}
+float SATRotatingPlatformPolygon::calculateMomentOfInertia() const {
+    float MomentOfInertia = 1/2 * this->getMass() * m_VirtualRadius * m_VirtualRadius;
+    return MomentOfInertia;
+}
+

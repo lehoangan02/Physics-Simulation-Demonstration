@@ -44,7 +44,7 @@ public:
     void draw();
     void move(Vector2 Direction);
     void rotate(float Angle);
-    void update(float DeltaTime);
+    virtual void update(float DeltaTime);
     void setActive(bool Active) {m_DrawInternal = Active;}
     bool isActive() const {return m_DrawInternal;}
     std::vector<Vector2> getVertices() const;
@@ -81,7 +81,7 @@ public:
     SATPlatformCircle(Vector2 Position, Color Color, float Mass);
     void draw() override;
     void move(Vector2 Direction);
-    void update(float DeltaTime);
+    virtual void update(float DeltaTime);
     void setActive(bool Active) {m_DrawInternal = Active;}
     Vector2 getCenter() const {return m_CurrentPosition;}
     float getRadius() const {return m_Radius;}
@@ -98,5 +98,30 @@ public:
     void setMassUsingArea();
 private:
     bool m_DrawInternal = false;
+};
+class SATRotatingPlatformPolygon : public SATPlatformPolygon {
+public:
+    SATRotatingPlatformPolygon(const std::vector<Vector2>& Vertices, Color Color);
+    void update(float DeltaTime) override;
+    void setRotationalVelocity(float RotationalVelocity) {m_RotationalVelocity = RotationalVelocity;}
+    void addRotationalVelocity(float RotationalVelocity) {m_RotationalVelocity += RotationalVelocity;}
+    float getRotationalVelocity() const {return m_RotationalVelocity;}
+    float calculateMomentOfInertia() const;
+private:
+    float m_RotationalVelocity = 0;
+    float m_VirtualRadius = 0;
+private:
+    void calculateVirtualRadius();
+};
+class SATRotatingPlatformCircle : public SATPlatformCircle {
+public:
+    SATRotatingPlatformCircle(Vector2 Position, Color Color, float Mass);
+    void update(float DeltaTime) override;
+    void setRotationalVelocity(float RotationalVelocity) {m_RotationalVelocity = RotationalVelocity;}
+    void addRotationalVelocity(float RotationalVelocity) {m_RotationalVelocity += RotationalVelocity;}
+    float getRotationalVelocity() const {return m_RotationalVelocity;}
+    float calculateMomentOfInertia() const;
+private:
+    float m_RotationalVelocity = 0;
 };
 #endif //PHYSICS_SIMULATION_DEMONSTRATION_SATPLATFORM_HPP

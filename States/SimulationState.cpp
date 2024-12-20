@@ -2344,6 +2344,7 @@ void SATCirclePolygonState::reset() {
     m_Engine.turnOnOffPlayerControl(true);
     int ObjectType = DiscreteSATEulerianEngine::CONTROL_OBJECT::CIRCLE;
     m_Engine.setObjectTypeToControl(ObjectType);
+
 }
 void SATCirclePolygonState::onNotify() {
     exitState();
@@ -2638,7 +2639,8 @@ void SATGravityAndContactPointsState::reset() {
     }
     m_Engine.turnOnOffPlayerControl(false);
     m_Engine.setEngineMode(DiscreteSATEulerianEngine::ENGINE_MODE::ACCELERATE_ENGINE);
-    // m_Engine.
+    m_Engine.turnOnOffGravity(true);
+    m_Engine.turnOnOffDisplayContactPoint(true);
 }
 void SATGravityAndContactPointsState::onNotify() {
     exitState();

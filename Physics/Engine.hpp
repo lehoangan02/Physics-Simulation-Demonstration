@@ -261,6 +261,8 @@ private:
     void collideSATPolygonsAccelerate();
     void collideSATCircleAccelerate();
     void applyGravity();
+    void calculateContactPoints();
+    void drawContactPoints();
 private:
     bool m_CollisionOn = true;
     bool m_PlayerControlOn = false;
