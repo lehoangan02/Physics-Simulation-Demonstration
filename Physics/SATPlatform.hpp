@@ -41,7 +41,7 @@ class SATPlatformPolygon
 {
 public:
     SATPlatformPolygon(const std::vector<Vector2>& Vertices, Color Color);
-    void draw();
+    virtual void draw();
     void move(Vector2 Direction);
     void rotate(float Angle);
     virtual void update(float DeltaTime);
@@ -107,6 +107,7 @@ public:
     void addRotationalVelocity(float RotationalVelocity) {m_RotationalVelocity += RotationalVelocity;}
     float getRotationalVelocity() const {return m_RotationalVelocity;}
     float calculateMomentOfInertia() const;
+    void draw() override;
 private:
     float m_RotationalVelocity = 0;
     float m_VirtualRadius = 0;
@@ -121,7 +122,10 @@ public:
     void addRotationalVelocity(float RotationalVelocity) {m_RotationalVelocity += RotationalVelocity;}
     float getRotationalVelocity() const {return m_RotationalVelocity;}
     float calculateMomentOfInertia() const;
+    void rotate(float Radian);
+    void draw() override;
 private:
     float m_RotationalVelocity = 0;
+    Vector2 m_TopPosition;
 };
 #endif //PHYSICS_SIMULATION_DEMONSTRATION_SATPLATFORM_HPP

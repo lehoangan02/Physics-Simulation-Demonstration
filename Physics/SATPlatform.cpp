@@ -239,4 +239,12 @@ float SATRotatingPlatformPolygon::calculateMomentOfInertia() const {
     float MomentOfInertia = 1/2 * this->getMass() * m_VirtualRadius * m_VirtualRadius;
     return MomentOfInertia;
 }
-
+SATRotatingPlatformCircle::SATRotatingPlatformCircle(Vector2 Position, Color Color, float Mass) : SATPlatformCircle(Position, Color, Mass) {
+    m_RotationalVelocity = 0;
+    m_Radius = 100;
+}
+void SATRotatingPlatformCircle::update(float DeltaTime) {
+    SATPlatformCircle::update(DeltaTime);
+    float Angle = m_RotationalVelocity * DeltaTime;
+    rotate(Angle);
+}
