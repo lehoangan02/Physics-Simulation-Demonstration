@@ -40,7 +40,9 @@ add_executable(Physics_Simulation_Demonstration main.cpp
         Physics/Collider.cpp
         Physics/Collider.h
         Physics/SATPlatform.cpp
-        Physics/SATPlatform.hpp)
+        Physics/SATPlatform.hpp
+        Physics/GeneralPhysics.cpp
+        Physics/GeneralPhysics.hpp)
 include_directories(/opt/homebrew/Cellar/raylib/5.0/include)
 
 find_package(raylib 4.5 REQUIRED)

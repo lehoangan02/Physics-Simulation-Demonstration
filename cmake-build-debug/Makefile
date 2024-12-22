@@ -321,6 +321,30 @@ Physics/Engine.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Physics_Simulation_Demonstration.dir/build.make CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/Engine.cpp.s
 .PHONY : Physics/Engine.cpp.s
 
+Physics/GeneralPhysics.o: Physics/GeneralPhysics.cpp.o
+.PHONY : Physics/GeneralPhysics.o
+
+# target to build an object file
+Physics/GeneralPhysics.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Physics_Simulation_Demonstration.dir/build.make CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/GeneralPhysics.cpp.o
+.PHONY : Physics/GeneralPhysics.cpp.o
+
+Physics/GeneralPhysics.i: Physics/GeneralPhysics.cpp.i
+.PHONY : Physics/GeneralPhysics.i
+
+# target to preprocess a source file
+Physics/GeneralPhysics.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Physics_Simulation_Demonstration.dir/build.make CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/GeneralPhysics.cpp.i
+.PHONY : Physics/GeneralPhysics.cpp.i
+
+Physics/GeneralPhysics.s: Physics/GeneralPhysics.cpp.s
+.PHONY : Physics/GeneralPhysics.s
+
+# target to generate assembly for a file
+Physics/GeneralPhysics.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Physics_Simulation_Demonstration.dir/build.make CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/GeneralPhysics.cpp.s
+.PHONY : Physics/GeneralPhysics.cpp.s
+
 Physics/PlatformRectangle.o: Physics/PlatformRectangle.cpp.o
 .PHONY : Physics/PlatformRectangle.o
 
@@ -618,6 +642,9 @@ help:
 	@echo "... Physics/Engine.o"
 	@echo "... Physics/Engine.i"
 	@echo "... Physics/Engine.s"
+	@echo "... Physics/GeneralPhysics.o"
+	@echo "... Physics/GeneralPhysics.i"
+	@echo "... Physics/GeneralPhysics.s"
 	@echo "... Physics/PlatformRectangle.o"
 	@echo "... Physics/PlatformRectangle.i"
 	@echo "... Physics/PlatformRectangle.s"

@@ -240,9 +240,9 @@ public:
     DiscreteSATEulerianEngine(int Width, int Height);
     void attachSATPolygon(SATPlatformPolygon* NewSATPolygon);
     void attachSATCircle(SATPlatformCircle* NewSATCircle);
-    void update(float DeltaTime);
-    void draw();
-    void reset();
+    virtual void update(float DeltaTime);
+    virtual void draw();
+    virtual void reset();
     void turnOnOffCollision(bool CollisionOn);
     void turnOnOffPlayerControl(bool PlayerControlOn);
     void setObjectTypeToControl(int ObjectTypeToControl);
@@ -251,19 +251,19 @@ public:
     void handlePlayerControl();
     void turnOnOffGravity(bool ApplyGravity) { m_ApplyGravity = ApplyGravity; }
     void turnOnOffDisplayContactPoint(bool DisplayContactPoint) { m_DisplayContactPoint = DisplayContactPoint; }
-private:
+protected:
     void applyConstraints();
     void checkCollision();
-    void collideSATPolygons();
-    void collideSATCircle();
+    virtual void collideSATPolygons();
+    virtual void collideSATCircle();
     void collideSATPolygonsInstant();
     void collideSATCircleInstant();
     void collideSATPolygonsAccelerate();
     void collideSATCircleAccelerate();
-    void applyGravity();
+    virtual void applyGravity();
     void calculateContactPoints();
     void drawContactPoints();
-private:
+protected:
     bool m_CollisionOn = true;
     bool m_PlayerControlOn = false;
     bool m_DisplayContactPoint = false;
@@ -277,5 +277,32 @@ private:
     vector<SATPlatformPolygon*> m_SATPolygonList;
     vector<SATPlatformCircle*> m_SATCircleList;
     vector<Vector2> m_ContactPointList;
+};
+class DiscreteRotatingEulerianEngine : public DiscreteSATEulerianEngine {
+public:
+    DiscreteRotatingEulerianEngine(int Width, int Height);
+    void attachSATPolygon(SATPlatformPolygon* NewSATPolygon) = delete;
+    void attachSATCircle(SATPlatformCircle* NewSATCircle) = delete;
+    void attachRotatingPlatformPolygon(SATRotatingPlatformPolygon* NewRotatingPlatformPolygon);
+    void attachRotatingPlatformCircle(SATRotatingPlatformCircle* NewRotatingPlatformCircle);
+    void update(float DeltaTime) override;
+    void draw() override;
+    void reset() override;
+    void turnOnOffCollision(bool CollisionOn) = delete;
+    void turnOnOffPlayerControl(bool PlayerControlOn) = delete;
+    void setObjectTypeToControl(int ObjectTypeToControl) = delete;
+    void setControlType(DiscreteSATEulerianEngine::CONTROL_TYPE ControlType) = delete;
+    void setEngineMode(DiscreteSATEulerianEngine::ENGINE_MODE EngineMode) = delete;
+    void handlePlayerControl() = delete;
+    // void turnOnOffGravity(bool ApplyGravity) = delete;
+private:
+    void collideSATPolygons() override;
+    void collideSATCircle() override;
+    void collideSATPolygonsInstant() = delete;
+    void collideSATCircleInstant() = delete;
+    void applyGravity() override;
+private:
+    vector<SATRotatingPlatformPolygon*> m_RotatingPolygonList;
+    vector<SATRotatingPlatformCircle*> m_RotatingCircleList;
 };
 #endif //PHYSICS_SIMULATION_DEMONSTRATION_ENGINE_HPP

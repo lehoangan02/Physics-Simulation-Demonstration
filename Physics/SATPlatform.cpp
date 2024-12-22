@@ -231,6 +231,8 @@ void SATRotatingPlatformPolygon::calculateVirtualRadius() {
     m_VirtualRadius /= this -> getVertices().size();
 }
 void SATRotatingPlatformPolygon::update(float DeltaTime) {
+
+
     SATPlatformPolygon::update(DeltaTime);
     float Angle = m_RotationalVelocity * DeltaTime;
     rotate(Angle);
@@ -239,12 +241,43 @@ float SATRotatingPlatformPolygon::calculateMomentOfInertia() const {
     float MomentOfInertia = 1/2 * this->getMass() * m_VirtualRadius * m_VirtualRadius;
     return MomentOfInertia;
 }
+void SATRotatingPlatformPolygon::draw() {
+    SATPlatformPolygon::draw();
+    // DrawCircle(getCenter().x, getCenter().y, m_VirtualRadius, BLACK);
+}
 SATRotatingPlatformCircle::SATRotatingPlatformCircle(Vector2 Position, Color Color, float Mass) : SATPlatformCircle(Position, Color, Mass) {
     m_RotationalVelocity = 0;
     m_Radius = 100;
+    m_TopPosition = Vector2Add(m_TopPosition, Vector2{0, -m_Radius});
 }
 void SATRotatingPlatformCircle::update(float DeltaTime) {
-    SATPlatformCircle::update(DeltaTime);
+    m_Velocity = Vector2Add(m_Velocity, Vector2Scale(m_Acceleration, DeltaTime));
+    m_PreviousPosition = m_CurrentPosition;
+    m_CurrentPosition = Vector2Add(m_CurrentPosition, Vector2Scale(m_Velocity, DeltaTime));
+    m_TopPosition = Vector2Add(m_TopPosition, Vector2Scale(m_Velocity, DeltaTime));
+    m_Acceleration = Vector2{0, 0};
     float Angle = m_RotationalVelocity * DeltaTime;
     rotate(Angle);
 }
+void SATRotatingPlatformCircle::rotate(float Radian) {
+    Vector2 Center = m_CurrentPosition;
+    Vector2 Direction = Vector2Subtract(m_TopPosition, Center);
+    Direction = Vector2Rotate(Direction, Radian);
+    m_TopPosition = Vector2Add(Center, Direction);
+}
+void SATRotatingPlatformCircle::setRadius(float Radius) {
+    Vector2 Center = m_CurrentPosition;
+    m_Radius = Radius;
+    Vector2 Direction = Vector2Subtract(m_TopPosition, Center);
+    Direction = Vector2Normalize(Direction);
+    Direction = Vector2Scale(Direction, m_Radius);
+    m_TopPosition = Vector2Add(Center, Direction);
+    return;
+}
+void SATRotatingPlatformCircle::draw() {
+    DrawCircle(m_CurrentPosition.x, m_CurrentPosition.y, m_Radius, BLACK);
+    DrawCircle(m_CurrentPosition.x, m_CurrentPosition.y, m_Radius - 6, m_Color);
+    DrawLineEx(m_CurrentPosition, m_TopPosition, 5, BLACK);
+    // DrawCircle(m_TopPosition.x, m_TopPosition.y, 10, BLACK);
+}
+

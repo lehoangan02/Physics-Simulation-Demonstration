@@ -1149,6 +1149,7 @@ void DiscreteSATEulerianEngine::update(float DeltaTime) {
 }
 void DiscreteSATEulerianEngine::draw() {
     DrawTexture(m_Background, 0, 0, WHITE);
+
     for (auto& SATPolygon : m_SATPolygonList)
     {
         SATPolygon->draw();
@@ -1809,5 +1810,72 @@ void DiscreteSATEulerianEngine::drawContactPoints() {
     }
     ++FrameSkipped;
 }
+DiscreteRotatingEulerianEngine::DiscreteRotatingEulerianEngine(int Width, int Height) : DiscreteSATEulerianEngine(Width, Height) {
+    m_ApplyGravity = false;
+}
+void DiscreteRotatingEulerianEngine::attachRotatingPlatformCircle(SATRotatingPlatformCircle *NewRotatingPlatformCircle) {
+    m_RotatingCircleList.push_back(NewRotatingPlatformCircle);
+}
+void DiscreteRotatingEulerianEngine::attachRotatingPlatformPolygon(SATRotatingPlatformPolygon *NewRotatingPlatformPolygon) {
+    m_RotatingPolygonList.push_back(NewRotatingPlatformPolygon);
+}
+void DiscreteRotatingEulerianEngine::update(float DeltaTime) {
+    applyGravity();
+    for (auto& SATPolygon : m_SATPolygonList)
+    {
+        SATPolygon->update(DeltaTime);
+    }
+    for (auto& SATCircle : m_SATCircleList)
+    {
+        SATCircle->update(DeltaTime);
+    }
+    for (auto& RotatingCircle : m_RotatingCircleList)
+    {
+        RotatingCircle->update(DeltaTime);
+    }
+    for (auto& RotatingPolygon : m_RotatingPolygonList)
+    {
+        RotatingPolygon->update(DeltaTime);
+    }
+    calculateContactPoints();
+    collideSATPolygons();
+    collideSATCircle();
+    applyConstraints();
+}
+void DiscreteRotatingEulerianEngine::draw() {
+    DrawTexture(m_Background, 0, 0, WHITE);
+    for (auto& SATPolygon : m_RotatingPolygonList) {
+        SATPolygon->draw();
+    }
+    for (auto& SATCircle : m_RotatingCircleList) {
+        SATCircle->draw();
+    }
+}
+void DiscreteRotatingEulerianEngine::reset() {
+
+    m_RotatingCircleList.clear();
+    m_RotatingPolygonList.clear();
+}
+void DiscreteRotatingEulerianEngine::collideSATCircle() {
+}
+void DiscreteRotatingEulerianEngine::collideSATPolygons() {
+
+}
+void DiscreteRotatingEulerianEngine::applyGravity() {
+    if (!m_ApplyGravity) return;
+    Vector2 Gravity = Vector2{0, 9.8 * 10};
+    for (auto& Polygon : m_RotatingPolygonList) {
+        if (Polygon->isFixed()) continue;
+        Polygon -> accelerate(Gravity);
+    }
+    for (auto& Circle : m_RotatingCircleList) {
+        Circle -> accelerate(Gravity);
+    }
+}
+
+
+
+
+
 
 

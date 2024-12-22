@@ -40,7 +40,8 @@ enum StateNumber {
     SAT_POLYGON_STATE,
     SAT_CIRCLE_POLYGON_STATE,
     SAT_RESPONSE_STATE,
-    SAT_GRAVITY_AND_CONTACT_POINTS_STATE
+    SAT_GRAVITY_AND_CONTACT_POINTS_STATE,
+    SAT_FIXED_AND_ROTATING_STATE,
 };
 class SimulationState;
 class StateFactory
@@ -445,7 +446,7 @@ private:
     SATTriangleState();
     ~SATTriangleState() override;
     void reset() override;
-    void readCordinates();
+    void readCoordinate();
 };
 class SATPolygonState : public SimulationState {
 public:
@@ -460,7 +461,7 @@ private:
     SATPolygonState();
     ~SATPolygonState() override;
     void reset() override;
-    void readCordinates();
+    void readCoordinate();
 };
 class SATCirclePolygonState : public SimulationState {
 public:
@@ -477,7 +478,7 @@ private:
     SATCirclePolygonState();
     ~SATCirclePolygonState() override;
     void reset() override;
-    void readCordinates();
+    void readCoordinate();
 };
 class SATResponseState : public SimulationState {
 public:
@@ -494,7 +495,7 @@ private:
     SATResponseState();
     ~SATResponseState() override;
     void reset() override;
-    void readCordinates();
+    void readCoordinate();
 };
 class SATGravityAndContactPointsState : public SimulationState {
 public:
@@ -511,6 +512,23 @@ private:
     SATGravityAndContactPointsState();
     ~SATGravityAndContactPointsState() override;
     void reset() override;
-    void readCordinates();
+    void readCoordinate();
 };
+class SATFixedAndRotatingState : public SimulationState {
+public:
+    static SimulationState* getSATFixedAndRotatingState();
+    SimulationState* update() override;
+    void draw() override;
+    void onNotify() override;
+private:
+    DiscreteRotatingEulerianEngine m_Engine;
+    vector<SATRotatingPlatformPolygon*> m_PolygonList;
+    vector<SATRotatingPlatformCircle*> m_CircleList;
+private:
+    SATFixedAndRotatingState();
+    ~SATFixedAndRotatingState() override;
+    void reset() override;
+    void readCoordinate();
+};
+
 #endif //PHYSICS_SIMULATION_DEMONSTRATION_SIMULATIONSTATE_HPP

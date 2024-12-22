@@ -17,6 +17,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/Collider.cpp.o.d"
   "CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/Engine.cpp.o"
   "CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/Engine.cpp.o.d"
+  "CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/GeneralPhysics.cpp.o"
+  "CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/GeneralPhysics.cpp.o.d"
   "CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/PlatformRectangle.cpp.o"
   "CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/PlatformRectangle.cpp.o.d"
   "CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/PlatformTriangle.cpp.o"

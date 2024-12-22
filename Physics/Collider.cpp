@@ -273,6 +273,109 @@ bool SATPolygonCollider::isColliding(const std::vector<Vector2> &Shape1, const s
     }
     return true;
 }
+std::vector<Vector2> SATPolygonCollider::getPointsOfIntersection(const std::vector<Vector2> &Shape1, const std::vector<Vector2> &Shape2) {
+    std::vector<Vector2> Result;
+    SATCollider* Collider = SATPolygonCollider::getSATPolygonCollider();
+    if (Collider -> isColliding(Shape1, Shape2)) {
+        std::cout << "Colliding" << std::endl;
+        vector<Vector2> VerticesWithProjection1;
+        vector<Vector2> VerticesWithProjection2;
+        vector<LineSegment> LineSegments1;
+        for (int i = 0; i < Shape1.size(); ++i) {
+            LineSegment Edge = {Shape1[i], Shape1[(i + 1) % Shape1.size()]};
+            LineSegments1.push_back(Edge);
+        }
+        vector<LineSegment> LineSegments2;
+        for (int i = 0; i < Shape2.size(); ++i) {
+            LineSegment Edge = {Shape2[i], Shape2[(i + 1) % Shape2.size()]};
+            LineSegments2.push_back(Edge);
+        }
+        for (auto& Vertex : Shape1) {
+            for (auto& Edge : LineSegments2) {
+                if (Edge.haveProjection(Vertex)) {
+                    VerticesWithProjection1.push_back(Vertex);
+                    break;
+                }
+            }
+        }
+        for (auto& Vertex : Shape2) {
+            for (auto& Edge : LineSegments1) {
+                if (Edge.haveProjection(Vertex)) {
+                    VerticesWithProjection2.push_back(Vertex);
+                    break;
+                }
+            }
+        }
+        const float InaccuracyThreshold = 0.000000001f;
+        float MinDistance1 = INT_MAX;
+        int MinimumDistanceIndex1 = 0;
+        for (int i = 0; i < VerticesWithProjection1.size(); ++i) {
+            float LocalMinDistance = INT_MAX;
+            for (auto& Edge : LineSegments2) {
+                float Distance = Line(Edge).distanceToPoint(VerticesWithProjection1[i]);
+                if (Distance < LocalMinDistance) {
+                    LocalMinDistance = Distance;
+                }
+            }
+            if (LocalMinDistance < MinDistance1) {
+                MinDistance1 = LocalMinDistance;
+                MinimumDistanceIndex1 = i;
+            }
+        }
+        float MinDistance2 = INT_MAX;
+        int MinimumDistanceIndex2 = 0;
+        for (int i = 0; i < VerticesWithProjection2.size(); ++i) {
+            float LocalMinDistance = INT_MAX;
+            for (auto& Edge : LineSegments1) {
+                float Distance = Line(Edge).distanceToPoint(VerticesWithProjection2[i]);
+                if (Distance < LocalMinDistance) {
+                    LocalMinDistance = Distance;
+                }
+            }
+            if (LocalMinDistance < MinDistance2) {
+                MinDistance2 = LocalMinDistance;
+                MinimumDistanceIndex2 = i;
+            }
+        }
+        float MinimumDistance;
+        if (MinDistance1 < MinDistance2) {
+            MinimumDistance = MinDistance1;
+        }
+        else {
+            MinimumDistance = MinDistance2;
+        }
+        for (int i = 0; i < VerticesWithProjection1.size(); ++i) {
+            for (auto& Edge : LineSegments2) {
+                if (!Edge.haveProjection(VerticesWithProjection1[i])) continue;
+                float Distance = Line(Edge).distanceToPoint(VerticesWithProjection1[i]);
+                if (Distance <= MinimumDistance + InaccuracyThreshold) {
+                    Vector2 Projection = Line(Edge).projection(VerticesWithProjection1[i]);
+                    Result.push_back(Projection);
+                    break;
+                }
+            }
+        }
+        for (int i = 0; i < VerticesWithProjection2.size(); ++i) {
+            for (auto& Edge : LineSegments1) {
+                if (!(Edge.haveProjection(VerticesWithProjection2[i]))) continue;
+                float Distance = Line(Edge).distanceToPoint(VerticesWithProjection2[i]);
+                if (Distance <= MinimumDistance + InaccuracyThreshold) {
+                    Vector2 Projection = Line(Edge).projection(VerticesWithProjection2[i]);
+                    Result.push_back(Projection);
+                    break;
+                }
+            }
+        }
+        // BeginDrawing();
+        // for (auto& Point : Result) {
+        //     DrawCircle(Point.x, Point.y, 5, RED);
+        // }
+        // EndDrawing();
+        std::cout << "Number of contact points: " << Result.size() << std::endl;
+    }
+    return Result;
+}
+
 CollisionResolve SATPolygonCollider::getCollisionResolution(const std::vector<Vector2> &Shape1,
                                                                        const std::vector<Vector2> &Shape2) {
 //    std::cout << "Getting Collision Resolution" << std::endl;
@@ -403,6 +506,27 @@ CollisionResolve SATPolygonCollider::getCollisionResolution(const std::vector<Ve
         return {FirstResolution, SecondResolution};
     }
 }
+CollisionResolve SATPolygonCollider::getCollisionResolution(const std::vector<Vector2> &Shape1, const std::vector<Vector2> &Shape2, bool IsShape1Fixed, bool IsShape2Fixed) {
+    CollisionResolve CollisionResolution = getCollisionResolution(Shape1, Shape2);
+    if (IsShape1Fixed && IsShape2Fixed) {
+        return {0, 0};
+    }
+    if (IsShape1Fixed) {
+        Vector2 Resolution = CollisionResolution.SecondResolution;
+        Resolution = Vector2Add(Vector2Negate(CollisionResolution.FirstResolution), Resolution);
+        CollisionResolution.FirstResolution = {0, 0};
+        CollisionResolution.SecondResolution = Resolution;
+        return CollisionResolution;
+    }
+    if (IsShape2Fixed) {
+        Vector2 Resolution = CollisionResolution.FirstResolution;
+        Resolution = Vector2Add(Vector2Negate(CollisionResolution.SecondResolution), Resolution);
+        CollisionResolution.FirstResolution = Resolution;
+        CollisionResolution.SecondResolution = {0, 0};
+        return CollisionResolution;
+    }
+}
+
 
 SATCirclePolygonCollider *SATCirclePolygonCollider::getSATCirclePolygonCollider() {
     static SATCirclePolygonCollider m_SATCirclePolygonCollider;
@@ -704,3 +828,111 @@ CollisionResolve SATCirclePolygonCollider::getCollisionResolution(const SATPlatf
     }
     return {Vector2{0, 0}, Vector2{0, 0}};
 }
+std::vector<Vector2> SATCirclePolygonCollider::getPointsOfIntersection(const SATPlatformCircle &Circle, const std::vector<Vector2> &Shape) {
+    std::vector<Vector2> Result;
+    SATCirclePolygonCollider* Collider = SATCirclePolygonCollider::getSATCirclePolygonCollider();
+    if (Collider->isColliding(Circle, Shape))
+    {
+        // find if there is a vertex inside the circle
+        bool Inside = false;
+        vector<Vector2> Vertices = Shape;
+        for (int i = 0; i < Vertices.size(); ++i)
+        {
+            if (Vector2Distance(Circle.getCenter(), Vertices[i]) < Circle.getRadius())
+            {
+                Inside = true;
+                break;
+            }
+        }
+        if (Inside) {
+            // find the closest vertex to the circle center
+            int ClosestVertexIndex = 0;
+            for (int i = 0; i < Vertices.size(); ++i)
+            {
+                if (Vector2Distance(Circle.getCenter(), Vertices[i]) < Vector2Distance(Circle.getCenter(), Vertices[ClosestVertexIndex]))
+                {
+                    ClosestVertexIndex = i;
+                }
+            }
+            Vector2 Projection = Vertices[ClosestVertexIndex];
+            Result.push_back(Projection);
+        }
+        else {
+            // find the closest edge to the circle center
+            vector<Vector2> Vertices = Shape;
+            vector<LineSegment> Edges;
+            for (int i = 0; i < Vertices.size(); ++i)
+            {
+                LineSegment Edge = {Vertices[i], Vertices[(i + 1) % Vertices.size()]};
+                Edges.push_back(Edge);
+            }
+            vector<bool> HaveProjection(Edges.size(), false);
+            int ClosestEdgeIndex;
+            for (int i = 0; i < Edges.size(); ++i)
+            {
+                if (Edges[i].haveProjection(Circle.getCenter()))
+                {
+                    HaveProjection[i] = true;
+                    ClosestEdgeIndex = i;
+                }
+            }
+            for (int i = 0; i < Edges.size(); ++i)
+            {
+                if (!HaveProjection[i]) continue;
+                Line LineEdge(Edges[i]);
+                Line MinLineEdge(Edges[ClosestEdgeIndex]);
+                if (LineEdge.distanceToPoint(Circle.getCenter()) < MinLineEdge.distanceToPoint(Circle.getCenter()))
+                {
+                    ClosestEdgeIndex = i;
+                }
+            }
+            Line ClosestEdgeLine(Edges[ClosestEdgeIndex]);
+            Vector2 Projection = ClosestEdgeLine.projection(Circle.getCenter());
+            Result.push_back(Projection);
+        }
+    }
+}
+
+CollisionResolve SATCirclePolygonCollider::getCollisionResolution(const SATPlatformCircle &Circle, std::vector<Vector2> Shape, bool IsCircleFixed, bool IsShapeFixed) {
+    if (IsCircleFixed && IsShapeFixed) {
+        return {0, 0};
+    }
+    if (IsCircleFixed) {
+        CollisionResolve CollisionResolution = getCollisionResolution(Circle, Shape);
+        Vector2 Resolution = CollisionResolution.SecondResolution;
+        Resolution = Vector2Add(Vector2Negate(CollisionResolution.FirstResolution), Resolution);
+        CollisionResolution.FirstResolution = {0, 0};
+        CollisionResolution.SecondResolution = Resolution;
+        return CollisionResolution;
+    }
+    if (IsShapeFixed) {
+        CollisionResolve CollisionResolution = getCollisionResolution(Circle, Shape);
+        Vector2 Resolution = CollisionResolution.FirstResolution;
+        Resolution = Vector2Add(Vector2Negate(CollisionResolution.SecondResolution), Resolution);
+        CollisionResolution.FirstResolution = Resolution;
+        CollisionResolution.SecondResolution = {0, 0};
+        return CollisionResolution;
+    }
+}
+SATRotatingCollider* SATRotatingCollider::getSATRotatingCollider() {
+    static SATRotatingCollider m_SATRotatingCollider;
+    return &m_SATRotatingCollider;
+}
+AngularCollisionResolve SATRotatingCollider::getCollisionResolution(SATRotatingPlatformPolygon *Shape1, SATRotatingPlatformPolygon *Shape2) {
+    if (Shape1->isFixed() && Shape2->isFixed()) {
+        return {0, 0, 0};
+    }
+    bool IsColliding = SATPolygonCollider::getSATPolygonCollider()->isColliding(Shape1->getVertices(), Shape2->getVertices());
+    if (IsColliding) {
+        Vector2 ContactPoint = SATPolygonCollider::getSATPolygonCollider()->getPointsOfIntersection(Shape1->getVertices(), Shape2->getVertices())[0];
+        Vector2 Tangent1 = calculateTangentalVelocity(Shape1->getCenter(), ContactPoint, Shape1->getRotationalVelocity());
+        Vector2 Tangent2 = calculateTangentalVelocity(Shape2->getCenter(), ContactPoint, Shape2->getRotationalVelocity());
+        float Inertia1 = 1/2 * Shape1->getMass() * Shape1->getRadius() * Shape1->getRadius();
+        float Inertia2 = 1/2 * Shape2->getMass() * Shape2->getRadius() * Shape2->getRadius();
+
+    }
+}
+
+
+
+

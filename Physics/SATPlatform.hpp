@@ -49,7 +49,7 @@ public:
     bool isActive() const {return m_DrawInternal;}
     std::vector<Vector2> getVertices() const;
     void setCustomColor(Color CustomColor) {m_CustomColor = CustomColor; m_UseCustomColor = true;}
-    void accelerate(Vector2 Acceleration);
+    virtual void accelerate(Vector2 Acceleration);
     void setVelocity(Vector2 Velocity) {m_Velocity = Velocity;}
     Vector2 getVelocity() const {return m_Velocity;}
     void addVelocity(Vector2 Velocity);
@@ -57,7 +57,7 @@ public:
     void setMassUsingArea();
     void setFixed(bool Fixed);
     float getMass() const {return m_Mass;}
-private:
+protected:
     const Color m_VertexColor{33, 53, 85, 255};
     const Color m_EdgeColor{62, 88, 121, 255};
     const Color m_ActiveInternalColor{216, 196, 182, 255};
@@ -86,7 +86,7 @@ public:
     Vector2 getCenter() const {return m_CurrentPosition;}
     float getRadius() const {return m_Radius;}
     void setRadius(float Radius);
-    void accelerate(Vector2 Acceleration);
+    virtual void accelerate(Vector2 Acceleration);
     Vector2 getVelocity() const {return m_Velocity;}
     float getMass() const {return m_Mass;}
     void addVelocity(Vector2 Velocity);
@@ -108,6 +108,9 @@ public:
     float getRotationalVelocity() const {return m_RotationalVelocity;}
     float calculateMomentOfInertia() const;
     void draw() override;
+    bool isFixed() const {return m_Fixed;}
+    float getRadius() const {return m_VirtualRadius;}
+    // void accelerate(Vector2 Acceleration) override;
 private:
     float m_RotationalVelocity = 0;
     float m_VirtualRadius = 0;
@@ -123,7 +126,10 @@ public:
     float getRotationalVelocity() const {return m_RotationalVelocity;}
     float calculateMomentOfInertia() const;
     void rotate(float Radian);
+    void setRadius(float Radius);
     void draw() override;
+    float getRadius() const {return m_Radius;}
+    // void accelerate(Vector2 Acceleration) override;
 private:
     float m_RotationalVelocity = 0;
     Vector2 m_TopPosition;
