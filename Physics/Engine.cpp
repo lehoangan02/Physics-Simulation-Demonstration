@@ -1878,7 +1878,8 @@ void DiscreteRotatingEulerianEngine::collideSATPolygons() {
                     std::cout << "Second velocity resolution: " << Result.SecondVelocityResolution.x << " " << Result.SecondVelocityResolution.y << std::endl;
                     Polygon1->addVelocity(Result.FirstVelocityResolution);
                     Polygon2->addVelocity(Result.SecondVelocityResolution);
-
+                    Polygon1->addRotationalVelocity(Result.FirstAngularResolution);
+                    Polygon2->addRotationalVelocity(Result.SecondAngularResolution);
 
 //                    CollisionResolve Result = PolygonCollider->getCollisionResolution(Polygon1->getVertices(), Polygon2->getVertices());
 //                    Polygon1->move(Result.FirstResolution);

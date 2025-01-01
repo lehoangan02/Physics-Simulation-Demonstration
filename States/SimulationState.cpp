@@ -2777,7 +2777,7 @@ void SATRotatingState::reset() {
     StaticPlatform.push_back(Vector2{625.8212141183002,567.6610183871973});
     StaticPlatform.push_back(Vector2{197.3329796928593,431.3715477498762});
     SATRotatingPlatformPolygon* NewPolygon = new SATRotatingPlatformPolygon(StaticPlatform, RED);
-    NewPolygon->setFixed(true);
+//    NewPolygon->setFixed(true);
     m_PolygonList.push_back(NewPolygon);
     std::vector<Vector2> RotatingPlatform;
     RotatingPlatform.push_back(Vector2{200,100});

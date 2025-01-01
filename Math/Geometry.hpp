@@ -74,6 +74,7 @@ public:
 bool isInsidePolygon(const Vector2& Point, const vector<LineSegment>& LineSegmentList);
 bool isInsideTriangle(const Vector2& Point, const PlatformTriangle& Triangle);
 float dotProduct(const Vector2 &First, const Vector2 &Second);
+float crossProduct(const Vector2 &First, const Vector2 &Second);
 float angle(Vector2 A, Vector2 B);
 float angle360InRadian(Vector2 A, Vector2 B);
 float radianToDegree(float Radian);

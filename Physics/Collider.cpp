@@ -1081,7 +1081,7 @@ AngularCollisionResolve SATRotatingCollider::getCollisionResolution(SATRotatingP
         Vector2 Tangent2 = calculateTangentalVelocity(Shape2->getCenter(), ContactPoint, Shape2->getRotationalVelocity());
         float Inertia1 = Shape1->calculateMomentOfInertia();
         float Inertia2 = Shape2->calculateMomentOfInertia();
-        float Impulse = calculateImpulse(Mass1, Mass2, Velocity1, Velocity2, 1.0f, Normal, Inertia1, Inertia2, Tangent1, Tangent2);
+        float Impulse = calculateImpulse(Mass1, Mass2, Vector2Add(Velocity1, Tangent1), Vector2Add(Velocity2, Tangent2), 1.0f, Normal, Inertia1, Inertia2, Tangent1, Tangent2);
         AngularCollisionResolve Result;
         std::cout << "Impulse: " << Impulse << std::endl;
         std::cout << "Normal: " << Normal.x << " " << Normal.y << std::endl;
@@ -1097,12 +1097,34 @@ AngularCollisionResolve SATRotatingCollider::getCollisionResolution(SATRotatingP
         std::cout << "New Velocity 2: " << NewVelocity2.x << " " << NewVelocity2.y << std::endl;
         Result.FirstVelocityResolution = NewVelocity1;
         Result.SecondVelocityResolution = NewVelocity2;
-        float NewAngularVelocity1 = Vector2DotProduct(Tangent1, Normal) * Impulse / Inertia1;
-        NewAngularVelocity1 = AngularVelocity1 + NewAngularVelocity1;
-        float NewAngularVelocity2 = Vector2DotProduct(Tangent2, Normal) * -Impulse / Inertia2;
-        NewAngularVelocity2 = AngularVelocity2 + NewAngularVelocity2;
-        Result.FirstAngularResolution = NewAngularVelocity1;
-        Result.SecondAngularResolution = NewAngularVelocity2;
+//        Vector2 ra = Vector2Subtract(ContactPoint, Shape1->getCenter());
+//        Vector2 rb = Vector2Subtract(ContactPoint, Shape2->getCenter());
+//        float NewAngularVelocity1 = Vector2DotProduct(ra, Normal) * (-float(1) / Inertia1);
+//        std::cout << "New Angular Velocity 1: " << NewAngularVelocity1 << std::endl;
+//        float NewAngularVelocity2 = Vector2DotProduct(rb, Normal) * (float(1) / Inertia2);
+//        std::cout << "New Angular Velocity 2: " << NewAngularVelocity2 << std::endl;
+//        Vector2 ImpulseVector = Vector2Scale(Normal, Impulse);
+//
+//        float CrossProduct1 = crossProduct(ra, ImpulseVector);
+//        NewAngularVelocity1 = NewAngularVelocity2 * CrossProduct1 * 0.0001;
+//        float CrossProduct2 = crossProduct(rb, ImpulseVector);
+//        NewAngularVelocity2 = NewAngularVelocity2 * CrossProduct2 * 0.0001;
+
+        Vector2 ra = Vector2Subtract(ContactPoint, Shape1->getCenter());
+        Vector2 rb = Vector2Subtract(ContactPoint, Shape2->getCenter());
+        Vector2 ImpulseVector = Vector2Scale(Normal, Impulse);
+
+    // Calculate torque
+        float Torque1 = crossProduct(ra, ImpulseVector);
+        float Torque2 = crossProduct(rb, ImpulseVector);
+
+    // Calculate change in angular velocities
+        float DeltaAngularVelocity1 = Torque1 / Inertia1;
+        float DeltaAngularVelocity2 = Torque2 / Inertia2;
+
+
+        Result.FirstAngularResolution = DeltaAngularVelocity1;
+        Result.SecondAngularResolution = DeltaAngularVelocity2;
         CollisionResolve PositionResolution = PolygonCollider->getCollisionResolution(Shape1->getVertices(), Shape2->getVertices());
                 Result.FirstPositionResolution = PositionResolution.FirstResolution;
         Result.SecondPositionResolution = PositionResolution.SecondResolution;
