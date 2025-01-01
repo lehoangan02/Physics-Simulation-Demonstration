@@ -276,7 +276,7 @@ std::vector<Vector2> SATPolygonCollider::getPointsOfIntersection(const std::vect
     std::vector<Vector2> Result;
     SATCollider* Collider = SATPolygonCollider::getSATPolygonCollider();
     if (Collider -> isColliding(Shape1, Shape2)) {
-        std::cout << "Colliding" << std::endl;
+//        std::cout << "Colliding" << std::endl;
         vector<Vector2> VerticesWithProjection1;
         vector<Vector2> VerticesWithProjection2;
         vector<LineSegment> LineSegments1;
@@ -309,8 +309,8 @@ std::vector<Vector2> SATPolygonCollider::getPointsOfIntersection(const std::vect
                 }
             }
         }
-        std::cout << "Number of vertices with projection 1: " << VerticesWithProjection1.size() << std::endl;
-        std::cout << "Number of vertices with projection 2: " << VerticesWithProjection2.size() << std::endl;
+//        std::cout << "Number of vertices with projection 1: " << VerticesWithProjection1.size() << std::endl;
+//        std::cout << "Number of vertices with projection 2: " << VerticesWithProjection2.size() << std::endl;
         const float InaccuracyThreshold = 0.000000001f;
         float MinDistance1 = INT_MAX;
         int MinimumDistanceIndex1 = 0;
@@ -369,40 +369,40 @@ std::vector<Vector2> SATPolygonCollider::getPointsOfIntersection(const std::vect
 //        }
         if (MinDistance1 < MinDistance2) {
             MinimumDistance = MinDistance1;
-            std::cout << "Min is 1" << std::endl;
-            std::cout << "Min 2: " << MinDistance2 << std::endl;
-            Vector2 Vertex = VerticesWithProjection1[MinimumDistanceIndex1];
-            DrawCircle(Vertex.x, Vertex.y, 10, YELLOW);
-            for (auto& Edge : LineSegments2) {
-                if (Edge.haveProjection(Vertex)) {
-                    if (Line(Edge).distanceToPoint(Vertex)== MinimumDistance) {
-                        Vector2 Projection = Line(Edge).projection(Vertex);
-                        DrawCircle(Projection.x, Projection.y, 10, GREEN);
-                        DrawLineEx(Vertex, Projection, 10, BLUE);
-                        break;
-                    }
-                }
-            }
+//            std::cout << "Min is 1" << std::endl;
+//            std::cout << "Min 2: " << MinDistance2 << std::endl;
+//            Vector2 Vertex = VerticesWithProjection1[MinimumDistanceIndex1];
+//            DrawCircle(Vertex.x, Vertex.y, 10, YELLOW);
+//            for (auto& Edge : LineSegments2) {
+//                if (Edge.haveProjection(Vertex)) {
+//                    if (Line(Edge).distanceToPoint(Vertex)== MinimumDistance) {
+//                        Vector2 Projection = Line(Edge).projection(Vertex);
+//                        DrawCircle(Projection.x, Projection.y, 10, GREEN);
+//                        DrawLineEx(Vertex, Projection, 10, BLUE);
+//                        break;
+//                    }
+//                }
+//            }
 
         }
         else {
             MinimumDistance = MinDistance2;
-            std::cout << "Min is 2" << std::endl;
-            std::cout << "Min 1: " << MinDistance1 << std::endl;
-            Vector2 Vertex = VerticesWithProjection2[MinimumDistanceIndex2];
-            DrawCircle(Vertex.x, Vertex.y, 10, YELLOW);
-            for (auto& Edge : LineSegments2) {
-                if (Edge.haveProjection(Vertex)) {
-                    if (Line(Edge).distanceToPoint(Vertex)== MinimumDistance) {
-                        Vector2 Projection = Line(Edge).projection(Vertex);
-                        DrawCircle(Projection.x, Projection.y, 10, GREEN);
-                        DrawLineEx(Vertex, Projection, 10, BLUE);
-                        break;
-                    }
-                }
-            }
+//            std::cout << "Min is 2" << std::endl;
+//            std::cout << "Min 1: " << MinDistance1 << std::endl;
+//            Vector2 Vertex = VerticesWithProjection2[MinimumDistanceIndex2];
+//            DrawCircle(Vertex.x, Vertex.y, 10, YELLOW);
+//            for (auto& Edge : LineSegments2) {
+//                if (Edge.haveProjection(Vertex)) {
+//                    if (Line(Edge).distanceToPoint(Vertex)== MinimumDistance) {
+//                        Vector2 Projection = Line(Edge).projection(Vertex);
+//                        DrawCircle(Projection.x, Projection.y, 10, GREEN);
+//                        DrawLineEx(Vertex, Projection, 10, BLUE);
+//                        break;
+//                    }
+//                }
+//            }
         }
-        std::cout << "Minimum distance: " << MinimumDistance << std::endl;
+//        std::cout << "Minimum distance: " << MinimumDistance << std::endl;
         for (int i = 0; i < VerticesWithProjection1.size(); ++i) {
             for (auto& Edge : LineSegments2) {
                 if (!Edge.haveProjection(VerticesWithProjection1[i])) continue;
@@ -425,7 +425,7 @@ std::vector<Vector2> SATPolygonCollider::getPointsOfIntersection(const std::vect
                 }
             }
         }
-        std::cout << "Number of contact points: " << Result.size() << std::endl;
+//        std::cout << "Number of contact points: " << Result.size() << std::endl;
     }
     else
     {
@@ -497,7 +497,7 @@ Vector2 SATPolygonCollider::getNormalDirection(const std::vector<Vector2> &Shape
 }
 CollisionResolve SATPolygonCollider::getCollisionResolution(const std::vector<Vector2> &Shape1,
                                                                        const std::vector<Vector2> &Shape2) {
-    std::cout << "Getting collision resolution" << std::endl;
+//    std::cout << "Getting collision resolution" << std::endl;
     std::vector<Vector2> AxisDirectionList1;
     std::vector<Vector2> AxisDirectionList2;
     for (int i = 0; i < Shape1.size(); ++i) {
@@ -615,17 +615,17 @@ CollisionResolve SATPolygonCollider::getCollisionResolution(const std::vector<Ve
         }
     }
     if (Vector2Length(MinTranslationVectorMin1Max2) < Vector2Length(MinTranslationVectorMin2Max1)) {
-        Vector2 FirstResolution = Vector2Scale(MinTranslationVectorMin1Max2, 0.5);
+        Vector2 FirstResolution = Vector2Scale(MinTranslationVectorMin1Max2, +0.5);
         Vector2 SecondResolution = Vector2Scale(MinTranslationVectorMin1Max2, -0.5);
-        std::cout << "First resolution: " << FirstResolution.x << " " << FirstResolution.y << std::endl;
-        std::cout << "Second resolution: " << SecondResolution.x << " " << SecondResolution.y << std::endl;
+//        std::cout << "First resolution: " << FirstResolution.x << " " << FirstResolution.y << std::endl;
+//        std::cout << "Second resolution: " << SecondResolution.x << " " << SecondResolution.y << std::endl;
         return {FirstResolution, SecondResolution};
     }
     else {
-        Vector2 FirstResolution = Vector2Scale(MinTranslationVectorMin2Max1, 0.5);
-        Vector2 SecondResolution = Vector2Scale(MinTranslationVectorMin2Max1, -0.5);
-        std::cout << "First resolution: " << FirstResolution.x << " " << FirstResolution.y << std::endl;
-        std::cout << "Second resolution: " << SecondResolution.x << " " << SecondResolution.y << std::endl;
+        Vector2 FirstResolution = Vector2Scale(MinTranslationVectorMin2Max1, -0.5);
+        Vector2 SecondResolution = Vector2Scale(MinTranslationVectorMin2Max1, +0.5);
+//        std::cout << "First resolution: " << FirstResolution.x << " " << FirstResolution.y << std::endl;
+//        std::cout << "Second resolution: " << SecondResolution.x << " " << SecondResolution.y << std::endl;
         return {FirstResolution, SecondResolution};
     }
 }
@@ -1056,7 +1056,9 @@ AngularCollisionResolve SATRotatingCollider::getCollisionResolution(SATRotatingP
     bool IsColliding = PolygonCollider->isColliding(Shape1->getVertices(), Shape2->getVertices());
     if (IsColliding) {
         float Mass1 = Shape1->getMass();
+        std::cout << "Mass 1: " << Mass1 << std::endl;
         float Mass2 = Shape2->getMass();
+        std::cout  << "Mass 2: " << Mass2 << std::endl;
         Vector2 Velocity1 = Shape1->getVelocity();
         Vector2 Velocity2 = Shape2->getVelocity();
         float AngularVelocity1 = Shape1->getRotationalVelocity();
@@ -1077,14 +1079,22 @@ AngularCollisionResolve SATRotatingCollider::getCollisionResolution(SATRotatingP
         Vector2 ContactPoint = PolygonCollider->getPointsOfIntersection(Shape1->getVertices(), Shape2->getVertices())[0];
         Vector2 Tangent1 = calculateTangentalVelocity(Shape1->getCenter(), ContactPoint, Shape1->getRotationalVelocity());
         Vector2 Tangent2 = calculateTangentalVelocity(Shape2->getCenter(), ContactPoint, Shape2->getRotationalVelocity());
-        float Inertia1 = 1/2 * Shape1->getMass() * Shape1->getRadius() * Shape1->getRadius();
-        float Inertia2 = 1/2 * Shape2->getMass() * Shape2->getRadius() * Shape2->getRadius();
+        float Inertia1 = Shape1->calculateMomentOfInertia();
+        float Inertia2 = Shape2->calculateMomentOfInertia();
         float Impulse = calculateImpulse(Mass1, Mass2, Velocity1, Velocity2, 1.0f, Normal, Inertia1, Inertia2, Tangent1, Tangent2);
         AngularCollisionResolve Result;
+        std::cout << "Impulse: " << Impulse << std::endl;
+        std::cout << "Normal: " << Normal.x << " " << Normal.y << std::endl;
         Vector2 NewVelocity1 = Vector2Scale(Normal, Impulse / Mass1);
-        NewVelocity1 = Vector2Add(NewVelocity1, Velocity1);
+        NewVelocity1 = Vector2Negate(NewVelocity1);
+//        NewVelocity1 = Vector2Add(NewVelocity1, Velocity1);
+        std::cout << "Old Velocity 1: " << Velocity1.x << " " << Velocity1.y << std::endl;
+        std::cout << "New Velocity 1: " << NewVelocity1.x << " " << NewVelocity1.y << std::endl;
         Vector2 NewVelocity2 = Vector2Scale(Normal, -Impulse / Mass2);
-        NewVelocity2 = Vector2Add(NewVelocity2, Velocity2);
+        NewVelocity2 = Vector2Negate(NewVelocity2);
+//        NewVelocity2 = Vector2Add(NewVelocity2, Velocity2);
+        std::cout << "Old Velocity 2: " << Velocity2.x << " " << Velocity2.y << std::endl;
+        std::cout << "New Velocity 2: " << NewVelocity2.x << " " << NewVelocity2.y << std::endl;
         Result.FirstVelocityResolution = NewVelocity1;
         Result.SecondVelocityResolution = NewVelocity2;
         float NewAngularVelocity1 = Vector2DotProduct(Tangent1, Normal) * Impulse / Inertia1;

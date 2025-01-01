@@ -1817,7 +1817,11 @@ void DiscreteRotatingEulerianEngine::attachRotatingPlatformCircle(SATRotatingPla
 }
 void DiscreteRotatingEulerianEngine::attachRotatingPlatformPolygon(SATRotatingPlatformPolygon *NewRotatingPlatformPolygon) {
     m_RotatingPolygonList.push_back(NewRotatingPlatformPolygon);
-
+    if (!(NewRotatingPlatformPolygon->isFixed()))
+    {
+        NewRotatingPlatformPolygon->setMassUsingArea();
+    }
+//    NewRotatingPlatformPolygon->cal
 }
 void DiscreteRotatingEulerianEngine::update(float DeltaTime) {
     applyGravity();
@@ -1864,12 +1868,21 @@ void DiscreteRotatingEulerianEngine::collideSATPolygons() {
                 SATPolygonCollider* PolygonCollider = dynamic_cast<SATPolygonCollider*>(SATPolygonCollider::getSATPolygonCollider());
                 if (PolygonCollider->isColliding(Polygon1->getVertices(), Polygon2->getVertices()))
                 {
-//                    std::cout << "Colliding" << std::endl;
+
                     AngularCollisionResolve Result = Collider->getCollisionResolution(Polygon1, Polygon2);
+                    Result.FirstPositionResolution = Vector2Scale(Result.FirstPositionResolution, 1.02f);
+                    Result.SecondPositionResolution = Vector2Scale(Result.SecondPositionResolution, 1.02f);
                     Polygon1->move(Result.FirstPositionResolution);
                     Polygon2->move(Result.SecondPositionResolution);
-//                    Polygon1->addVelocity(Result.FirstVelocityResolution);
-//                    Polygon2->addVelocity(Result.SecondVelocityResolution);
+                    std::cout << "First velocity resolution: " << Result.FirstVelocityResolution.x << " " << Result.FirstVelocityResolution.y << std::endl;
+                    std::cout << "Second velocity resolution: " << Result.SecondVelocityResolution.x << " " << Result.SecondVelocityResolution.y << std::endl;
+                    Polygon1->addVelocity(Result.FirstVelocityResolution);
+                    Polygon2->addVelocity(Result.SecondVelocityResolution);
+
+
+//                    CollisionResolve Result = PolygonCollider->getCollisionResolution(Polygon1->getVertices(), Polygon2->getVertices());
+//                    Polygon1->move(Result.FirstResolution);
+//                    Polygon2->move(Result.SecondResolution);
                 }
             }
         }

@@ -17,7 +17,13 @@ float calculateImpulse(const float &Mass1, const float &Mass2, const Vector2 &Ve
     Normal = Vector2Normalize(Normal);
     float j;
     j = -(1 + CoefficientOfRestitution) * Vector2DotProduct(RelativeVelocity, Normal);
+    std::cout << "Inertia 1: " << Inertia1 << std::endl;
+    std::cout << "Inertia 2: " << Inertia2 << std::endl;
+    std::cout << "Numerator: " << j << std::endl;
     float Denominator = (1/Mass1 + 1/Mass2) + (Vector2DotProduct(Tangental1, Normal) * Vector2DotProduct(Tangental1, Normal) / Inertia1) + (Vector2DotProduct(Tangental2, Normal) * Vector2DotProduct(Tangental2, Normal) / Inertia2);
+    std::cout << "Second term: " << (Vector2DotProduct(Tangental1, Normal) * Vector2DotProduct(Tangental1, Normal) / Inertia1) << std::endl;
+    std::cout << "Third term: " << (Vector2DotProduct(Tangental2, Normal) * Vector2DotProduct(Tangental2, Normal) / Inertia2) << std::endl;
+    std::cout << "Denominator: " << Denominator << std::endl;
     j /= Denominator;
     return j;
 }
