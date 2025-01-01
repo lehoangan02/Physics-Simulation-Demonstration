@@ -2,7 +2,7 @@
 	"artifacts" : 
 	[
 		{
-			"path" : "/home/lehoangan/Documents/GitHub/Physics-Simulation-Demonstration/Physics_Simulation_Demonstration"
+			"path" : "/Users/lehoangan/Library/CloudStorage/OneDrive-VNU-HCMUS/Documents/CLion/Physics-Simulation-Demonstration/Physics_Simulation_Demonstration"
 		}
 	],
 	"backtrace" : 1,
@@ -12,14 +12,11 @@
 		[
 			"add_executable",
 			"target_link_libraries",
-			"set_target_properties",
-			"find_package",
 			"include_directories"
 		],
 		"files" : 
 		[
-			"CMakeLists.txt",
-			"/usr/local/lib/cmake/raylib/raylib-config.cmake"
+			"CMakeLists.txt"
 		],
 		"nodes" : 
 		[
@@ -39,23 +36,7 @@
 				"parent" : 0
 			},
 			{
-				"command" : 3,
-				"file" : 0,
-				"line" : 48,
-				"parent" : 0
-			},
-			{
-				"file" : 1,
-				"parent" : 3
-			},
-			{
 				"command" : 2,
-				"file" : 1,
-				"line" : 63,
-				"parent" : 4
-			},
-			{
-				"command" : 4,
 				"file" : 0,
 				"line" : 46,
 				"parent" : 0
@@ -68,18 +49,19 @@
 			"compileCommandFragments" : 
 			[
 				{
-					"fragment" : "-g -std=gnu++23 -fdiagnostics-color=always"
-				},
-				{
-					"backtrace" : 2,
-					"fragment" : "-I/usr/local/include"
+					"fragment" : "-g -std=gnu++2b -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.1.sdk -fcolor-diagnostics"
 				}
 			],
 			"includes" : 
 			[
 				{
-					"backtrace" : 6,
+					"backtrace" : 3,
 					"path" : "/opt/homebrew/Cellar/raylib/5.0/include"
+				},
+				{
+					"backtrace" : 2,
+					"isSystem" : true,
+					"path" : "/opt/homebrew/include"
 				}
 			],
 			"language" : "CXX",
@@ -130,17 +112,8 @@
 				"role" : "flags"
 			},
 			{
-				"fragment" : "-Wl,-rpath,/usr/local/lib",
-				"role" : "libraries"
-			},
-			{
 				"backtrace" : 2,
-				"fragment" : "/usr/local/lib/libraylib.a",
-				"role" : "libraries"
-			},
-			{
-				"backtrace" : 5,
-				"fragment" : "-L/usr/local/lib -lraylib",
+				"fragment" : "/opt/homebrew/lib/libraylib.dylib",
 				"role" : "libraries"
 			}
 		],

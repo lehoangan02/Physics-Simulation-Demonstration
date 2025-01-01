@@ -195,6 +195,7 @@ void SATPlatformCircle::setRadius(float Radius) {
         m_Radius = 10;
     }
     m_Radius = Radius;
+
 }
 void SATPlatformCircle::update(float DeltaTime) {
     EulerianRoundBall::update(DeltaTime);
@@ -220,6 +221,7 @@ void SATPlatformCircle::setFixed(bool Fixed) {
 SATRotatingPlatformPolygon::SATRotatingPlatformPolygon(const std::vector<Vector2>& Vertices, Color Color) : SATPlatformPolygon(Vertices, Color) {
     m_RotationalVelocity = 0;
     calculateVirtualRadius();
+    setMassUsingArea();
 }
 void SATRotatingPlatformPolygon::calculateVirtualRadius() {
     Vector2 Center = getCenter();
@@ -231,8 +233,6 @@ void SATRotatingPlatformPolygon::calculateVirtualRadius() {
     m_VirtualRadius /= this -> getVertices().size();
 }
 void SATRotatingPlatformPolygon::update(float DeltaTime) {
-
-
     SATPlatformPolygon::update(DeltaTime);
     float Angle = m_RotationalVelocity * DeltaTime;
     rotate(Angle);
@@ -243,41 +243,35 @@ float SATRotatingPlatformPolygon::calculateMomentOfInertia() const {
 }
 void SATRotatingPlatformPolygon::draw() {
     SATPlatformPolygon::draw();
-    // DrawCircle(getCenter().x, getCenter().y, m_VirtualRadius, BLACK);
+    std::string Mass = to_string((int)m_Mass);
+    Vector2 Position = getCenter();
+    DrawText(Mass.c_str(), Position.x, Position.y, 20, BLACK);
 }
 SATRotatingPlatformCircle::SATRotatingPlatformCircle(Vector2 Position, Color Color, float Mass) : SATPlatformCircle(Position, Color, Mass) {
     m_RotationalVelocity = 0;
     m_Radius = 100;
-    m_TopPosition = Vector2Add(m_TopPosition, Vector2{0, -m_Radius});
+    m_TopPosition = Vector2Add(Position, Vector2{0, -m_Radius});
+    setMassUsingArea();
 }
 void SATRotatingPlatformCircle::update(float DeltaTime) {
-    m_Velocity = Vector2Add(m_Velocity, Vector2Scale(m_Acceleration, DeltaTime));
-    m_PreviousPosition = m_CurrentPosition;
-    m_CurrentPosition = Vector2Add(m_CurrentPosition, Vector2Scale(m_Velocity, DeltaTime));
-    m_TopPosition = Vector2Add(m_TopPosition, Vector2Scale(m_Velocity, DeltaTime));
-    m_Acceleration = Vector2{0, 0};
+    SATPlatformCircle::update(DeltaTime);
     float Angle = m_RotationalVelocity * DeltaTime;
     rotate(Angle);
 }
 void SATRotatingPlatformCircle::rotate(float Radian) {
-    Vector2 Center = m_CurrentPosition;
-    Vector2 Direction = Vector2Subtract(m_TopPosition, Center);
+    Vector2 Direction = Vector2Subtract(m_TopPosition, m_CurrentPosition);
     Direction = Vector2Rotate(Direction, Radian);
-    m_TopPosition = Vector2Add(Center, Direction);
-}
-void SATRotatingPlatformCircle::setRadius(float Radius) {
-    Vector2 Center = m_CurrentPosition;
-    m_Radius = Radius;
-    Vector2 Direction = Vector2Subtract(m_TopPosition, Center);
-    Direction = Vector2Normalize(Direction);
-    Direction = Vector2Scale(Direction, m_Radius);
-    m_TopPosition = Vector2Add(Center, Direction);
-    return;
+    m_TopPosition = Vector2Add(m_CurrentPosition, Direction);
 }
 void SATRotatingPlatformCircle::draw() {
     DrawCircle(m_CurrentPosition.x, m_CurrentPosition.y, m_Radius, BLACK);
     DrawCircle(m_CurrentPosition.x, m_CurrentPosition.y, m_Radius - 6, m_Color);
     DrawLineEx(m_CurrentPosition, m_TopPosition, 5, BLACK);
-    // DrawCircle(m_TopPosition.x, m_TopPosition.y, 10, BLACK);
+    std::string Text = to_string(m_Mass);
+    DrawText(Text.c_str(), m_CurrentPosition.x, m_CurrentPosition.y, 20, BLACK);
 }
-
+void SATRotatingPlatformCircle::setRadius(float Radius) {
+    m_Radius = Radius;
+    m_TopPosition = Vector2Add(m_CurrentPosition, Vector2{0, -m_Radius});
+    setMassUsingArea();
+}

@@ -129,7 +129,6 @@ public:
     void setRadius(float Radius);
     void draw() override;
     float getRadius() const {return m_Radius;}
-    // void accelerate(Vector2 Acceleration) override;
 private:
     float m_RotationalVelocity = 0;
     Vector2 m_TopPosition;

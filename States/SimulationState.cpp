@@ -55,7 +55,7 @@ SimulationState *StateFactory::getState(int StateNumber) {
         case StateNumber::SAT_GRAVITY_AND_CONTACT_POINTS_STATE:
             return SATGravityAndContactPointsState::getSATGravityAndContactPointsState();
         case StateNumber::SAT_FIXED_AND_ROTATING_STATE:
-            return SATFixedAndRotatingState::getSATFixedAndRotatingState();
+            return SATRotatingState::getSATRotatingState();
         default:
             return nullptr;
     }
@@ -2726,7 +2726,7 @@ SimulationState* SATGravityAndContactPointsState::update() {
     }
     return nullptr;
 }
-SATFixedAndRotatingState::SATFixedAndRotatingState() : m_Engine(1800, 1000) {
+SATRotatingState::SATRotatingState() : m_Engine(1800, 1000) {
     m_StateNumber = StateNumber::SAT_FIXED_AND_ROTATING_STATE;
     // m_ColorList.push_back(Color{22, 114, 136, 255});
     // m_ColorList.push_back(Color{140, 218, 236, 255});
@@ -2740,7 +2740,7 @@ SATFixedAndRotatingState::SATFixedAndRotatingState() : m_Engine(1800, 1000) {
     // m_ColorList.push_back(Color{131, 99, 148, 255});
     reset();
 }
-SATFixedAndRotatingState::~SATFixedAndRotatingState() {
+SATRotatingState::~SATRotatingState() {
     m_IsActive = true;
     for (auto& polygon : m_PolygonList)
     {
@@ -2755,7 +2755,7 @@ SATFixedAndRotatingState::~SATFixedAndRotatingState() {
     }
     m_CircleList.clear();
 }
-void SATFixedAndRotatingState::reset() {
+void SATRotatingState::reset() {
     m_IsActive = true;
     for (auto& polygon : m_PolygonList)
     {
@@ -2779,6 +2779,13 @@ void SATFixedAndRotatingState::reset() {
     SATRotatingPlatformPolygon* NewPolygon = new SATRotatingPlatformPolygon(StaticPlatform, RED);
     NewPolygon->setFixed(true);
     m_PolygonList.push_back(NewPolygon);
+    std::vector<Vector2> RotatingPlatform;
+    RotatingPlatform.push_back(Vector2{200,100});
+    RotatingPlatform.push_back(Vector2{300,100});
+    RotatingPlatform.push_back(Vector2{300,200});
+    RotatingPlatform.push_back(Vector2{200,200});
+    SATRotatingPlatformPolygon* NewPolygon2 = new SATRotatingPlatformPolygon(RotatingPlatform, RED);
+    m_PolygonList.push_back(NewPolygon2);
     for (auto& polygon : m_PolygonList)
     {
         m_Engine.attachRotatingPlatformPolygon(polygon);
@@ -2787,98 +2794,113 @@ void SATFixedAndRotatingState::reset() {
     {
         m_Engine.attachRotatingPlatformCircle(circle);
     }
-    m_Engine.turnOnOffGravity(true);
-    m_Engine.turnOnOffDisplayContactPoint(true);
 }
-void SATFixedAndRotatingState::onNotify() {
+void SATRotatingState::onNotify() {
     exitState();
 }
-void SATFixedAndRotatingState::readCoordinate() {
-    ifstream fin;
-    fin.open("PolygonCoordinates.txt");
-    if (!fin.is_open())
-    {
-        cerr << "Error opening file\n";
-        return;
-    }
-    int NumberOfPolygons;
-    fin >> NumberOfPolygons;
-    for (int i = 0; i < NumberOfPolygons; ++i)
-    {
-        int NumberOfVertices;
-        fin >> NumberOfVertices;
-        vector<Vector2> Vertices;
-        for (int j = 0; j < NumberOfVertices; ++j)
-        {
-            float x, y;
-            fin >> x >> y;
-            Vertices.push_back(Vector2{x, y});
-        }
-        SATRotatingPlatformPolygon* NewPolygon = new SATRotatingPlatformPolygon(Vertices, RED);
-        NewPolygon->addRotationalVelocity(std::rand() % 10 - 5);
-        // NewPolygon->setCustomColor(m_ColorList[i + 6]);
-        m_PolygonList.push_back(NewPolygon);
-    }
-    fin.close();
-    fin.open("CircleCoordinate.txt");
-    if (!fin.is_open())
-    {
-        cerr << "Error opening file\n";
-        return;
-    }
-    int NumberOfCircles;
-    fin >> NumberOfCircles;
-    for (int i = 0; i < NumberOfCircles; ++i) {
-        float x, y;
-        fin >> x >> y;
-        SATRotatingPlatformCircle *NewCircle = new SATRotatingPlatformCircle(Vector2{x, y}, RED, 1.0f);
-        NewCircle->addRotationalVelocity(std::rand() % 10 - 5);
-        switch (i) {
-            case 0:
-                NewCircle->setRadius(80);
-                break;
-            case 1:
-                NewCircle->setRadius(50);
-                break;
-            case 2:
-                NewCircle->setRadius(60);
-                break;
-            case 3:
-                NewCircle->setRadius(70);
-                break;
-            case 4:
-                NewCircle->setRadius(40);
-                break;
-            case 5:
-                NewCircle->setRadius(90);
-                break;
-            case 6:
-                NewCircle->setRadius(100);
-                break;
-        }
-
-        m_CircleList.push_back(NewCircle);
-    }
-    std::cout << "Circles: " << m_CircleList.size() << std::endl;
-    std::cout << "Polygons: " << m_PolygonList.size() << std::endl;
+void SATRotatingState::readCoordinate() {
+//    ifstream fin;
+//    fin.open("PolygonCoordinates.txt");
+//    if (!fin.is_open())
+//    {
+//        cerr << "Error opening file\n";
+//        return;
+//    }
+//    int NumberOfPolygons;
+//    fin >> NumberOfPolygons;
+//    for (int i = 0; i < NumberOfPolygons; ++i)
+//    {
+//        int NumberOfVertices;
+//        fin >> NumberOfVertices;
+//        vector<Vector2> Vertices;
+//        for (int j = 0; j < NumberOfVertices; ++j)
+//        {
+//            float x, y;
+//            fin >> x >> y;
+//            Vertices.push_back(Vector2{x, y});
+//        }
+//        SATRotatingPlatformPolygon* NewPolygon = new SATRotatingPlatformPolygon(Vertices, RED);
+//        NewPolygon->addRotationalVelocity(std::rand() % 10 - 5);
+//        // NewPolygon->setCustomColor(m_ColorList[i + 6]);
+//        m_PolygonList.push_back(NewPolygon);
+//    }
+//    fin.close();
+//    fin.open("CircleCoordinate.txt");
+//    if (!fin.is_open())
+//    {
+//        cerr << "Error opening file\n";
+//        return;
+//    }
+//    int NumberOfCircles;
+//    fin >> NumberOfCircles;
+//    for (int i = 0; i < NumberOfCircles; ++i) {
+//        float x, y;
+//        fin >> x >> y;
+//        SATRotatingPlatformCircle *NewCircle = new SATRotatingPlatformCircle(Vector2{x, y}, RED, 1.0f);
+//        NewCircle->addRotationalVelocity(std::rand() % 10 - 5);
+//        switch (i) {
+//            case 0:
+//                NewCircle->setRadius(80);
+//                break;
+//            case 1:
+//                NewCircle->setRadius(50);
+//                break;
+//            case 2:
+//                NewCircle->setRadius(60);
+//                break;
+//            case 3:
+//                NewCircle->setRadius(70);
+//                break;
+//            case 4:
+//                NewCircle->setRadius(40);
+//                break;
+//            case 5:
+//                NewCircle->setRadius(90);
+//                break;
+//            case 6:
+//                NewCircle->setRadius(100);
+//                break;
+//        }
+//
+//        m_CircleList.push_back(NewCircle);
+//    }
+//    std::cout << "Circles: " << m_CircleList.size() << std::endl;
+//    std::cout << "Polygons: " << m_PolygonList.size() << std::endl;
 }
-void SATFixedAndRotatingState::draw() {
+void SATRotatingState::draw() {
     // std::cout << "State Drawing\n";
     m_Engine.draw();
     DrawText("SAT Fixed And Rotating State", 100, 10, 20, RED);
 }
-SimulationState* SATFixedAndRotatingState::update() {
+SimulationState* SATRotatingState::update() {
     if (!m_IsActive) {
         return HomeState::getHomeState();
     }
     int SubStep = 8;
     for (int i = 0; i < SubStep; ++i) {
-        m_Engine.update(m_FrameTime / (float)SubStep);
+        m_Engine.update(m_FrameTime / (float) SubStep);
+    }
+    if (IsKeyDown(KEY_LEFT))
+    {
+        m_PolygonList[1] ->accelerate({-100.0f, 0.0f});
+    }
+    if (IsKeyDown(KEY_RIGHT))
+    {
+//        std::cout << "Right\n";
+        m_PolygonList[1] ->accelerate({100.0f, 0.0f});
+    }
+    if (IsKeyDown(KEY_UP))
+    {
+        m_PolygonList[1] ->accelerate({0.0f, -100.0f});
+    }
+    if (IsKeyDown(KEY_DOWN))
+    {
+        m_PolygonList[1] ->accelerate({0.0f, 100.0f});
     }
     return nullptr;
 }
-SimulationState* SATFixedAndRotatingState::getSATFixedAndRotatingState() {
-    static SATFixedAndRotatingState MySATFixedAndRotatingState;
+SimulationState* SATRotatingState::getSATRotatingState() {
+    static SATRotatingState MySATFixedAndRotatingState;
     return &MySATFixedAndRotatingState;
 }
 

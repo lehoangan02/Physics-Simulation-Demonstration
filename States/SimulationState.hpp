@@ -514,9 +514,9 @@ private:
     void reset() override;
     void readCoordinate();
 };
-class SATFixedAndRotatingState : public SimulationState {
+class SATRotatingState : public SimulationState {
 public:
-    static SimulationState* getSATFixedAndRotatingState();
+    static SimulationState* getSATRotatingState();
     SimulationState* update() override;
     void draw() override;
     void onNotify() override;
@@ -525,8 +525,8 @@ private:
     vector<SATRotatingPlatformPolygon*> m_PolygonList;
     vector<SATRotatingPlatformCircle*> m_CircleList;
 private:
-    SATFixedAndRotatingState();
-    ~SATFixedAndRotatingState() override;
+    SATRotatingState();
+    ~SATRotatingState() override;
     void reset() override;
     void readCoordinate();
 };

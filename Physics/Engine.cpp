@@ -1818,17 +1818,10 @@ void DiscreteRotatingEulerianEngine::attachRotatingPlatformCircle(SATRotatingPla
 }
 void DiscreteRotatingEulerianEngine::attachRotatingPlatformPolygon(SATRotatingPlatformPolygon *NewRotatingPlatformPolygon) {
     m_RotatingPolygonList.push_back(NewRotatingPlatformPolygon);
+
 }
 void DiscreteRotatingEulerianEngine::update(float DeltaTime) {
     applyGravity();
-    for (auto& SATPolygon : m_SATPolygonList)
-    {
-        SATPolygon->update(DeltaTime);
-    }
-    for (auto& SATCircle : m_SATCircleList)
-    {
-        SATCircle->update(DeltaTime);
-    }
     for (auto& RotatingCircle : m_RotatingCircleList)
     {
         RotatingCircle->update(DeltaTime);
@@ -1837,7 +1830,6 @@ void DiscreteRotatingEulerianEngine::update(float DeltaTime) {
     {
         RotatingPolygon->update(DeltaTime);
     }
-    calculateContactPoints();
     collideSATPolygons();
     collideSATCircle();
     applyConstraints();
@@ -1859,7 +1851,19 @@ void DiscreteRotatingEulerianEngine::reset() {
 void DiscreteRotatingEulerianEngine::collideSATCircle() {
 }
 void DiscreteRotatingEulerianEngine::collideSATPolygons() {
-
+    for (auto& Polygon1 : m_RotatingPolygonList)
+    {
+        for (auto& Polygon2 : m_RotatingPolygonList)
+        {
+            if (Polygon1 != Polygon2)
+            {
+                SATRotatingCollider* Collider = SATRotatingCollider::getSATRotatingCollider();
+                AngularCollisionResolve Result = Collider->getCollisionResolution(Polygon1, Polygon2);
+                Polygon1->move(Result.FirstPositionResolution);
+                Polygon2->move(Result.SecondPositionResolution);
+            }
+        }
+    }
 }
 void DiscreteRotatingEulerianEngine::applyGravity() {
     if (!m_ApplyGravity) return;
