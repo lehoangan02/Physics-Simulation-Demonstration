@@ -261,8 +261,8 @@ protected:
     void collideSATPolygonsAccelerate();
     void collideSATCircleAccelerate();
     virtual void applyGravity();
-    void calculateContactPoints();
-    void drawContactPoints();
+    virtual void calculateContactPoints();
+    virtual void drawContactPoints();
 protected:
     bool m_CollisionOn = true;
     bool m_PlayerControlOn = false;
@@ -301,6 +301,8 @@ private:
     void collideSATPolygonsInstant() = delete;
     void collideSATCircleInstant() = delete;
     void applyGravity() override;
+    void calculateContactPoints() override;
+    void drawContactPoints() override;
 private:
     vector<SATRotatingPlatformPolygon*> m_RotatingPolygonList;
     vector<SATRotatingPlatformCircle*> m_RotatingCircleList;

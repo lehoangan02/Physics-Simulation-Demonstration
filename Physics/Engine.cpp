@@ -1627,7 +1627,7 @@ void DiscreteSATEulerianEngine::calculateContactPoints() {
             if (SATPolygon1 != SATPolygon2) {
                 SATCollider* Collider = SATPolygonCollider::getSATPolygonCollider();
                 if (Collider -> isColliding(SATPolygon1->getVertices(), SATPolygon2->getVertices())) {
-                    std::cout << "Colliding" << std::endl;
+//                    std::cout << "Colliding" << std::endl;
                     vector<Vector2> VerticesWithProjection1;
                     vector<Vector2> VerticesWithProjection2;
                     vector<LineSegment> LineSegments1;
@@ -1798,7 +1798,6 @@ void DiscreteSATEulerianEngine::calculateContactPoints() {
 }
 void DiscreteSATEulerianEngine::drawContactPoints() {
     if (!m_DisplayContactPoint) return;
-    // std::cout << "Number of contact points: " << m_ContactPointList.size() << std::endl;
     for (auto& Point : m_ContactPointList) {
         drawSquare(Point, 10, MAGENTA);
     }
@@ -1830,7 +1829,7 @@ void DiscreteRotatingEulerianEngine::update(float DeltaTime) {
     {
         RotatingPolygon->update(DeltaTime);
     }
-    collideSATPolygons();
+    calculateContactPoints();
     collideSATCircle();
     applyConstraints();
 }
@@ -1842,6 +1841,8 @@ void DiscreteRotatingEulerianEngine::draw() {
     for (auto& SATCircle : m_RotatingCircleList) {
         SATCircle->draw();
     }
+    collideSATPolygons();
+    drawContactPoints();
 }
 void DiscreteRotatingEulerianEngine::reset() {
 
@@ -1851,16 +1852,25 @@ void DiscreteRotatingEulerianEngine::reset() {
 void DiscreteRotatingEulerianEngine::collideSATCircle() {
 }
 void DiscreteRotatingEulerianEngine::collideSATPolygons() {
-    for (auto& Polygon1 : m_RotatingPolygonList)
+    for (int i = 0; i < m_RotatingPolygonList.size(); ++i)
     {
-        for (auto& Polygon2 : m_RotatingPolygonList)
+        SATRotatingPlatformPolygon* Polygon1 = m_RotatingPolygonList[i];
+        for (int j = i + 1; j < m_RotatingPolygonList.size(); ++j)
         {
+            SATRotatingPlatformPolygon* Polygon2 = m_RotatingPolygonList[j];
             if (Polygon1 != Polygon2)
             {
                 SATRotatingCollider* Collider = SATRotatingCollider::getSATRotatingCollider();
-                AngularCollisionResolve Result = Collider->getCollisionResolution(Polygon1, Polygon2);
-                Polygon1->move(Result.FirstPositionResolution);
-                Polygon2->move(Result.SecondPositionResolution);
+                SATPolygonCollider* PolygonCollider = dynamic_cast<SATPolygonCollider*>(SATPolygonCollider::getSATPolygonCollider());
+                if (PolygonCollider->isColliding(Polygon1->getVertices(), Polygon2->getVertices()))
+                {
+//                    std::cout << "Colliding" << std::endl;
+                    AngularCollisionResolve Result = Collider->getCollisionResolution(Polygon1, Polygon2);
+                    Polygon1->move(Result.FirstPositionResolution);
+                    Polygon2->move(Result.SecondPositionResolution);
+//                    Polygon1->addVelocity(Result.FirstVelocityResolution);
+//                    Polygon2->addVelocity(Result.SecondVelocityResolution);
+                }
             }
         }
     }
@@ -1874,6 +1884,129 @@ void DiscreteRotatingEulerianEngine::applyGravity() {
     }
     for (auto& Circle : m_RotatingCircleList) {
         Circle -> accelerate(Gravity);
+    }
+}
+void DiscreteRotatingEulerianEngine::calculateContactPoints() {
+    m_ContactPointList.clear();
+    for (int i = 0; i < m_RotatingPolygonList.size(); ++i) {
+        SATRotatingPlatformPolygon *Polygon1 = m_RotatingPolygonList[i];
+        for (int j = i + 1; j < m_RotatingPolygonList.size(); ++j) {
+            SATRotatingPlatformPolygon *Polygon2 = m_RotatingPolygonList[j];
+            if (Polygon1 != Polygon2) {
+                SATPolygonCollider *Collider = dynamic_cast<SATPolygonCollider *>(SATPolygonCollider::getSATPolygonCollider());
+                if (Collider->isColliding(Polygon1->getVertices(), Polygon2->getVertices())) {
+                    vector<Vector2> VerticesWithProjection1;
+                    vector<Vector2> VerticesWithProjection2;
+                    vector<LineSegment> LineSegments1;
+                    for (int i = 0; i < Polygon1->getVertices().size(); ++i) {
+                        LineSegment Edge = {Polygon1->getVertices()[i],
+                                            Polygon1->getVertices()[(i + 1) % Polygon1->getVertices().size()]};
+                        LineSegments1.push_back(Edge);
+                    }
+                    vector<LineSegment> LineSegments2;
+                    for (int i = 0; i < Polygon2->getVertices().size(); ++i) {
+                        LineSegment Edge = {Polygon2->getVertices()[i],
+                                            Polygon2->getVertices()[(i + 1) % Polygon2->getVertices().size()]};
+                        LineSegments2.push_back(Edge);
+                    }
+                    for (auto &Vertex: Polygon1->getVertices()) {
+                        for (auto &Edge: LineSegments2) {
+                            if (Edge.haveProjection(Vertex)) {
+                                VerticesWithProjection1.push_back(Vertex);
+                                break;
+                            }
+                        }
+                    }
+                    for (auto &Vertex: Polygon2->getVertices()) {
+                        for (auto &Edge: LineSegments1) {
+                            if (Edge.haveProjection(Vertex)) {
+                                VerticesWithProjection2.push_back(Vertex);
+                                break;
+                            }
+                        }
+                    }
+//                    std::cout << "Number of vertices with projection 1: " << VerticesWithProjection1.size() << std::endl;
+//                    for (int i = 0; i < VerticesWithProjection1.size(); ++i) {
+//                        std::cout << "Vertex index: " << i << std::endl;
+//                        std::cout << "Vertex: " << VerticesWithProjection1[i].x << " " << VerticesWithProjection1[i].y << std::endl;
+//                    }
+//                    std::cout << "Number of vertices with projection 2: " << VerticesWithProjection2.size() << std::endl;
+//                    for (int i = 0; i < VerticesWithProjection2.size(); ++i) {
+//                        std::cout << "Vertex index: " << i << std::endl;
+//                        std::cout << "Vertex: " << VerticesWithProjection2[i].x << " " << VerticesWithProjection2[i].y << std::endl;
+//                    }
+                    const float InaccuracyThreshold = 0.000000001f;
+                    float MinDistance1 = INT_MAX;
+                    int MinimumDistanceIndex1 = 0;
+                    for (int i = 0; i < VerticesWithProjection1.size(); ++i) {
+                        float LocalMinDistance = INT_MAX;
+                        for (auto &Edge: LineSegments2) {
+                            float Distance = Line(Edge).distanceToPoint(VerticesWithProjection1[i]);
+                            if (Distance < LocalMinDistance) {
+                                LocalMinDistance = Distance;
+                            }
+                        }
+                        if (LocalMinDistance < MinDistance1) {
+                            MinDistance1 = LocalMinDistance;
+                            MinimumDistanceIndex1 = i;
+                        }
+                    }
+                    float MinDistance2 = INT_MAX;
+                    int MinimumDistanceIndex2 = 0;
+                    for (int i = 0; i < VerticesWithProjection2.size(); ++i) {
+                        float LocalMinDistance = INT_MAX;
+                        for (auto &Edge: LineSegments1) {
+                            float Distance = Line(Edge).distanceToPoint(VerticesWithProjection2[i]);
+                            if (Distance < LocalMinDistance) {
+                                LocalMinDistance = Distance;
+                            }
+                        }
+                        if (LocalMinDistance < MinDistance2) {
+                            MinDistance2 = LocalMinDistance;
+                            MinimumDistanceIndex2 = i;
+                        }
+                    }
+                    float MinimumDistance;
+                    if (MinDistance1 < MinDistance2) {
+                        MinimumDistance = MinDistance1;
+                    } else {
+                        MinimumDistance = MinDistance2;
+                    }
+                    for (int i = 0; i < VerticesWithProjection1.size(); ++i) {
+                        for (auto &Edge: LineSegments2) {
+                            if (!Edge.haveProjection(VerticesWithProjection1[i])) continue;
+                            float Distance = Line(Edge).distanceToPoint(VerticesWithProjection1[i]);
+                            if (Distance <= MinimumDistance + InaccuracyThreshold) {
+                                Vector2 Projection = Line(Edge).projection(VerticesWithProjection1[i]);
+                                m_ContactPointList.push_back(Projection);
+                                break;
+                            }
+                        }
+                    }
+                    for (int i = 0; i < VerticesWithProjection2.size(); ++i) {
+                        for (auto &Edge: LineSegments1) {
+                            if (!(Edge.haveProjection(VerticesWithProjection2[i]))) continue;
+                            float Distance = Line(Edge).distanceToPoint(VerticesWithProjection2[i]);
+                            if (Distance <= MinimumDistance + InaccuracyThreshold) {
+                                Vector2 Projection = Line(Edge).projection(VerticesWithProjection2[i]);
+                                m_ContactPointList.push_back(Projection);
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+//    std::cout << "Number of contact points: " << m_ContactPointList.size() << std::endl;
+//    for (auto& Point : m_ContactPointList)
+//    {
+//        std::cout << "Contact point: " << Point.x << " " << Point.y << std::endl;
+//    }
+}
+void DiscreteRotatingEulerianEngine::drawContactPoints() {
+    for (auto& Point : m_ContactPointList) {
+        drawSquare(Point, 10, MAGENTA);
     }
 }
 
