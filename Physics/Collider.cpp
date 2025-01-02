@@ -409,7 +409,7 @@ std::vector<Vector2> SATPolygonCollider::getPointsOfIntersection(const std::vect
                 float Distance = Line(Edge).distanceToPoint(VerticesWithProjection1[i]);
                 if (Distance <= MinimumDistance + InaccuracyThreshold) {
                     Vector2 Projection = Line(Edge).projection(VerticesWithProjection1[i]);
-                    Result.push_back(Projection);
+                    Result.push_back(VerticesWithProjection1[i]);
                     break;
                 }
             }
@@ -530,6 +530,7 @@ Vector2 SATPolygonCollider::getNormalDirection(const Vector2 &Point, const std::
             Vector2 Projection = SelectedLine.projection(Center);
             Vector2 NormalDirection = Vector2Subtract(Projection, Center);
             NormalDirection = Vector2Normalize(NormalDirection);
+            std::cout << "Case 1" << std::endl;
             return NormalDirection;
         }
     }
@@ -555,6 +556,7 @@ Vector2 SATPolygonCollider::getNormalDirection(const Vector2 &Point, const std::
             Vector2 Projection = SelectedLine.projection(Center);
             Vector2 NormalDirection = Vector2Subtract(Projection, Center);
             NormalDirection = Vector2Normalize(NormalDirection);
+            std::cout << "Case 2" << std::endl;
             return NormalDirection;
         }
     }
@@ -575,9 +577,11 @@ Vector2 SATPolygonCollider::getNormalDirection(const Vector2 &Point, const std::
         }
         Center = Vector2Scale(Center, 1.0f / Shape1.size());
         Line SelectedLine = Line(LineSegments1[ClosestEdgeIndex]);
-        Vector2 Projection = SelectedLine.projection(Point);
-        Vector2 NormalDirection = Vector2Subtract(Point, Center);
+        Vector2 Projection = SelectedLine.projection(Center);
+        drawArrow(Center, Projection, RED);
+        Vector2 NormalDirection = Vector2Subtract(Projection, Center);
         NormalDirection = Vector2Normalize(NormalDirection);
+        std::cout << "Case 3" << std::endl;
         return NormalDirection;
     }
     else if (isInsidePolygon(Point, LineSegments2))
@@ -598,9 +602,10 @@ Vector2 SATPolygonCollider::getNormalDirection(const Vector2 &Point, const std::
         Center = Vector2Scale(Center, 1.0f / Shape2.size());
 
         Line SelectedLine = Line(LineSegments2[ClosestEdgeIndex]);
-        Vector2 Projection = SelectedLine.projection(Point);
-        Vector2 NormalDirection = Vector2Subtract(Point, Center);
+        Vector2 Projection = SelectedLine.projection(Center);
+        Vector2 NormalDirection = Vector2Subtract(Projection, Center);
         NormalDirection = Vector2Normalize(NormalDirection);
+        std::cout << "Case 4" << std::endl;
         return NormalDirection;
     }
     else
@@ -1226,7 +1231,7 @@ AngularCollisionResolve SATRotatingCollider::getCollisionResolution(SATRotatingP
                 float CrossProduct1 = crossProduct(ra, ImpulseVector);
                 drawArrow(Shape1->getCenter(), ContactPoint, RED);
                 NewAngularVelocity1 = NewAngularVelocity2 * CrossProduct1;
-                float CrossProduct2 = crossProduct(rb, ImpulseVector);
+                float CrossProduct2 = crossProduct(ImpulseVector, rb);
                 drawArrow(Shape2->getCenter(), ContactPoint, BLUE);
                 NewAngularVelocity2 = NewAngularVelocity2 * CrossProduct2;
                 Result.FirstAngularResolution = -NewAngularVelocity1 * 0.01;

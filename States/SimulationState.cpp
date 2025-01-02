@@ -2916,24 +2916,32 @@ SimulationState* SATRotatingState::update() {
     }
     if (IsKeyDown(KEY_LEFT))
     {
-        m_PolygonList[1] ->accelerate({-300.0f, 0.0f});
-//        m_PolygonList[1] ->move({-1.0f, 0.0f});
+//        m_PolygonList[1] ->accelerate({-300.0f, 0.0f});
+        m_PolygonList[1] ->move({-1.0f, 0.0f});
     }
     if (IsKeyDown(KEY_RIGHT))
     {
 //        std::cout << "Right\n";
-        m_PolygonList[1] ->accelerate({300.0f, 0.0f});
-//        m_PolygonList[1] ->move({1.0f, 0.0f});
+//        m_PolygonList[1] ->accelerate({300.0f, 0.0f});
+        m_PolygonList[1] ->move({1.0f, 0.0f});
     }
     if (IsKeyDown(KEY_UP))
     {
-        m_PolygonList[1] ->accelerate({0.0f, -300.0f});
-//        m_PolygonList[1] ->move({0.0f, -1.0f});
+//        m_PolygonList[1] ->accelerate({0.0f, -300.0f});
+        m_PolygonList[1] ->move({0.0f, -1.0f});
     }
     if (IsKeyDown(KEY_DOWN))
     {
-        m_PolygonList[1] ->accelerate({0.0f, 300.0f});
-//        m_PolygonList[1] ->move({0.0f, 1.0f});
+//        m_PolygonList[1] ->accelerate({0.0f, 300.0f});
+        m_PolygonList[1] ->move({0.0f, 1.0f});
+    }
+    if (IsKeyDown(KEY_ONE))
+    {
+        m_PolygonList[1]->rotate(0.05);
+    }
+    if (IsKeyDown(KEY_TWO))
+    {
+        m_PolygonList[1]->rotate(-0.05);
     }
     return nullptr;
 }
