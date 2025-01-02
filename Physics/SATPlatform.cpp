@@ -231,21 +231,23 @@ void SATRotatingPlatformPolygon::calculateVirtualRadius() {
         m_VirtualRadius += Distance;
     }
     m_VirtualRadius /= this -> getVertices().size();
-    std::cout << "Virtual Radius: " << m_VirtualRadius << std::endl;
+//    std::cout << "Virtual Radius: " << m_VirtualRadius << std::endl;
 }
 void SATRotatingPlatformPolygon::update(float DeltaTime) {
+
     SATPlatformPolygon::update(DeltaTime);
     float Angle = m_RotationalVelocity * DeltaTime;
     rotate(Angle);
+
 }
 float SATRotatingPlatformPolygon::calculateMomentOfInertia() const {
     if (m_Mass == INT_MAX) {
         return INT_MAX;
     }
-    std::cout << "Mass: " << m_Mass << std::endl;
-    std::cout << "Virtual Radius: " << m_VirtualRadius << std::endl;
+//    std::cout << "Mass: " << m_Mass << std::endl;
+//    std::cout << "Virtual Radius: " << m_VirtualRadius << std::endl;
     float MomentOfInertia = 0.5f * this->getMass() * m_VirtualRadius * m_VirtualRadius;
-    std::cout << "Moment of Inertia: " << MomentOfInertia << std::endl;
+//    std::cout << "Moment of Inertia: " << MomentOfInertia << std::endl;
     return MomentOfInertia;
 }
 void SATRotatingPlatformPolygon::draw() {

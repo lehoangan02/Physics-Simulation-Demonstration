@@ -529,6 +529,7 @@ private:
     ~SATRotatingState() override;
     void reset() override;
     void readCoordinate();
+    void setupBoundaries();
 };
 
 #endif //PHYSICS_SIMULATION_DEMONSTRATION_SIMULATIONSTATE_HPP

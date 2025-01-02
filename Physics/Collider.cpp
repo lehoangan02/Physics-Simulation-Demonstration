@@ -495,6 +495,120 @@ Vector2 SATPolygonCollider::getNormalDirection(const std::vector<Vector2> &Shape
     }
 
 }
+Vector2 SATPolygonCollider::getNormalDirection(const Vector2 &Point, const std::vector<Vector2> &Shape1,
+                                               const std::vector<Vector2> &Shape2) {
+
+    std::vector<LineSegment> LineSegments1;
+    for (int i = 0; i < Shape1.size(); ++i) {
+        LineSegment Edge = {Shape1[i], Shape1[(i + 1) % Shape1.size()]};
+        LineSegments1.push_back(Edge);
+    }
+    std::vector<LineSegment> LineSegments2;
+    for (int i = 0; i < Shape2.size(); ++i) {
+        LineSegment Edge = {Shape2[i], Shape2[(i + 1) % Shape2.size()]};
+        LineSegments2.push_back(Edge);
+    }
+    for (auto& Vertex : Shape1) {
+        if (Vertex == Point) {
+            float MinDistance = INT_MAX;
+            int ClosestEdgeIndex = 0;
+            for (int i = 0; i < LineSegments2.size(); ++i)
+            {
+                Line Line2(LineSegments2[i]);
+                if (Line2.distanceToPoint(Point) < MinDistance)
+                {
+                    MinDistance = Line2.distanceToPoint(Point);
+                    ClosestEdgeIndex = i;
+                }
+            }
+            Vector2 Center = {0, 0};
+            for (auto& Vertex : Shape2) {
+                Center = Vector2Add(Center, Vertex);
+            }
+            Center = Vector2Scale(Center, 1.0f / Shape2.size());
+            Line SelectedLine = Line(LineSegments2[ClosestEdgeIndex]);
+            Vector2 Projection = SelectedLine.projection(Center);
+            Vector2 NormalDirection = Vector2Subtract(Projection, Center);
+            NormalDirection = Vector2Normalize(NormalDirection);
+            return NormalDirection;
+        }
+    }
+    for (auto& Vertex : Shape2) {
+        if (Vertex == Point) {
+            float MinDistance = INT_MAX;
+            int ClosestEdgeIndex = 0;
+            for (int i = 0; i < LineSegments1.size(); ++i)
+            {
+                Line Line1(LineSegments1[i]);
+                if (Line1.distanceToPoint(Point) < MinDistance)
+                {
+                    MinDistance = Line1.distanceToPoint(Point);
+                    ClosestEdgeIndex = i;
+                }
+            }
+            Vector2 Center = {0, 0};
+            for (auto& Vertex : Shape1) {
+                Center = Vector2Add(Center, Vertex);
+            }
+            Center = Vector2Scale(Center, 1.0f / Shape1.size());
+            Line SelectedLine = Line(LineSegments1[ClosestEdgeIndex]);
+            Vector2 Projection = SelectedLine.projection(Center);
+            Vector2 NormalDirection = Vector2Subtract(Projection, Center);
+            NormalDirection = Vector2Normalize(NormalDirection);
+            return NormalDirection;
+        }
+    }
+    if (isInsidePolygon(Point, LineSegments1))
+    {
+        float MinDistance = INT_MAX;
+        int ClosestEdgeIndex = 0;
+        for (int i = 0; i < LineSegments1.size(); ++i) {
+            Line Line1(LineSegments1[i]);
+            if (Line1.distanceToPoint(Point) < MinDistance) {
+                MinDistance = Line1.distanceToPoint(Point);
+                ClosestEdgeIndex = i;
+            }
+        }
+        Vector2 Center = {0, 0};
+        for (auto& Vertex : Shape1) {
+            Center = Vector2Add(Center, Vertex);
+        }
+        Center = Vector2Scale(Center, 1.0f / Shape1.size());
+        Line SelectedLine = Line(LineSegments1[ClosestEdgeIndex]);
+        Vector2 Projection = SelectedLine.projection(Point);
+        Vector2 NormalDirection = Vector2Subtract(Point, Center);
+        NormalDirection = Vector2Normalize(NormalDirection);
+        return NormalDirection;
+    }
+    else if (isInsidePolygon(Point, LineSegments2))
+    {
+        float MinDistance = INT_MAX;
+        int ClosestEdgeIndex = 0;
+        for (int i = 0; i < LineSegments2.size(); ++i) {
+            Line Line2(LineSegments2[i]);
+            if (Line2.distanceToPoint(Point) < MinDistance) {
+                MinDistance = Line2.distanceToPoint(Point);
+                ClosestEdgeIndex = i;
+            }
+        }
+        Vector2 Center = {0, 0};
+        for (auto& Vertex : Shape2) {
+            Center = Vector2Add(Center, Vertex);
+        }
+        Center = Vector2Scale(Center, 1.0f / Shape2.size());
+
+        Line SelectedLine = Line(LineSegments2[ClosestEdgeIndex]);
+        Vector2 Projection = SelectedLine.projection(Point);
+        Vector2 NormalDirection = Vector2Subtract(Point, Center);
+        NormalDirection = Vector2Normalize(NormalDirection);
+        return NormalDirection;
+    }
+    else
+    {
+        return {1, 1};
+//        throw std::invalid_argument("Point is not inside any of the polygons");
+    }
+}
 CollisionResolve SATPolygonCollider::getCollisionResolution(const std::vector<Vector2> &Shape1,
                                                                        const std::vector<Vector2> &Shape2) {
 //    std::cout << "Getting collision resolution" << std::endl;
@@ -1064,7 +1178,6 @@ AngularCollisionResolve SATRotatingCollider::getCollisionResolution(SATRotatingP
         float AngularVelocity1 = Shape1->getRotationalVelocity();
         float AngularVelocity2 = Shape2->getRotationalVelocity();
         SATPolygonCollider* PolygonCollider = dynamic_cast<SATPolygonCollider*>(SATPolygonCollider::getSATPolygonCollider());
-        Vector2 Normal = PolygonCollider->getNormalDirection(Shape1->getVertices(), Shape2->getVertices());
         int NumberOfContactPoints = PolygonCollider->getPointsOfIntersection(Shape1->getVertices(), Shape2->getVertices()).size();
         if (NumberOfContactPoints == 0) {
             AngularCollisionResolve Result;
@@ -1076,58 +1189,105 @@ AngularCollisionResolve SATRotatingCollider::getCollisionResolution(SATRotatingP
             Result.SecondVelocityResolution = Shape2->getVelocity();
             return Result;
         }
-        Vector2 ContactPoint = PolygonCollider->getPointsOfIntersection(Shape1->getVertices(), Shape2->getVertices())[0];
+//        Vector2 ContactPoint = PolygonCollider->getPointsOfIntersection(Shape1->getVertices(), Shape2->getVertices())[0];
+        Vector2 ContactPoint = {0, 0};
+        for (auto& Point : PolygonCollider->getPointsOfIntersection(Shape1->getVertices(), Shape2->getVertices())) {
+            ContactPoint = Vector2Add(ContactPoint, Point);
+        }
+        ContactPoint = Vector2Scale(ContactPoint, 1.0f / NumberOfContactPoints);
+        Vector2 Normal = PolygonCollider->getNormalDirection(ContactPoint, Shape1->getVertices(), Shape2->getVertices());
+        Vector2 Normal10 = Vector2Scale(Normal, 100);
+        drawArrow(ContactPoint, Vector2Add(ContactPoint, Normal10), GREEN);
         Vector2 Tangent1 = calculateTangentalVelocity(Shape1->getCenter(), ContactPoint, Shape1->getRotationalVelocity());
         Vector2 Tangent2 = calculateTangentalVelocity(Shape2->getCenter(), ContactPoint, Shape2->getRotationalVelocity());
         float Inertia1 = Shape1->calculateMomentOfInertia();
         float Inertia2 = Shape2->calculateMomentOfInertia();
         float Impulse = calculateImpulse(Mass1, Mass2, Vector2Add(Velocity1, Tangent1), Vector2Add(Velocity2, Tangent2), 1.0f, Normal, Inertia1, Inertia2, Tangent1, Tangent2);
         AngularCollisionResolve Result;
-        std::cout << "Impulse: " << Impulse << std::endl;
-        std::cout << "Normal: " << Normal.x << " " << Normal.y << std::endl;
+
         Vector2 NewVelocity1 = Vector2Scale(Normal, Impulse / Mass1);
         NewVelocity1 = Vector2Negate(NewVelocity1);
-//        NewVelocity1 = Vector2Add(NewVelocity1, Velocity1);
-        std::cout << "Old Velocity 1: " << Velocity1.x << " " << Velocity1.y << std::endl;
-        std::cout << "New Velocity 1: " << NewVelocity1.x << " " << NewVelocity1.y << std::endl;
+        //        NewVelocity1 = Vector2Add(NewVelocity1, Velocity1);
+
         Vector2 NewVelocity2 = Vector2Scale(Normal, -Impulse / Mass2);
         NewVelocity2 = Vector2Negate(NewVelocity2);
-//        NewVelocity2 = Vector2Add(NewVelocity2, Velocity2);
-        std::cout << "Old Velocity 2: " << Velocity2.x << " " << Velocity2.y << std::endl;
-        std::cout << "New Velocity 2: " << NewVelocity2.x << " " << NewVelocity2.y << std::endl;
+        //        NewVelocity2 = Vector2Add(NewVelocity2, Velocity2);
+
         Result.FirstVelocityResolution = NewVelocity1;
         Result.SecondVelocityResolution = NewVelocity2;
+                Vector2 ra = Vector2Subtract(ContactPoint, Shape1->getCenter());
+                Vector2 rb = Vector2Subtract(ContactPoint, Shape2->getCenter());
+                float NewAngularVelocity1 = Vector2DotProduct(ra, Normal) * (-float(1) / Inertia1);
+                std::cout << "New Angular Velocity 1: " << NewAngularVelocity1 << std::endl;
+                float NewAngularVelocity2 = Vector2DotProduct(rb, Normal) * (float(1) / Inertia2);
+                std::cout << "New Angular Velocity 2: " << NewAngularVelocity2 << std::endl;
+                Vector2 ImpulseVector = Vector2Scale(Normal, Impulse);
+
+                float CrossProduct1 = crossProduct(ra, ImpulseVector);
+                drawArrow(Shape1->getCenter(), ContactPoint, RED);
+                NewAngularVelocity1 = NewAngularVelocity2 * CrossProduct1;
+                float CrossProduct2 = crossProduct(rb, ImpulseVector);
+                drawArrow(Shape2->getCenter(), ContactPoint, BLUE);
+                NewAngularVelocity2 = NewAngularVelocity2 * CrossProduct2;
+                Result.FirstAngularResolution = -NewAngularVelocity1 * 0.01;
+                Result.SecondAngularResolution = -NewAngularVelocity2 * 0.01;
+
 //        Vector2 ra = Vector2Subtract(ContactPoint, Shape1->getCenter());
 //        Vector2 rb = Vector2Subtract(ContactPoint, Shape2->getCenter());
-//        float NewAngularVelocity1 = Vector2DotProduct(ra, Normal) * (-float(1) / Inertia1);
-//        std::cout << "New Angular Velocity 1: " << NewAngularVelocity1 << std::endl;
-//        float NewAngularVelocity2 = Vector2DotProduct(rb, Normal) * (float(1) / Inertia2);
-//        std::cout << "New Angular Velocity 2: " << NewAngularVelocity2 << std::endl;
 //        Vector2 ImpulseVector = Vector2Scale(Normal, Impulse);
 //
-//        float CrossProduct1 = crossProduct(ra, ImpulseVector);
-//        NewAngularVelocity1 = NewAngularVelocity2 * CrossProduct1 * 0.0001;
-//        float CrossProduct2 = crossProduct(rb, ImpulseVector);
-//        NewAngularVelocity2 = NewAngularVelocity2 * CrossProduct2 * 0.0001;
-
-        Vector2 ra = Vector2Subtract(ContactPoint, Shape1->getCenter());
-        Vector2 rb = Vector2Subtract(ContactPoint, Shape2->getCenter());
-        Vector2 ImpulseVector = Vector2Scale(Normal, Impulse);
-
-    // Calculate torque
-        float Torque1 = crossProduct(ra, ImpulseVector);
-        float Torque2 = crossProduct(rb, ImpulseVector);
-
-    // Calculate change in angular velocities
-        float DeltaAngularVelocity1 = Torque1 / Inertia1;
-        float DeltaAngularVelocity2 = Torque2 / Inertia2;
+//        // Calculate torque
+//        float Torque1 = crossProduct(ra, ImpulseVector);
+//        float Torque2 = crossProduct(rb, ImpulseVector);
+//
+//        // Calculate change in angular velocities
+//        float DeltaAngularVelocity1 = Torque1 / Inertia1;
+//        float DeltaAngularVelocity2 = Torque2 / Inertia2;
+//
+//
+//        Result.FirstAngularResolution = DeltaAngularVelocity1;
+//        Result.SecondAngularResolution = DeltaAngularVelocity2;
 
 
-        Result.FirstAngularResolution = DeltaAngularVelocity1;
-        Result.SecondAngularResolution = DeltaAngularVelocity2;
         CollisionResolve PositionResolution = PolygonCollider->getCollisionResolution(Shape1->getVertices(), Shape2->getVertices());
                 Result.FirstPositionResolution = PositionResolution.FirstResolution;
         Result.SecondPositionResolution = PositionResolution.SecondResolution;
+        if (Shape1->isFixed())
+        {
+            Result.FirstVelocityResolution = {0, 0};
+//            Result.SecondVelocityResolution = Vector2Add(Vector2Negate(NewVelocity1), NewVelocity2);
+            Result.FirstAngularResolution = 0;
+            Result.FirstPositionResolution = {0, 0};
+//            return Result;
+        }
+        else if (Shape2->isFixed())
+        {
+            Result.SecondVelocityResolution = {0, 0};
+//            Result.FirstVelocityResolution = Vector2Add(NewVelocity1, Vector2Negate(NewVelocity2));
+            Result.SecondAngularResolution = 0;
+            Result.SecondPositionResolution = {0, 0};
+//            return Result;
+        }
+        std::cout << "Impulse: " << Impulse << std::endl;
+        std::cout << "Normal: " << Normal.x << " " << Normal.y << std::endl;
+        std::cout << "Old Velocity 1: " << Velocity1.x << " " << Velocity1.y << std::endl;
+        std::cout << "New Velocity 1: " << Result.FirstVelocityResolution.x << " " << Result.FirstVelocityResolution.y << std::endl;
+        std::cout << "Old Rotational Velocity 1: " << AngularVelocity1 << std::endl;
+        std::cout << "New Rotational Velocity 1: " << Result.FirstAngularResolution << std::endl;
+        std::cout << "Old Velocity 2: " << Velocity2.x << " " << Velocity2.y << std::endl;
+        std::cout << "New Velocity 2: " << Result.SecondVelocityResolution.x << " " << Result.SecondVelocityResolution.y << std::endl;
+        std::cout << "Old Rotational Velocity 2: " << AngularVelocity2 << std::endl;
+        std::cout << "New Rotational Velocity 2: " << Result.SecondAngularResolution << std::endl;
+        std::vector<LineSegment> Edges2;
+        for (int i = 0; i < Shape1->getVertices().size(); ++i)
+        {
+            LineSegment Edge = {Shape1->getVertices()[i], Shape2->getVertices()[(i + 1) % Shape2->getVertices().size()]};
+            Edges2.push_back(Edge);
+        }
+        if (Shape2->isFixed())
+        {
+                Result.FirstAngularResolution *= -2;
+        }
         return Result;
     }
     else

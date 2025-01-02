@@ -48,6 +48,7 @@ public:
     bool isColliding(const std::vector<Vector2>& Shape1, const std::vector<Vector2>& Shape2) override;
     std::vector<Vector2> getPointsOfIntersection(const std::vector<Vector2>& Shape1, const std::vector<Vector2>& Shape2);
     Vector2 getNormalDirection(const std::vector<Vector2>& Shape1, const std::vector<Vector2>& Shape2);
+    Vector2 getNormalDirection(const Vector2& Point, const std::vector<Vector2>& Shape1, const std::vector<Vector2>& Shape2);
     bool IsAVertexOf(const Vector2& Point, const std::vector<Vector2>& Shape);
     CollisionResolve getCollisionResolution(const std::vector<Vector2>& Shape1, const std::vector<Vector2>& Shape2) override;
     CollisionResolve getCollisionResolution(const std::vector<Vector2>& Shape1, const std::vector<Vector2>& Shape2, bool IsShape1Fixed, bool IsShape2Fixed);

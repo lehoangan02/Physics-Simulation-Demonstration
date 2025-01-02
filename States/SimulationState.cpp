@@ -2777,7 +2777,7 @@ void SATRotatingState::reset() {
     StaticPlatform.push_back(Vector2{625.8212141183002,567.6610183871973});
     StaticPlatform.push_back(Vector2{197.3329796928593,431.3715477498762});
     SATRotatingPlatformPolygon* NewPolygon = new SATRotatingPlatformPolygon(StaticPlatform, RED);
-//    NewPolygon->setFixed(true);
+    NewPolygon->setFixed(true);
     m_PolygonList.push_back(NewPolygon);
     std::vector<Vector2> RotatingPlatform;
     RotatingPlatform.push_back(Vector2{200,100});
@@ -2786,6 +2786,14 @@ void SATRotatingState::reset() {
     RotatingPlatform.push_back(Vector2{200,200});
     SATRotatingPlatformPolygon* NewPolygon2 = new SATRotatingPlatformPolygon(RotatingPlatform, RED);
     m_PolygonList.push_back(NewPolygon2);
+    std::vector<Vector2> RotatingPlatform2;
+    RotatingPlatform2.push_back(Vector2{400,100});
+    RotatingPlatform2.push_back(Vector2{500,100});
+    RotatingPlatform2.push_back(Vector2{500,200});
+    RotatingPlatform2.push_back(Vector2{400,200});
+    SATRotatingPlatformPolygon* NewPolygon3 = new SATRotatingPlatformPolygon(RotatingPlatform2, RED);
+    m_PolygonList.push_back(NewPolygon3);
+    setupBoundaries();
     for (auto& polygon : m_PolygonList)
     {
         m_Engine.attachRotatingPlatformPolygon(polygon);
@@ -2867,6 +2875,32 @@ void SATRotatingState::readCoordinate() {
 //    std::cout << "Circles: " << m_CircleList.size() << std::endl;
 //    std::cout << "Polygons: " << m_PolygonList.size() << std::endl;
 }
+void SATRotatingState::setupBoundaries() {
+    std::vector<Vector2> LeftBoundary;
+    LeftBoundary.push_back(Vector2{0, 0});
+    LeftBoundary.push_back(Vector2{0, 1000});
+    LeftBoundary.push_back(Vector2{10, 1000});
+    LeftBoundary.push_back(Vector2{10, 0});
+    SATRotatingPlatformPolygon* LeftBoundaryPolygon = new SATRotatingPlatformPolygon(LeftBoundary, RED);
+    LeftBoundaryPolygon->setFixed(true);
+    m_PolygonList.push_back(LeftBoundaryPolygon);
+    std::vector<Vector2> RightBoundary;
+    RightBoundary.push_back(Vector2{1790, 0});
+    RightBoundary.push_back(Vector2{1800, 0});
+    RightBoundary.push_back(Vector2{1800, 1000});
+    RightBoundary.push_back(Vector2{1790, 1000});
+    SATRotatingPlatformPolygon* RightBoundaryPolygon = new SATRotatingPlatformPolygon(RightBoundary, RED);
+    RightBoundaryPolygon->setFixed(true);
+    m_PolygonList.push_back(RightBoundaryPolygon);
+    std::vector<Vector2> BottomBoundary;
+    BottomBoundary.push_back(Vector2{0, 990});
+    BottomBoundary.push_back(Vector2{1800, 990});
+    BottomBoundary.push_back(Vector2{1800, 1000});
+    BottomBoundary.push_back(Vector2{0, 1000});
+    SATRotatingPlatformPolygon* BottomBoundaryPolygon = new SATRotatingPlatformPolygon(BottomBoundary, RED);
+    BottomBoundaryPolygon->setFixed(true);
+    m_PolygonList.push_back(BottomBoundaryPolygon);
+}
 void SATRotatingState::draw() {
     // std::cout << "State Drawing\n";
     m_Engine.draw();
@@ -2882,23 +2916,23 @@ SimulationState* SATRotatingState::update() {
     }
     if (IsKeyDown(KEY_LEFT))
     {
-        m_PolygonList[1] ->accelerate({-100.0f, 0.0f});
+        m_PolygonList[1] ->accelerate({-300.0f, 0.0f});
 //        m_PolygonList[1] ->move({-1.0f, 0.0f});
     }
     if (IsKeyDown(KEY_RIGHT))
     {
 //        std::cout << "Right\n";
-        m_PolygonList[1] ->accelerate({100.0f, 0.0f});
+        m_PolygonList[1] ->accelerate({300.0f, 0.0f});
 //        m_PolygonList[1] ->move({1.0f, 0.0f});
     }
     if (IsKeyDown(KEY_UP))
     {
-        m_PolygonList[1] ->accelerate({0.0f, -100.0f});
+        m_PolygonList[1] ->accelerate({0.0f, -300.0f});
 //        m_PolygonList[1] ->move({0.0f, -1.0f});
     }
     if (IsKeyDown(KEY_DOWN))
     {
-        m_PolygonList[1] ->accelerate({0.0f, 100.0f});
+        m_PolygonList[1] ->accelerate({0.0f, 300.0f});
 //        m_PolygonList[1] ->move({0.0f, 1.0f});
     }
     return nullptr;
