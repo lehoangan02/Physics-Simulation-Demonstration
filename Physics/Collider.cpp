@@ -530,7 +530,7 @@ Vector2 SATPolygonCollider::getNormalDirection(const Vector2 &Point, const std::
             Vector2 Projection = SelectedLine.projection(Center);
             Vector2 NormalDirection = Vector2Subtract(Projection, Center);
             NormalDirection = Vector2Normalize(NormalDirection);
-            std::cout << "Case 1" << std::endl;
+//            std::cout << "Case 1" << std::endl;
             return NormalDirection;
         }
     }
@@ -556,7 +556,7 @@ Vector2 SATPolygonCollider::getNormalDirection(const Vector2 &Point, const std::
             Vector2 Projection = SelectedLine.projection(Center);
             Vector2 NormalDirection = Vector2Subtract(Projection, Center);
             NormalDirection = Vector2Normalize(NormalDirection);
-            std::cout << "Case 2" << std::endl;
+//            std::cout << "Case 2" << std::endl;
             return NormalDirection;
         }
     }
@@ -581,7 +581,7 @@ Vector2 SATPolygonCollider::getNormalDirection(const Vector2 &Point, const std::
         drawArrow(Center, Projection, RED);
         Vector2 NormalDirection = Vector2Subtract(Projection, Center);
         NormalDirection = Vector2Normalize(NormalDirection);
-        std::cout << "Case 3" << std::endl;
+//        std::cout << "Case 3" << std::endl;
         return NormalDirection;
     }
     else if (isInsidePolygon(Point, LineSegments2))
@@ -605,7 +605,7 @@ Vector2 SATPolygonCollider::getNormalDirection(const Vector2 &Point, const std::
         Vector2 Projection = SelectedLine.projection(Center);
         Vector2 NormalDirection = Vector2Subtract(Projection, Center);
         NormalDirection = Vector2Normalize(NormalDirection);
-        std::cout << "Case 4" << std::endl;
+//        std::cout << "Case 4" << std::endl;
         return NormalDirection;
     }
     else
@@ -1175,9 +1175,9 @@ AngularCollisionResolve SATRotatingCollider::getCollisionResolution(SATRotatingP
     bool IsColliding = PolygonCollider->isColliding(Shape1->getVertices(), Shape2->getVertices());
     if (IsColliding) {
         float Mass1 = Shape1->getMass();
-        std::cout << "Mass 1: " << Mass1 << std::endl;
+//        std::cout << "Mass 1: " << Mass1 << std::endl;
         float Mass2 = Shape2->getMass();
-        std::cout  << "Mass 2: " << Mass2 << std::endl;
+//        std::cout  << "Mass 2: " << Mass2 << std::endl;
         Vector2 Velocity1 = Shape1->getVelocity();
         Vector2 Velocity2 = Shape2->getVelocity();
         float AngularVelocity1 = Shape1->getRotationalVelocity();
@@ -1207,7 +1207,7 @@ AngularCollisionResolve SATRotatingCollider::getCollisionResolution(SATRotatingP
         Vector2 Tangent2 = calculateTangentalVelocity(Shape2->getCenter(), ContactPoint, Shape2->getRotationalVelocity());
         float Inertia1 = Shape1->calculateMomentOfInertia();
         float Inertia2 = Shape2->calculateMomentOfInertia();
-        float Impulse = calculateImpulse(Mass1, Mass2, Vector2Add(Velocity1, Tangent1), Vector2Add(Velocity2, Tangent2), 1.0f, Normal, Inertia1, Inertia2, Tangent1, Tangent2);
+        float Impulse = calculateImpulse(Mass1, Mass2, Vector2Add(Velocity1, Tangent1), Vector2Add(Velocity2, Tangent2), 0.6f, Normal, Inertia1, Inertia2, Tangent1, Tangent2);
         AngularCollisionResolve Result;
 
         Vector2 NewVelocity1 = Vector2Scale(Normal, Impulse / Mass1);
@@ -1250,13 +1250,50 @@ AngularCollisionResolve SATRotatingCollider::getCollisionResolution(SATRotatingP
         float DeltaAngularVelocity2 = Torque2 / Inertia2;
 
 
-        Result.FirstAngularResolution = DeltaAngularVelocity1 * 0.1f;
-        Result.SecondAngularResolution = DeltaAngularVelocity2 * 0.1f;
+        Result.FirstAngularResolution = DeltaAngularVelocity1 * 0.2f;
+        Result.SecondAngularResolution = DeltaAngularVelocity2 * 0.2f;
 
 
         CollisionResolve PositionResolution = PolygonCollider->getCollisionResolution(Shape1->getVertices(), Shape2->getVertices());
                 Result.FirstPositionResolution = PositionResolution.FirstResolution;
         Result.SecondPositionResolution = PositionResolution.SecondResolution;
+
+
+        Vector2 PracticalVelocity1 = Vector2Add(Result.FirstVelocityResolution, Shape1->getVelocity());
+        Vector2 PracticalVelocity2 = Vector2Add(Result.SecondVelocityResolution, Shape2->getVelocity());
+        drawArrow(ContactPoint, Vector2Add(ContactPoint, PracticalVelocity1), RED);
+        drawArrow(ContactPoint, Vector2Add(ContactPoint, PracticalVelocity2), BLUE);
+        float Dot1 = Vector2DotProduct((PracticalVelocity1), Normal);
+        float Dot2 = Vector2DotProduct((PracticalVelocity2), Normal);
+        Vector2 Normal1 = Vector2Scale(Normal, Dot1);
+        Vector2 Normal2 = Vector2Scale(Normal, Dot2);
+        drawArrow(ContactPoint, Vector2Add(ContactPoint, Normal1), PURPLE);
+        drawArrow(ContactPoint, Vector2Add(ContactPoint, Normal2), PURPLE);
+//        Vector2 FrictionTangent1 = Vector2Normalize(Vector2Subtract(Normal1, PracticalVelocity1));
+//        Vector2 FrictionTangent2 = Vector2Normalize(Vector2Subtract(Normal2, PracticalVelocity2));
+        Vector2 FrictionTangent1 = (Vector2Subtract(Normal1, PracticalVelocity1));
+        Vector2 FrictionTangent2 = (Vector2Subtract(Normal2, PracticalVelocity2));
+        drawArrow(ContactPoint, Vector2Add(ContactPoint, FrictionTangent1), YELLOW);
+        drawArrow(ContactPoint, Vector2Add(ContactPoint, FrictionTangent2), YELLOW);
+        float FrictionImpulse = calculateImpulse(Mass1, Mass2, FrictionTangent1, FrictionTangent2, 0.0f, Normal, Inertia1, Inertia2, Tangent1, Tangent2);
+        Vector2 FrictionImpulseVector = Vector2Scale(Normal, FrictionImpulse);
+        Vector2 NewFrictionVelocity1 = Vector2Scale(FrictionImpulseVector, 1.0f / Mass1);
+        NewFrictionVelocity1 = Vector2Negate(NewFrictionVelocity1);
+        Vector2 NewFrictionVelocity2 = Vector2Scale(FrictionImpulseVector, -1.0f / Mass2);
+        NewFrictionVelocity2 = Vector2Negate(NewFrictionVelocity2);
+        Result.FirstVelocityResolution = Vector2Add(Result.FirstVelocityResolution, NewFrictionVelocity1);
+        Result.SecondVelocityResolution = Vector2Add(Result.SecondVelocityResolution, NewFrictionVelocity2);
+
+        Vector2 TorqueFriction1 = Vector2Scale(Normal, Torque1);
+        Vector2 TorqueFriction2 = Vector2Scale(Normal, Torque2);
+        float DeltaAngularVelocityFriction1 = TorqueFriction1.x / Inertia1;
+        float DeltaAngularVelocityFriction2 = TorqueFriction2.x / Inertia2;
+        Result.FirstAngularResolution += DeltaAngularVelocityFriction1 * 0.2f;
+        Result.SecondAngularResolution += DeltaAngularVelocityFriction2 * 0.2f;
+
+
+
+
         if (Shape1->isFixed())
         {
             Result.FirstVelocityResolution = {0, 0};
@@ -1273,16 +1310,16 @@ AngularCollisionResolve SATRotatingCollider::getCollisionResolution(SATRotatingP
             Result.SecondPositionResolution = {0, 0};
 //            return Result;
         }
-        std::cout << "Impulse: " << Impulse << std::endl;
-        std::cout << "Normal: " << Normal.x << " " << Normal.y << std::endl;
-        std::cout << "Old Velocity 1: " << Velocity1.x << " " << Velocity1.y << std::endl;
-        std::cout << "New Velocity 1: " << Result.FirstVelocityResolution.x << " " << Result.FirstVelocityResolution.y << std::endl;
-        std::cout << "Old Rotational Velocity 1: " << AngularVelocity1 << std::endl;
-        std::cout << "New Rotational Velocity 1: " << Result.FirstAngularResolution << std::endl;
-        std::cout << "Old Velocity 2: " << Velocity2.x << " " << Velocity2.y << std::endl;
-        std::cout << "New Velocity 2: " << Result.SecondVelocityResolution.x << " " << Result.SecondVelocityResolution.y << std::endl;
-        std::cout << "Old Rotational Velocity 2: " << AngularVelocity2 << std::endl;
-        std::cout << "New Rotational Velocity 2: " << Result.SecondAngularResolution << std::endl;
+//        std::cout << "Impulse: " << Impulse << std::endl;
+//        std::cout << "Normal: " << Normal.x << " " << Normal.y << std::endl;
+//        std::cout << "Old Velocity 1: " << Velocity1.x << " " << Velocity1.y << std::endl;
+//        std::cout << "New Velocity 1: " << Result.FirstVelocityResolution.x << " " << Result.FirstVelocityResolution.y << std::endl;
+//        std::cout << "Old Rotational Velocity 1: " << AngularVelocity1 << std::endl;
+//        std::cout << "New Rotational Velocity 1: " << Result.FirstAngularResolution << std::endl;
+//        std::cout << "Old Velocity 2: " << Velocity2.x << " " << Velocity2.y << std::endl;
+//        std::cout << "New Velocity 2: " << Result.SecondVelocityResolution.x << " " << Result.SecondVelocityResolution.y << std::endl;
+//        std::cout << "Old Rotational Velocity 2: " << AngularVelocity2 << std::endl;
+//        std::cout << "New Rotational Velocity 2: " << Result.SecondAngularResolution << std::endl;
         std::vector<LineSegment> Edges2;
         for (int i = 0; i < Shape1->getVertices().size(); ++i)
         {
@@ -1294,6 +1331,7 @@ AngularCollisionResolve SATRotatingCollider::getCollisionResolution(SATRotatingP
 //            std::cout << "Edge case" << std::endl;
                 Result.FirstAngularResolution *= -2;
         }
+
         return Result;
     }
     else

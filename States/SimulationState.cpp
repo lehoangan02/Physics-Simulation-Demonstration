@@ -2950,3 +2950,4 @@ SimulationState* SATRotatingState::getSATRotatingState() {
     return &MySATFixedAndRotatingState;
 }
 
+

@@ -531,5 +531,21 @@ private:
     void readCoordinate();
     void setupBoundaries();
 };
-
+class SATFricitionState : public SimulationState {
+public:
+    static SimulationState* getSATFricitionState();
+    SimulationState* update() override;
+    void draw() override;
+    void onNotify() override;
+private:
+    DiscreteRotatingEulerianEngine m_Engine;
+    vector<SATRotatingPlatformPolygon*> m_PolygonList;
+    vector<SATRotatingPlatformCircle*> m_CircleList;
+private:
+    SATFricitionState();
+    ~SATFricitionState() override;
+    void reset() override;
+    void readCoordinate();
+    void setupBoundaries();
+};
 #endif //PHYSICS_SIMULATION_DEMONSTRATION_SIMULATIONSTATE_HPP
