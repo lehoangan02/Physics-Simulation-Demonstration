@@ -1250,8 +1250,8 @@ AngularCollisionResolve SATRotatingCollider::getCollisionResolution(SATRotatingP
         float DeltaAngularVelocity2 = Torque2 / Inertia2;
 
 
-        Result.FirstAngularResolution = DeltaAngularVelocity1 * 0.2f;
-        Result.SecondAngularResolution = DeltaAngularVelocity2 * 0.2f;
+        Result.FirstAngularResolution = DeltaAngularVelocity1 * 0.1f;
+        Result.SecondAngularResolution = DeltaAngularVelocity2 * 0.1f;
 
 
         CollisionResolve PositionResolution = PolygonCollider->getCollisionResolution(Shape1->getVertices(), Shape2->getVertices());
@@ -1269,29 +1269,31 @@ AngularCollisionResolve SATRotatingCollider::getCollisionResolution(SATRotatingP
         Vector2 Normal2 = Vector2Scale(Normal, Dot2);
         drawArrow(ContactPoint, Vector2Add(ContactPoint, Normal1), PURPLE);
         drawArrow(ContactPoint, Vector2Add(ContactPoint, Normal2), PURPLE);
-//        Vector2 FrictionTangent1 = Vector2Normalize(Vector2Subtract(Normal1, PracticalVelocity1));
-//        Vector2 FrictionTangent2 = Vector2Normalize(Vector2Subtract(Normal2, PracticalVelocity2));
-        Vector2 FrictionTangent1 = (Vector2Subtract(Normal1, PracticalVelocity1));
-        Vector2 FrictionTangent2 = (Vector2Subtract(Normal2, PracticalVelocity2));
+        Vector2 FrictionTangent1 = Vector2Subtract(Normal1, PracticalVelocity1);
+        FrictionTangent1 = Vector2Normalize(FrictionTangent1);
+        Vector2 FrictionTangent2 = Vector2Subtract(Normal2, PracticalVelocity2);
+        FrictionTangent2 = Vector2Normalize(FrictionTangent2);
         drawArrow(ContactPoint, Vector2Add(ContactPoint, FrictionTangent1), YELLOW);
         drawArrow(ContactPoint, Vector2Add(ContactPoint, FrictionTangent2), YELLOW);
-        float FrictionImpulse = calculateImpulse(Mass1, Mass2, FrictionTangent1, FrictionTangent2, 0.0f, Normal, Inertia1, Inertia2, Tangent1, Tangent2);
-        Vector2 FrictionImpulseVector = Vector2Scale(Normal, FrictionImpulse);
-        Vector2 NewFrictionVelocity1 = Vector2Scale(FrictionImpulseVector, 1.0f / Mass1);
-        NewFrictionVelocity1 = Vector2Negate(NewFrictionVelocity1);
-        Vector2 NewFrictionVelocity2 = Vector2Scale(FrictionImpulseVector, -1.0f / Mass2);
-        NewFrictionVelocity2 = Vector2Negate(NewFrictionVelocity2);
-        Result.FirstVelocityResolution = Vector2Add(Result.FirstVelocityResolution, NewFrictionVelocity1);
-        Result.SecondVelocityResolution = Vector2Add(Result.SecondVelocityResolution, NewFrictionVelocity2);
 
-        Vector2 TorqueFriction1 = Vector2Scale(Normal, Torque1);
-        Vector2 TorqueFriction2 = Vector2Scale(Normal, Torque2);
-        float DeltaAngularVelocityFriction1 = TorqueFriction1.x / Inertia1;
-        float DeltaAngularVelocityFriction2 = TorqueFriction2.x / Inertia2;
-        Result.FirstAngularResolution += DeltaAngularVelocityFriction1 * 0.2f;
-        Result.SecondAngularResolution += DeltaAngularVelocityFriction2 * 0.2f;
+        Vector2 raPerp = {ra.y, -ra.x};
+        Vector2 rbPerp = {rb.y, -rb.x};
+        float raPerpDotT = Vector2DotProduct(raPerp, FrictionTangent1);
+        float rbPerpDotT = Vector2DotProduct(rbPerp, FrictionTangent2);
+        float denom = (1 / Mass1) + (1 / Mass2) + (raPerpDotT * raPerpDotT) / Inertia1 + (rbPerpDotT * rbPerpDotT) / Inertia2;
+        float j = - (Vector2DotProduct(Vector2Subtract(PracticalVelocity1, PracticalVelocity2), Normal)) / denom;
+        Vector2 ImpulseFriction1 = Vector2Scale(Tangent1, j);
+        Vector2 ImpulseFriction2 = Vector2Scale(Tangent2, j);
 
+        Vector2 FrictionVelocity1 = Vector2Scale(ImpulseFriction1, 1 / (Mass1 * 1000));
+        Vector2 FrictionVelocity2 = Vector2Scale(ImpulseFriction2, 1 / (Mass2 * 1000));
+//        std::cout << "Friction Velocity 1: " << FrictionVelocity1.x << " " << FrictionVelocity1.y << std::endl;
+//        std::cout << "Friction Velocity 2: " << FrictionVelocity2.x << " " << FrictionVelocity2.y << std::endl;
 
+        Result.FirstVelocityResolution = Vector2Add(Result.FirstVelocityResolution, FrictionVelocity1);
+        Result.SecondVelocityResolution = Vector2Add(Result.SecondVelocityResolution, FrictionVelocity2);
+        Result.FirstAngularResolution += crossProduct(ra, ImpulseFriction1) / Inertia1 * -0;
+        Result.SecondAngularResolution += crossProduct(rb, ImpulseFriction2) / Inertia2 * -0;
 
 
         if (Shape1->isFixed())

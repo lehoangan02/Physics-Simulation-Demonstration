@@ -1890,6 +1890,7 @@ void DiscreteRotatingEulerianEngine::collideSATPolygons() {
     }
 }
 void DiscreteRotatingEulerianEngine::applyGravity() {
+//    return;
     Vector2 Gravity = Vector2{0, 9.8 * 10};
     for (auto& Polygon : m_RotatingPolygonList) {
         if (Polygon->isFixed()) continue;

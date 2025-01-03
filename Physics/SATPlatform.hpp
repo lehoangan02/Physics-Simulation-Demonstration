@@ -105,15 +105,18 @@ public:
     void update(float DeltaTime) override;
     void setRotationalVelocity(float RotationalVelocity) {m_RotationalVelocity = RotationalVelocity;}
     void addRotationalVelocity(float RotationalVelocity) {m_RotationalVelocity += RotationalVelocity;}
+    void accelerateRotation(float Acceleration);
     float getRotationalVelocity() const {return m_RotationalVelocity;}
     float calculateMomentOfInertia() const;
     void draw() override;
     bool isFixed() const {return m_Fixed;}
     float getRadius() const {return m_VirtualRadius;}
+    float getAngle() const;
     // void accelerate(Vector2 Acceleration) override;
 private:
     float m_RotationalVelocity = 0;
     float m_VirtualRadius = 0;
+    Color m_Color;
 private:
     void calculateVirtualRadius();
 };

@@ -17,6 +17,7 @@
 #include "../Machine Learning/KMeansCalculator.h"
 #include "../Physics/Collider.h"
 #include "../Physics/SATPlatform.hpp"
+#include "../Animation/Animation.hpp"
 enum StateNumber {
     HOME_STATE,
     VERLET_DROP_STATE,
@@ -42,6 +43,7 @@ enum StateNumber {
     SAT_RESPONSE_STATE,
     SAT_GRAVITY_AND_CONTACT_POINTS_STATE,
     SAT_FIXED_AND_ROTATING_STATE,
+    MOON_LANDER_STATE,
 };
 class SimulationState;
 class StateFactory
@@ -528,24 +530,38 @@ private:
     SATRotatingState();
     ~SATRotatingState() override;
     void reset() override;
-    void readCoordinate();
     void setupBoundaries();
 };
-class SATFricitionState : public SimulationState {
+class MoonLanderState : public SimulationState {
+    struct LandingCraft
+    {
+        LandingCraft();
+        SATRotatingPlatformPolygon* Body;
+        Animation LeftRotateNozzle;
+        Animation RightRotateNozzle;
+        Animation LeftThrustNozzle;
+        Animation RightThrustNozzle;
+        void GiveBody(SATRotatingPlatformPolygon* Body);
+        void draw();
+        void update();
+        Texture2D m_NozzleTexture = LoadTexture("Assets/Textures/Nozzle.png");
+        Texture2D m_Lander = LoadTexture("Assets/Textures/Lander.png");
+    };
 public:
-    static SimulationState* getSATFricitionState();
+    static SimulationState* getMoonLanderState();
     SimulationState* update() override;
     void draw() override;
     void onNotify() override;
 private:
+    Texture2D m_Background = LoadTexture("Assets/Textures/Moon_Lander.png");
+    LandingCraft m_LandingCraft;
     DiscreteRotatingEulerianEngine m_Engine;
     vector<SATRotatingPlatformPolygon*> m_PolygonList;
     vector<SATRotatingPlatformCircle*> m_CircleList;
 private:
-    SATFricitionState();
-    ~SATFricitionState() override;
+    MoonLanderState();
+    ~MoonLanderState() override;
     void reset() override;
-    void readCoordinate();
     void setupBoundaries();
 };
 #endif //PHYSICS_SIMULATION_DEMONSTRATION_SIMULATIONSTATE_HPP

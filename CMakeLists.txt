@@ -42,7 +42,9 @@ add_executable(Physics_Simulation_Demonstration main.cpp
         Physics/SATPlatform.cpp
         Physics/SATPlatform.hpp
         Physics/GeneralPhysics.cpp
-        Physics/GeneralPhysics.hpp)
+        Physics/GeneralPhysics.hpp
+        Animation/Animation.cpp
+        Animation/Animation.hpp)
 include_directories(/opt/homebrew/Cellar/raylib/5.0/include)
 
 find_package(raylib 4.5 REQUIRED)

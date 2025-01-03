@@ -222,6 +222,7 @@ SATRotatingPlatformPolygon::SATRotatingPlatformPolygon(const std::vector<Vector2
     m_RotationalVelocity = 0;
     calculateVirtualRadius();
     setMassUsingArea();
+    m_Color = Color;
 }
 void SATRotatingPlatformPolygon::calculateVirtualRadius() {
     Vector2 Center = getCenter();
@@ -240,6 +241,9 @@ void SATRotatingPlatformPolygon::update(float DeltaTime) {
     rotate(Angle);
 
 }
+void SATRotatingPlatformPolygon::accelerateRotation(float Acceleration) {
+    m_RotationalVelocity += Acceleration;
+}
 float SATRotatingPlatformPolygon::calculateMomentOfInertia() const {
     if (m_Mass == INT_MAX) {
         return INT_MAX;
@@ -251,10 +255,25 @@ float SATRotatingPlatformPolygon::calculateMomentOfInertia() const {
     return MomentOfInertia;
 }
 void SATRotatingPlatformPolygon::draw() {
-    SATPlatformPolygon::draw();
+    for (int i = 0; i < m_NumberOfVertices; ++i) {
+        DrawTriangle(m_Vertices[0].Position, m_Vertices[i].Position,
+                     m_Vertices[(i + 1) % m_NumberOfVertices].Position, m_Color);
+    }
+    Color SOIL = Color{61, 61, 61, 255};
+    for (int i = 0; i < m_NumberOfVertices; ++i) {
+        DrawLineEx(m_Vertices[i].Position, m_Vertices[(i + 1) % m_NumberOfVertices].Position, 5, SOIL);
+    }
+    for (int i = 0; i < m_NumberOfVertices; ++i) {
+        DrawCircle((int) m_Vertices[i].Position.x, (int) m_Vertices[i].Position.y, 2.5, SOIL);
+    }
     std::string Mass = to_string((int)m_Mass);
     Vector2 Position = getCenter();
 //    DrawText(Mass.c_str(), Position.x, Position.y, 20, BLACK);
+}
+float SATRotatingPlatformPolygon::getAngle() const {
+    Vector2 Center = getCenter();
+    Vector2 Direction = Vector2Subtract(m_Vertices[0].Position, Center);
+    return angle360InRadian(Direction, Vector2{1, 0});
 }
 SATRotatingPlatformCircle::SATRotatingPlatformCircle(Vector2 Position, Color Color, float Mass) : SATPlatformCircle(Position, Color, Mass) {
     m_RotationalVelocity = 0;

@@ -157,3 +157,45 @@ std::cout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~" << std::endl;
                     std::cout << "Error: Collision not resolved" << std::endl;
                 }
 
+//        Vector2 RelativeVelocity = Vector2Subtract(Shape1->getVelocity(), Shape2->getVelocity());
+//        float Dot = Vector2DotProduct(RelativeVelocity, Normal);
+//        Vector2 Tangent = Vector2Subtract(RelativeVelocity, Vector2Scale(Normal, Dot));
+//        Tangent = Vector2Normalize(Tangent);
+//        float raPerpDotTangent = Vector2DotProduct(FrictionTangent1, Tangent);
+//        float rbPerpDotTangent = Vector2DotProduct(FrictionTangent2, Tangent);
+//        std::cout << "Tangent: " << Tangent.x << " " << Tangent.y << std::endl;
+//        std::cout << "Relative Velocity: " << RelativeVelocity.x << " " << RelativeVelocity.y << std::endl;
+//        float FrictionImpulse = -Vector2DotProduct(RelativeVelocity, Tangent);
+//        float denom = (1.0f / Mass1) + (1.0f / Mass2) + (raPerpDotTangent * raPerpDotTangent) / Inertia1 + (rbPerpDotTangent * rbPerpDotTangent) / Inertia2;
+//        FrictionImpulse /= denom;
+//        Vector2 FrictionImpulseVector = Vector2Scale(Tangent, FrictionImpulse);
+//
+//        Result.FirstVelocityResolution = Vector2Add(Result.FirstVelocityResolution, Vector2Scale(Tangent, FrictionImpulse / Mass1));
+//        Vector2 Temp = Vector2Scale(Tangent, FrictionImpulse / Mass1);
+//        std::cout << "Friction Impulse 1: " << Temp.x << " " << Temp.y << std::endl;
+//        Result.SecondVelocityResolution = Vector2Add(Result.SecondVelocityResolution, Vector2Scale(Tangent, -FrictionImpulse / Mass2));
+//        Temp = Vector2Scale(Tangent, -FrictionImpulse / Mass2);
+//        std::cout << "Friction Impulse 2: " << Temp.x << " " << Temp.y << std::endl;
+//        Result.FirstAngularResolution += crossProduct(ra, FrictionImpulseVector) * (1.0f / Inertia1);
+//        Result.SecondAngularResolution += crossProduct(rb, FrictionImpulseVector) * (1.0f / Inertia2);
+
+
+
+//        float FrictionImpulse = calculateImpulse(Mass1, Mass2, Tangent1, Tangent2, 0.0f, Normal, Inertia1, Inertia2, FrictionTangent1, FrictionTangent2);
+//        Vector2 FrictionImpulseVector = Vector2Scale(Normal, FrictionImpulse);
+//        std::cout << "Friction Impulse: " << FrictionImpulse << std::endl;
+//        Vector2 NewFrictionVelocity1 = Vector2Scale(FrictionImpulseVector, 1.0f / Mass1);
+//        NewFrictionVelocity1 = Vector2Negate(NewFrictionVelocity1);
+//        Vector2 NewFrictionVelocity2 = Vector2Scale(FrictionImpulseVector, -1.0f / Mass2);
+//        std::cout << "New Friction Velocity 1: " << NewFrictionVelocity1.x << " " << NewFrictionVelocity1.y << std::endl;
+//        std::cout << "New Friction Velocity 2: " << NewFrictionVelocity2.x << " " << NewFrictionVelocity2.y << std::endl;
+//        NewFrictionVelocity2 = Vector2Negate(NewFrictionVelocity2);
+//        Result.FirstVelocityResolution = Vector2Add(Result.FirstVelocityResolution, NewFrictionVelocity1);
+//        Result.SecondVelocityResolution = Vector2Add(Result.SecondVelocityResolution, NewFrictionVelocity2);
+//
+//        Vector2 TorqueFriction1 = Vector2Scale(Normal, Torque1);
+//        Vector2 TorqueFriction2 = Vector2Scale(Normal, Torque2);
+//        float DeltaAngularVelocityFriction1 = TorqueFriction1.x / Inertia1;
+//        float DeltaAngularVelocityFriction2 = TorqueFriction2.x / Inertia2;
+//        Result.FirstAngularResolution += DeltaAngularVelocityFriction1 * 0.2f;
+//        Result.SecondAngularResolution += DeltaAngularVelocityFriction2 * 0.2f;

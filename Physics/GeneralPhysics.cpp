@@ -17,6 +17,8 @@ float calculateImpulse(const float &Mass1, const float &Mass2, const Vector2 &Ve
     Normal = Vector2Normalize(Normal);
     float j;
     j = -(1 + CoefficientOfRestitution) * Vector2DotProduct(RelativeVelocity, Normal);
+//    std::cout << "Relative Velocity: " << RelativeVelocity.x << " " << RelativeVelocity.y << std::endl;
+//    std::cout << "Normal: " << Normal.x << " " << Normal.y << std::endl;
 //    std::cout << "Inertia 1: " << Inertia1 << std::endl;
 //    std::cout << "Inertia 2: " << Inertia2 << std::endl;
 //    std::cout << "Numerator: " << j << std::endl;
