@@ -1220,38 +1220,38 @@ AngularCollisionResolve SATRotatingCollider::getCollisionResolution(SATRotatingP
 
         Result.FirstVelocityResolution = NewVelocity1;
         Result.SecondVelocityResolution = NewVelocity2;
-                Vector2 ra = Vector2Subtract(ContactPoint, Shape1->getCenter());
-                Vector2 rb = Vector2Subtract(ContactPoint, Shape2->getCenter());
-                float NewAngularVelocity1 = Vector2DotProduct(ra, Normal) * (-float(1) / Inertia1);
-                std::cout << "New Angular Velocity 1: " << NewAngularVelocity1 << std::endl;
-                float NewAngularVelocity2 = Vector2DotProduct(rb, Normal) * (float(1) / Inertia2);
-                std::cout << "New Angular Velocity 2: " << NewAngularVelocity2 << std::endl;
-                Vector2 ImpulseVector = Vector2Scale(Normal, Impulse);
+//                Vector2 ra = Vector2Subtract(ContactPoint, Shape1->getCenter());
+//                Vector2 rb = Vector2Subtract(ContactPoint, Shape2->getCenter());
+//                float NewAngularVelocity1 = Vector2DotProduct(ra, Normal) * (-float(1) / Inertia1);
+//                std::cout << "New Angular Velocity 1: " << NewAngularVelocity1 << std::endl;
+//                float NewAngularVelocity2 = Vector2DotProduct(rb, Normal) * (float(1) / Inertia2);
+//                std::cout << "New Angular Velocity 2: " << NewAngularVelocity2 << std::endl;
+//                Vector2 ImpulseVector = Vector2Scale(Normal, Impulse);
+//
+//                float CrossProduct1 = crossProduct(ra, ImpulseVector);
+//                drawArrow(Shape1->getCenter(), ContactPoint, RED);
+//                NewAngularVelocity1 = NewAngularVelocity2 * CrossProduct1;
+//                float CrossProduct2 = crossProduct(rb, ImpulseVector);
+//                drawArrow(Shape2->getCenter(), ContactPoint, BLUE);
+//                NewAngularVelocity2 = NewAngularVelocity2 * CrossProduct2;
+//                Result.FirstAngularResolution = NewAngularVelocity1 * 0.01;
+//                Result.SecondAngularResolution = NewAngularVelocity2 * 0.01;
 
-                float CrossProduct1 = crossProduct(ra, ImpulseVector);
-                drawArrow(Shape1->getCenter(), ContactPoint, RED);
-                NewAngularVelocity1 = NewAngularVelocity2 * CrossProduct1;
-                float CrossProduct2 = crossProduct(ImpulseVector, rb);
-                drawArrow(Shape2->getCenter(), ContactPoint, BLUE);
-                NewAngularVelocity2 = NewAngularVelocity2 * CrossProduct2;
-                Result.FirstAngularResolution = -NewAngularVelocity1 * 0.01;
-                Result.SecondAngularResolution = -NewAngularVelocity2 * 0.01;
+        Vector2 ra = Vector2Subtract(ContactPoint, Shape1->getCenter());
+        Vector2 rb = Vector2Subtract(ContactPoint, Shape2->getCenter());
+        Vector2 ImpulseVector = Vector2Scale(Normal, Impulse);
 
-//        Vector2 ra = Vector2Subtract(ContactPoint, Shape1->getCenter());
-//        Vector2 rb = Vector2Subtract(ContactPoint, Shape2->getCenter());
-//        Vector2 ImpulseVector = Vector2Scale(Normal, Impulse);
-//
-//        // Calculate torque
-//        float Torque1 = crossProduct(ra, ImpulseVector);
-//        float Torque2 = crossProduct(rb, ImpulseVector);
-//
-//        // Calculate change in angular velocities
-//        float DeltaAngularVelocity1 = Torque1 / Inertia1;
-//        float DeltaAngularVelocity2 = Torque2 / Inertia2;
-//
-//
-//        Result.FirstAngularResolution = DeltaAngularVelocity1;
-//        Result.SecondAngularResolution = DeltaAngularVelocity2;
+        // Calculate torque
+        float Torque1 = crossProduct(ra, ImpulseVector);
+        float Torque2 = crossProduct(rb, ImpulseVector);
+
+        // Calculate change in angular velocities
+        float DeltaAngularVelocity1 = Torque1 / Inertia1;
+        float DeltaAngularVelocity2 = Torque2 / Inertia2;
+
+
+        Result.FirstAngularResolution = DeltaAngularVelocity1 * 0.1f;
+        Result.SecondAngularResolution = DeltaAngularVelocity2 * 0.1f;
 
 
         CollisionResolve PositionResolution = PolygonCollider->getCollisionResolution(Shape1->getVertices(), Shape2->getVertices());
@@ -1291,6 +1291,7 @@ AngularCollisionResolve SATRotatingCollider::getCollisionResolution(SATRotatingP
         }
         if (Shape2->isFixed())
         {
+//            std::cout << "Edge case" << std::endl;
                 Result.FirstAngularResolution *= -2;
         }
         return Result;

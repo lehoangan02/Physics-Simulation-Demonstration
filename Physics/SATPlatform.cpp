@@ -254,7 +254,7 @@ void SATRotatingPlatformPolygon::draw() {
     SATPlatformPolygon::draw();
     std::string Mass = to_string((int)m_Mass);
     Vector2 Position = getCenter();
-    DrawText(Mass.c_str(), Position.x, Position.y, 20, BLACK);
+//    DrawText(Mass.c_str(), Position.x, Position.y, 20, BLACK);
 }
 SATRotatingPlatformCircle::SATRotatingPlatformCircle(Vector2 Position, Color Color, float Mass) : SATPlatformCircle(Position, Color, Mass) {
     m_RotationalVelocity = 0;
