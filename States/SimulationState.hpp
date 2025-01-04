@@ -546,6 +546,7 @@ class MoonLanderState : public SimulationState {
         void update();
         Texture2D m_NozzleTexture = LoadTexture("Assets/Textures/Nozzle.png");
         Texture2D m_Lander = LoadTexture("Assets/Textures/Lander.png");
+        Sound m_Sound = LoadSound("Assets/Music/mixkit-space-rocket-full-power-turbine-1720.wav");
     };
 public:
     static SimulationState* getMoonLanderState();
@@ -558,6 +559,7 @@ private:
     DiscreteRotatingEulerianEngine m_Engine;
     vector<SATRotatingPlatformPolygon*> m_PolygonList;
     vector<SATRotatingPlatformCircle*> m_CircleList;
+
 private:
     MoonLanderState();
     ~MoonLanderState() override;

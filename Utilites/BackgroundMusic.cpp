@@ -3,6 +3,7 @@
 //
 
 #include "BackgroundMusic.hpp"
+#include <iostream>
 BackgroundMusic* BackgroundMusic::getBackgroundMusic()
 {
     static BackgroundMusic m_BackgroundMusic;
@@ -19,7 +20,7 @@ BackgroundMusic::BackgroundMusic()
 {
     InitAudioDevice();
     m_Music = LoadMusicStream("Assets/Music/BackgroundMusic.mp3");
-//    PlayMusicStream(m_Music);
+    PlayMusicStream(m_Music);
 }
 BackgroundMusic::~BackgroundMusic()
 {
@@ -30,3 +31,4 @@ void BackgroundMusic::update()
 {
     UpdateMusicStream(m_Music);
 }
+

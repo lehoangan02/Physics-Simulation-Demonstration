@@ -2912,8 +2912,8 @@ SimulationState* MoonLanderState::update() {
     if (!m_IsActive) {
         return HomeState::getHomeState();
     }
-    m_Engine.update(m_FrameTime);
     m_LandingCraft.update();
+    m_Engine.update(m_FrameTime);
     return nullptr;
 }
 void MoonLanderState::reset() {
@@ -2931,6 +2931,7 @@ void MoonLanderState::reset() {
     }
     m_CircleList.clear();
     m_Engine.reset();
+    Color Beige{245, 236, 213, 255};
     std::vector<Vector2> Body;
     Body.push_back(Vector2{300, 200});
     Body.push_back(Vector2{400, 200});
@@ -2939,6 +2940,52 @@ void MoonLanderState::reset() {
     SATRotatingPlatformPolygon* NewPolygon = new SATRotatingPlatformPolygon(Body, RED);
     m_LandingCraft.GiveBody(NewPolygon);
     m_PolygonList.push_back(NewPolygon);
+    std::vector<Vector2> Platform1;
+//    104.031 676.992
+//    312.949 743.441
+//    338.727 835.547
+//    86.0156 748.113
+    Platform1.push_back(Vector2{104.031, 676.992});
+    Platform1.push_back(Vector2{312.949, 743.441});
+    Platform1.push_back(Vector2{338.727, 835.547});
+    Platform1.push_back(Vector2{86.0156, 748.113});
+    SATRotatingPlatformPolygon* NewPolygon1 = new SATRotatingPlatformPolygon(Platform1, Beige);
+    NewPolygon1->setFixed(true);
+    m_PolygonList.push_back(NewPolygon1);
+//    1333.44 999.586
+//    1570.07 867.672
+//    1796.91 995.309
+    std::vector<Vector2> Platform2;
+    Platform2.push_back(Vector2{1333.44, 999.586});
+    Platform2.push_back(Vector2{1570.07, 867.672});
+    Platform2.push_back(Vector2{1796.91, 995.309});
+    SATRotatingPlatformPolygon* NewPolygon2 = new SATRotatingPlatformPolygon(Platform2, Beige);
+    NewPolygon2->setFixed(true);
+    m_PolygonList.push_back(NewPolygon2);
+//    1377.39 301.812
+//    1386.64 408.582
+//    1642.19 418.914
+//    1666.28 304.242
+    std::vector<Vector2> Platform3;
+    Platform3.push_back(Vector2{1377.39, 301.812});
+    Platform3.push_back(Vector2{1386.64, 408.582});
+    Platform3.push_back(Vector2{1642.19, 418.914});
+    Platform3.push_back(Vector2{1666.28, 304.242});
+    SATRotatingPlatformPolygon* NewPolygon3 = new SATRotatingPlatformPolygon(Platform3, Beige);
+    NewPolygon3->setFixed(true);
+    m_PolygonList.push_back(NewPolygon3);
+//    650.102 176.219
+//    650.75 197.855
+//    1245.1 225.082
+//    1245.98 201.574
+    std::vector<Vector2> Platform4;
+    Platform4.push_back(Vector2{650.102, 176.219});
+    Platform4.push_back(Vector2{650.75, 197.855});
+    Platform4.push_back(Vector2{1245.1, 225.082});
+    Platform4.push_back(Vector2{1245.98, 201.574});
+    SATRotatingPlatformPolygon* NewPolygon4 = new SATRotatingPlatformPolygon(Platform4, Beige);
+    NewPolygon4->setFixed(true);
+    m_PolygonList.push_back(NewPolygon4);
     setupBoundaries();
     for (auto& polygon : m_PolygonList)
     {
@@ -2955,7 +3002,10 @@ void MoonLanderState::draw() {
     DrawText("Moon Lander State", 100, 10, 20, RED);
     static float Angle = -90.0f;
     m_LandingCraft.draw();
-//    FlameAnimation.draw(Vector2{500, 500}, 2.0f, Angle);
+    for (int i = 1; i < m_PolygonList.size(); ++i)
+    {
+        m_PolygonList[i]->draw();
+    }
 }
 void MoonLanderState::setupBoundaries() {
     Color SOIL = Color{61, 61, 61, 255};
@@ -2990,7 +3040,7 @@ MoonLanderState::LandingCraft::LandingCraft() : LeftRotateNozzle(LoadTexture("./
 RightRotateNozzle(LoadTexture("./Assets/Textures/Fire.png"), Vector2{31, 1}, 0.016f),
 LeftThrustNozzle(LoadTexture("./Assets/Textures/Fire.png"), Vector2{31, 1}, 0.016f),
 RightThrustNozzle(LoadTexture("./Assets/Textures/Fire.png"), Vector2{31, 1}, 0.016f) {
-
+    SetSoundVolume(m_Sound, 0.2f);
 }
 void MoonLanderState::LandingCraft::draw() {
     if (!Body) return;
@@ -3069,23 +3119,34 @@ void MoonLanderState::LandingCraft::update() {
     Vector2 Arrow = {0, -100};
     Angle -= PI/4;
     Arrow = Vector2Rotate(Arrow, Angle);
+    static bool Playing = false;
+    bool Nozzle = false;
     if (IsKeyDown(KEY_LEFT))
     {
 //        Body->rotate(-0.05);
         Body->accelerateRotation(-0.05);
-
+        Nozzle = true;
     }
     if (IsKeyDown(KEY_RIGHT))
     {
 //        Body->rotate(0.05);
         Body->accelerateRotation(+0.05);
+        Nozzle = true;
     }
     if (IsKeyDown(KEY_UP))
     {
 //        Body->move(Vector2{0, -4});
+//        std::cout << "Up\n";
         Arrow = Vector2Normalize(Arrow);
         Arrow = Vector2Scale(Arrow, -300);
+        if (IsKeyDown(KEY_LEFT) && IsKeyDown(KEY_RIGHT))
+        {
+//            std::cout << "Both\n";
+            Arrow = Vector2Scale(Arrow, 1.5);
+            Body->accelerate({Arrow});
+        }
         Body->accelerate({Arrow});
+        Nozzle = true;
     }
     if (IsKeyDown(KEY_DOWN))
     {
@@ -3093,13 +3154,29 @@ void MoonLanderState::LandingCraft::update() {
         Arrow = Vector2Normalize(Arrow);
         Arrow = Vector2Scale(Arrow, 300);
         Body->accelerate(Arrow);
+        Nozzle = true;
     }
     if (IsKeyDown(KEY_LEFT) && IsKeyDown(KEY_RIGHT))
     {
+//        std::cout << "Both\n";
         Arrow = Vector2Normalize(Arrow);
         Arrow = Vector2Scale(Arrow, -300);
         Body->accelerate({Arrow});
+        Nozzle = true;
     }
+    if (!Nozzle)
+    {
+        StopSound(m_Sound);
+        Playing = false;
+    }
+    if (Nozzle && !Playing)
+    {
+        PlaySound(m_Sound);
+        Playing = true;
+    }
+
+//    Vector2 Acceleration = Body->getTotalAcceleration();
+//    std::cout << "Total Acceleration: " << Acceleration.x << " " << Acceleration.y << std::endl;
 }
 void MoonLanderState::LandingCraft::GiveBody(SATRotatingPlatformPolygon *Body) {
     this->Body = Body;

@@ -156,6 +156,7 @@ std::vector<Vector2> SATPlatformPolygon::getVertices() const {
 }
 void SATPlatformPolygon::accelerate(Vector2 Acceleration) {
     m_Acceleration = Vector2Add(m_Acceleration, Acceleration);
+
 }
 void SATPlatformPolygon::update(float DeltaTime) {
     m_Velocity = Vector2Add(m_Velocity, Vector2Scale (m_Acceleration, DeltaTime));

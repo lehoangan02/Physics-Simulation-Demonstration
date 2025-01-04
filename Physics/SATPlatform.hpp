@@ -56,6 +56,7 @@ public:
     Vector2 getCenter() const;
     void setMassUsingArea();
     void setFixed(bool Fixed);
+    Vector2 getTotalAcceleration() const {return m_Acceleration;}
     float getMass() const {return m_Mass;}
 protected:
     const Color m_VertexColor{33, 53, 85, 255};
