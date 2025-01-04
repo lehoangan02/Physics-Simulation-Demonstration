@@ -42,6 +42,7 @@ int StateSelector::update()
     {
         if (m_Buttons[i] -> update())
         {
+            if (i >= 14) return i + 2;
             return i + 1;
         }
     }
@@ -119,7 +120,19 @@ StateSelector::StateSelector(Vector2 Position) : m_Position(Position) {
     m_ButtonText[9] = "Spring";
     m_ButtonText[10] = "Soft Body";
     m_ButtonText[11] = "Playable Jelly";
-    for (int i = 0; i < 12; i++)
+    m_ButtonText[12] = "KMeans Grouping";
+    m_ButtonText[13] = "KMeans Optimized";
+    m_ButtonText[14] = "Pressure Soft Body";
+    m_ButtonText[15] = "Shape Matching Soft Body";
+    m_ButtonText[16] = "SAT Triangle";
+    m_ButtonText[17] = "SAT Polygon";
+    m_ButtonText[18] = "SAT Circle and Polygon";
+    m_ButtonText[19] = "SAT Response";
+    m_ButtonText[20] = "Gravity and Contact Points";
+    m_ButtonText[21] = "SAT Platform and Rotation with Friction";
+    m_ButtonText[22] = "Moon Lander";
+
+    for (int i = 0; i < 23; i++)
     {
 //        std::string Text = "Button " + std::to_string(i);
         std::string Text = m_ButtonText[i];

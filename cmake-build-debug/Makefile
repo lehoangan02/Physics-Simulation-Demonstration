@@ -129,6 +129,30 @@ Physics_Simulation_Demonstration/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Physics_Simulation_Demonstration.dir/build.make CMakeFiles/Physics_Simulation_Demonstration.dir/build
 .PHONY : Physics_Simulation_Demonstration/fast
 
+Animation/Animation.o: Animation/Animation.cpp.o
+.PHONY : Animation/Animation.o
+
+# target to build an object file
+Animation/Animation.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Physics_Simulation_Demonstration.dir/build.make CMakeFiles/Physics_Simulation_Demonstration.dir/Animation/Animation.cpp.o
+.PHONY : Animation/Animation.cpp.o
+
+Animation/Animation.i: Animation/Animation.cpp.i
+.PHONY : Animation/Animation.i
+
+# target to preprocess a source file
+Animation/Animation.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Physics_Simulation_Demonstration.dir/build.make CMakeFiles/Physics_Simulation_Demonstration.dir/Animation/Animation.cpp.i
+.PHONY : Animation/Animation.cpp.i
+
+Animation/Animation.s: Animation/Animation.cpp.s
+.PHONY : Animation/Animation.s
+
+# target to generate assembly for a file
+Animation/Animation.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Physics_Simulation_Demonstration.dir/build.make CMakeFiles/Physics_Simulation_Demonstration.dir/Animation/Animation.cpp.s
+.PHONY : Animation/Animation.cpp.s
+
 Buttons/Buttons.o: Buttons/Buttons.cpp.o
 .PHONY : Buttons/Buttons.o
 
@@ -618,6 +642,9 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... Physics_Simulation_Demonstration"
+	@echo "... Animation/Animation.o"
+	@echo "... Animation/Animation.i"
+	@echo "... Animation/Animation.s"
 	@echo "... Buttons/Buttons.o"
 	@echo "... Buttons/Buttons.i"
 	@echo "... Buttons/Buttons.s"

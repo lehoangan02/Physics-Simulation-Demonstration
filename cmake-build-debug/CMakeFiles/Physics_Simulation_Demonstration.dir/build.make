@@ -349,6 +349,20 @@ CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/GeneralPhysics.cpp.s: cm
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/GeneralPhysics.cpp.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/lehoangan/Documents/GitHub/Physics-Simulation-Demonstration/Physics/GeneralPhysics.cpp -o CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/GeneralPhysics.cpp.s
 
+CMakeFiles/Physics_Simulation_Demonstration.dir/Animation/Animation.cpp.o: CMakeFiles/Physics_Simulation_Demonstration.dir/flags.make
+CMakeFiles/Physics_Simulation_Demonstration.dir/Animation/Animation.cpp.o: /home/lehoangan/Documents/GitHub/Physics-Simulation-Demonstration/Animation/Animation.cpp
+CMakeFiles/Physics_Simulation_Demonstration.dir/Animation/Animation.cpp.o: CMakeFiles/Physics_Simulation_Demonstration.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/lehoangan/Documents/GitHub/Physics-Simulation-Demonstration/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_21) "Building CXX object CMakeFiles/Physics_Simulation_Demonstration.dir/Animation/Animation.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/Physics_Simulation_Demonstration.dir/Animation/Animation.cpp.o -MF CMakeFiles/Physics_Simulation_Demonstration.dir/Animation/Animation.cpp.o.d -o CMakeFiles/Physics_Simulation_Demonstration.dir/Animation/Animation.cpp.o -c /home/lehoangan/Documents/GitHub/Physics-Simulation-Demonstration/Animation/Animation.cpp
+
+CMakeFiles/Physics_Simulation_Demonstration.dir/Animation/Animation.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/Physics_Simulation_Demonstration.dir/Animation/Animation.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/lehoangan/Documents/GitHub/Physics-Simulation-Demonstration/Animation/Animation.cpp > CMakeFiles/Physics_Simulation_Demonstration.dir/Animation/Animation.cpp.i
+
+CMakeFiles/Physics_Simulation_Demonstration.dir/Animation/Animation.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/Physics_Simulation_Demonstration.dir/Animation/Animation.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/lehoangan/Documents/GitHub/Physics-Simulation-Demonstration/Animation/Animation.cpp -o CMakeFiles/Physics_Simulation_Demonstration.dir/Animation/Animation.cpp.s
+
 # Object files for target Physics_Simulation_Demonstration
 Physics_Simulation_Demonstration_OBJECTS = \
 "CMakeFiles/Physics_Simulation_Demonstration.dir/main.cpp.o" \
@@ -370,7 +384,8 @@ Physics_Simulation_Demonstration_OBJECTS = \
 "CMakeFiles/Physics_Simulation_Demonstration.dir/Machine_Learning/KMeansCalculator.cpp.o" \
 "CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/Collider.cpp.o" \
 "CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/SATPlatform.cpp.o" \
-"CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/GeneralPhysics.cpp.o"
+"CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/GeneralPhysics.cpp.o" \
+"CMakeFiles/Physics_Simulation_Demonstration.dir/Animation/Animation.cpp.o"
 
 # External object files for target Physics_Simulation_Demonstration
 Physics_Simulation_Demonstration_EXTERNAL_OBJECTS =
@@ -395,10 +410,11 @@ Physics_Simulation_Demonstration_EXTERNAL_OBJECTS =
 /home/lehoangan/Documents/GitHub/Physics-Simulation-Demonstration/Physics_Simulation_Demonstration: CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/Collider.cpp.o
 /home/lehoangan/Documents/GitHub/Physics-Simulation-Demonstration/Physics_Simulation_Demonstration: CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/SATPlatform.cpp.o
 /home/lehoangan/Documents/GitHub/Physics-Simulation-Demonstration/Physics_Simulation_Demonstration: CMakeFiles/Physics_Simulation_Demonstration.dir/Physics/GeneralPhysics.cpp.o
+/home/lehoangan/Documents/GitHub/Physics-Simulation-Demonstration/Physics_Simulation_Demonstration: CMakeFiles/Physics_Simulation_Demonstration.dir/Animation/Animation.cpp.o
 /home/lehoangan/Documents/GitHub/Physics-Simulation-Demonstration/Physics_Simulation_Demonstration: CMakeFiles/Physics_Simulation_Demonstration.dir/build.make
 /home/lehoangan/Documents/GitHub/Physics-Simulation-Demonstration/Physics_Simulation_Demonstration: /usr/local/lib/libraylib.a
 /home/lehoangan/Documents/GitHub/Physics-Simulation-Demonstration/Physics_Simulation_Demonstration: CMakeFiles/Physics_Simulation_Demonstration.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/lehoangan/Documents/GitHub/Physics-Simulation-Demonstration/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_21) "Linking CXX executable /home/lehoangan/Documents/GitHub/Physics-Simulation-Demonstration/Physics_Simulation_Demonstration"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/lehoangan/Documents/GitHub/Physics-Simulation-Demonstration/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_22) "Linking CXX executable /home/lehoangan/Documents/GitHub/Physics-Simulation-Demonstration/Physics_Simulation_Demonstration"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/Physics_Simulation_Demonstration.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

@@ -1,6 +1,8 @@
 file(REMOVE_RECURSE
   "/home/lehoangan/Documents/GitHub/Physics-Simulation-Demonstration/Physics_Simulation_Demonstration"
   "/home/lehoangan/Documents/GitHub/Physics-Simulation-Demonstration/Physics_Simulation_Demonstration.pdb"
+  "CMakeFiles/Physics_Simulation_Demonstration.dir/Animation/Animation.cpp.o"
+  "CMakeFiles/Physics_Simulation_Demonstration.dir/Animation/Animation.cpp.o.d"
   "CMakeFiles/Physics_Simulation_Demonstration.dir/Buttons/Buttons.cpp.o"
   "CMakeFiles/Physics_Simulation_Demonstration.dir/Buttons/Buttons.cpp.o.d"
   "CMakeFiles/Physics_Simulation_Demonstration.dir/Commands/Command.cpp.o"

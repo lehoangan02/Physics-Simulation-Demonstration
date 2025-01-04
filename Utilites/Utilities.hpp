@@ -34,8 +34,8 @@ private:
 private:
     Vector2 m_Position;
     Vector2 m_Size = {800, 50 * 10};
-    Vector2 m_ScollRange = {0, 400};
-    std::string m_ButtonText[12];
+    Vector2 m_ScollRange = {0, 900};
+    std::string m_ButtonText[24];
 public:
     bool m_Active = true;
 public:
